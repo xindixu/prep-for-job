@@ -146,3 +146,5 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
+# node
+node_modules
