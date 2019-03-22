@@ -6,9 +6,12 @@
 <h1>Jobs</h1>
     <ul>
     {% for job in jobs %}
-        <li><a href="{{ url_for("job", uuid=job.uuid) }}">
+        <li>
+          <a href="{{ url_for("job", uuid=job.uuid) }}">
             {{ job.title }}
-        </a></li>
+          </a>
+
+        </li>
     {% endfor %}
     </ul>
 {% endblock %}

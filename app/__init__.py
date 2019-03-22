@@ -50,11 +50,12 @@ def create_app(test_config=None):
                 return render_template("job.html", jobs=jobs.json())
         else:
             job_info = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}")
+            related_jobs = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_jobs")
             related_skills = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_skills")
-            if job_info.status_code != 200 or related_skills.status_code != 200:
+            if job_info.status_code != 200 or related_skills.status_code != 200 or related_jobs.status_code != 200:
                 return "Not Found", 404
             else:
-                return render_template("job_info.html", job=job_info.json(), skills=related_skills.json())
+                return render_template("job_info.html", job=job_info.json(), skills=related_skills.json(), related_jobs=related_jobs.json())
 
     @app.route('/skill/')
     @app.route('/skill/<string:uuid>')
@@ -72,7 +73,7 @@ def create_app(test_config=None):
     @app.url_value_preprocessor
     def get_endpoint(endpoint, values):
         g.endpoint = endpoint
-    
+
     return app
 
 
