@@ -39,8 +39,9 @@
         </li>
 
       </ul>
-      {% if g.user %}
       <ul class="my-2 my-lg-0 navbar-nav">
+      {% if g.user %}
+
         <li class="nav-item">
           <span class="navbar-text">Hi, {{ g.user['username'] }}</span>
         </li>
@@ -54,8 +55,9 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('auth.login') }}">Log In</a>
         </li>
+        {% endif %}
       </ul>
-      {% endif %}
+
     </div>
   </nav>
   <main class="container">
