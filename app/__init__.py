@@ -1,6 +1,7 @@
 import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, g
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -27,9 +28,7 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-
-
-    # route
+    # routes
     @app.route('/')
     def index():
         return render_template('index.html')
@@ -53,8 +52,13 @@ def create_app(test_config=None):
     # auth
     from . import auth
     app.register_blueprint(auth.bp)
+
+    @app.url_value_preprocessor
+    def get_endpoint(endpoint, values):
+        g.endpoint = endpoint
     
     return app
+
 
 if __name__ == '__main__':
     create_app()

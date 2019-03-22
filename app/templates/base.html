@@ -6,56 +6,65 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  {# Bootstrap #}
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  {# Bootstrap CSS #}
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+
+  {# jQuery CDN (for Bootstrap JS) #}
+  <script
+      src="http://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+
+  {# Bootstrap JS #}
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+          integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+          crossorigin="anonymous"></script>
 
   <title>{% block title %}{% endblock %}</title>
 </head>
 
 <body>
   <nav class="navbar navbar-expand-sm navbar-light bg-light">
-    <a class="navbar-brand" href="#">Prep-for-job</a>
+    <a class="navbar-brand" href="{{ url_for("index") }}">Prep-for-job</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="{{ url_for("index") }}">Home <span class="sr-only">(current)</span></a>
-        </li>
-
-        <li class="nav-item">
+        <li class="nav-item {% if g.endpoint == "job" %}active{% endif %}">
           <a class="nav-link" href="{{ url_for("job") }}">Job</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {% if g.endpoint == "salary" %}active{% endif %}">
           <a class="nav-link" href="{{ url_for("salary") }}">Salary</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {% if g.endpoint == "skill" %}active{% endif %}">
           <a class="nav-link" href="{{ url_for("skill") }}">Skill</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {% if g.endpoint == "about" %}active{% endif %}">
           <a class="nav-link" href="{{ url_for("about") }}">About <span class="sr-only">(current)</span></a>
         </li>
 
       </ul>
       <ul class="my-2 my-lg-0 navbar-nav">
-      {% if g.user %}
 
+      {% if g.user %}
         <li class="nav-item">
           <span class="navbar-text">Hi, {{ g.user['username'] }}</span>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('auth.logout') }}">Log Out</a>
         </li>
-        {% else %}
-        <li class="nav-item">
+      {% else %}
+        <li class="nav-item {% if g.endpoint == "auth.register" %}active{% endif %}">
           <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {% if g.endpoint == "auth.login" %}active{% endif %}">
           <a class="nav-link" href="{{ url_for('auth.login') }}">Log In</a>
         </li>
-        {% endif %}
+      {% endif %}
       </ul>
 
     </div>
