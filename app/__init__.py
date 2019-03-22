@@ -60,7 +60,24 @@ def create_app(test_config=None):
     @app.route('/skill/')
     @app.route('/skill/<string:uuid>')
     def skill(uuid=None):
-        return render_template("skill.html")
+        if uuid is None:
+            skills = requests.get(f"http://api.dataatwork.org/v1/skills", params={"limit": 30, "offset" : 19930})
+            if skills.status_code != 200:
+                return "Not Found", 404
+            else:
+                return render_template("skill.html", skills=skills.json())
+        else:
+            skills_info = requests.get(f"http://api.dataatwork.org/v1/skills/{uuid}")
+            related_jobs = requests.get(f"http://api.dataatwork.org/v1/skills/{uuid}/related_jobs")
+            print(skills_info, related_jobs, sep="\n")
+            if skills_info.status_code != 200:
+                if related_jobs.status_code != 200:
+                    return "Not Found", 404
+                else:
+                    return related_jobs
+            else:
+                return render_template("skills_info.html", skills=skills_info.json(), jobs=related_jobs.json())
+
 
     @app.route('/salary')
     def salary():
