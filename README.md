@@ -2,8 +2,12 @@
 
 ## To Run
 1. `export Flask_APP=app`
-2. `export FLASK_ENV=development`
-3. `flask run`
+1. `export FLASK_ENV=development`
+1. `flask run`
+
+or
+
+`make website`
 
 ## To initialize database
 `flask init-db`
