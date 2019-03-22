@@ -7,10 +7,15 @@
 {% block content %}
 <h1>Login</h1>
   <form method="post">
+  <div class="form-group">
     <label for="username">Username</label>
-    <input name="username" id="username" required>
+    <input type="text" class="form-control"  name="username" id="username" aria-describedby="username" placeholder="john" required>
+  </div>
+  <div class="form-group">
     <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Log In">
-  </form>
+    <input type="password" class="form-control" name="password" id="password" placeholder="" required>
+  </div>
+  <input type="submit" class="btn btn-primary" value="Log In">
+</form>
+
 {% endblock %}
