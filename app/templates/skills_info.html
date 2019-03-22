@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ skills.title }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ skills.title }}</h1>
+      {% if "error" in skills.keys() %}
+        <h4> No Related Jobs </h4>
+      {% else %}
+    <ul>
+        {% for job in jobs.jobs %}
+            <li><a href="{{ url_for("job", uuid = job.job_uuid) }}">
+                {{ job.job_title }}
+            </a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}
