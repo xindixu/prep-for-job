@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ job.title }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ job.title }}</h1>
+    <h2>Skills</h2>
+    <ul>
+        {% for skill in skills.skills %}
+            <li>
+              <a href="#">
+                {{ skill.skill_name }}:
+              </a>
+              {{ skill.description }}
+            </li>
+        {% endfor %}
+    </ul>
+    <h2>Related Jobs</h2>
+
+    <ul>
+      {% for job in related_jobs.related_job_titles %}
+      <li>
+        <a href="{{ url_for("job", uuid=job.uuid) }}">
+          {{ job.title }}
+        </a>
+      </li>
+      {% endfor %}
+
+    </ul>
+{% endblock %}

@@ -1,6 +1,8 @@
 import os
 
 from flask import Flask, render_template, g
+import json
+import requests
 
 
 def create_app(test_config=None):
@@ -37,13 +39,45 @@ def create_app(test_config=None):
     def about():
         return render_template("about.html")
 
-    @app.route('/job')
-    def job():
-        return render_template("job.html")
+    @app.route('/job/')
+    @app.route('/job/<string:uuid>')
+    def job(uuid=None):
+        if uuid is None:
+            jobs = requests.get(f"http://api.dataatwork.org/v1/jobs", params={"limit": 10})
+            if jobs.status_code != 200:
+                return "Not Found", 404
+            else:
+                return render_template("job.html", jobs=jobs.json())
+        else:
+            job_info = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}")
+            related_jobs = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_jobs")
+            related_skills = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_skills")
+            if job_info.status_code != 200 or related_skills.status_code != 200 or related_jobs.status_code != 200:
+                return "Not Found", 404
+            else:
+                return render_template("job_info.html", job=job_info.json(), skills=related_skills.json(), related_jobs=related_jobs.json())
 
-    @app.route('/skill')
-    def skill():
-        return render_template("skill.html")
+    @app.route('/skill/')
+    @app.route('/skill/<string:uuid>')
+    def skill(uuid=None):
+        if uuid is None:
+            skills = requests.get(f"http://api.dataatwork.org/v1/skills", params={"limit": 30, "offset" : 19930})
+            if skills.status_code != 200:
+                return "Not Found", 404
+            else:
+                return render_template("skill.html", skills=skills.json())
+        else:
+            skills_info = requests.get(f"http://api.dataatwork.org/v1/skills/{uuid}")
+            related_jobs = requests.get(f"http://api.dataatwork.org/v1/skills/{uuid}/related_jobs")
+            print(skills_info, related_jobs, sep="\n")
+            if skills_info.status_code != 200:
+                if related_jobs.status_code != 200:
+                    return "Not Found", 404
+                else:
+                    return related_jobs
+            else:
+                return render_template("skills_info.html", skills=skills_info.json(), jobs=related_jobs.json())
+
 
     @app.route('/salary')
     def salary():
@@ -56,7 +90,7 @@ def create_app(test_config=None):
     @app.url_value_preprocessor
     def get_endpoint(endpoint, values):
         g.endpoint = endpoint
-    
+
     return app
 
 
