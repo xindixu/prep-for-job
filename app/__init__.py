@@ -1,6 +1,8 @@
 import os
 
 from flask import Flask, render_template, g
+import json
+import requests
 
 
 def create_app(test_config=None):
@@ -37,12 +39,26 @@ def create_app(test_config=None):
     def about():
         return render_template("about.html")
 
-    @app.route('/job')
-    def job():
-        return render_template("job.html")
+    @app.route('/job/')
+    @app.route('/job/<string:uuid>')
+    def job(uuid=None):
+        if uuid is None:
+            jobs = requests.get(f"http://api.dataatwork.org/v1/jobs", params={"limit": 10})
+            if jobs.status_code != 200:
+                return "Not Found", 404
+            else:
+                return render_template("job.html", jobs=jobs.json())
+        else:
+            job_info = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}")
+            related_skills = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_skills")
+            if job_info.status_code != 200 or related_skills.status_code != 200:
+                return "Not Found", 404
+            else:
+                return render_template("job_info.html", job=job_info.json(), skills=related_skills.json())
 
-    @app.route('/skill')
-    def skill():
+    @app.route('/skill/')
+    @app.route('/skill/<string:uuid>')
+    def skill(uuid=None):
         return render_template("skill.html")
 
     @app.route('/salary')
