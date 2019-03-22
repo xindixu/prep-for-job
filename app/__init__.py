@@ -70,13 +70,10 @@ def create_app(test_config=None):
             skills_info = requests.get(f"http://api.dataatwork.org/v1/skills/{uuid}")
             related_jobs = requests.get(f"http://api.dataatwork.org/v1/skills/{uuid}/related_jobs")
             print(skills_info, related_jobs, sep="\n")
-            if skills_info.status_code != 200:
-                if related_jobs.status_code != 200:
-                    return "Not Found", 404
-                else:
-                    return related_jobs
-            else:
-                return render_template("skills_info.html", skills=skills_info.json(), jobs=related_jobs.json())
+            # if skills_info.status_code != 200 or related_jobs.status_code != 200:
+            #         return "Not Found", 404
+            # else:
+            return render_template("skills_info.html", skills=skills_info.json(), jobs=related_jobs.json())
 
 
     @app.route('/salary')

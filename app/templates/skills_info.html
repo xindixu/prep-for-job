@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ skills.title }}</h1>
-      {% if "error" in skills.keys() %}
+    <h1>{{ skills.skill_name }}</h1>
+      {% if "error" in jobs.keys() %}
         <h4> No Related Jobs </h4>
       {% else %}
     <ul>
