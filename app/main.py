@@ -3,7 +3,7 @@ import os
 from flask import Flask, render_template, g
 import json
 import requests
-
+from bls_datasets import oes, qcew
 
 def create_app(test_config=None):
     # create and configure the app
@@ -174,7 +174,33 @@ def create_app(test_config=None):
 
     @app.route('/salary')
     def salary():
-        return render_template("salary.html")
+
+        df_oes = oes.get_data(year=2017)
+        detailed = df_oes[df_oes.OCC_GROUP == 'detailed']
+        job = detailed.OCC_TITLE
+
+        obj = {}
+        for j in job:
+            p = detailed[detailed.OCC_TITLE == j].A_MEDIAN.values[0]
+            obj[j] = p
+
+        # avg weekly wage
+        df_qcew = qcew.get_data('industry', rtype='dataframe', year='2017', qtr='1', industry='10')
+        austin = df_qcew[(df_qcew.own_code == 0) & (df_qcew.area_fips == '48015')]
+        weekly_avg = austin.avg_wkly_wage.values[0]
+
+        # headers = {'Content-type': 'application/json'}
+        # data = json.dumps({"seriesid": ['NCU5306633300003']})
+        # p = requests.post("https://api.bls.gov/publicAPI/v2/timeseries/data/", data=data, headers=headers)
+        #
+        # json_data = json.loads(p.data)
+        #
+        # # if data['status'] != 200:
+        # #     return "Not Found", 404
+        # # else:
+        # #     return render_template("salary.html", salary=data)
+        #
+        return render_template("salary.html", obj=obj, weekly_avg=weekly_avg)
 
     # auth
     import auth

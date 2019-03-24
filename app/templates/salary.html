@@ -6,6 +6,16 @@
     <h1>Salary</h1>
     <hr>
 
+
+    {% for j,p in obj.items() %}
+    <p>{{j}} - ${{p}}/yr </p>
+    {% endfor %}
+
+
+
+    <h2>Weekly Average in Austin, TX</h2>
+    ${{weekly_avg}}
+
     <h4><i>$0 ~ $50000/yr</i></h4>
     <li>1st Grade Teacher $47,263</li>
     <li>Bicycle Repairers $28,390</li>
@@ -16,7 +26,6 @@
 
     <li>Assessor $54,010</li>
     <li>Structural Iron and Steel Workers $52,610</li>
-
 
     <br>
     <h4><i>$60000 ~ $70000/yr</i></h4>
