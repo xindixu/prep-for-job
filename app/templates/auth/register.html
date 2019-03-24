@@ -15,7 +15,17 @@
     <label for="password">Password</label>
     <input type="password" class="form-control" name="password" id="password" placeholder="" required>
   </div>
-  <input type="submit" class="btn btn-primary" value="Register">
+      <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Register">
+      </div>
 </form>
+
+<div id="alerts">
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-danger" role="alert">
+        {{ message|e }}
+    </div>
+{% endfor %}
+</div>
 
 {% endblock %}

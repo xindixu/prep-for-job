@@ -48,9 +48,14 @@ def create_app(test_config=None):
 
     @app.route('/about')
     def about():
+<<<<<<< app/main.py
+        commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits", params={"all": "true", "per_page": 100}).json()
+        issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all", params={"scope": "all", "per_page": 100}).json()
+=======
         commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits?all=true").json()
         issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all").json()
 
+>>>>>>> app/main.py
 
         member_contribs = {
             "aidan": {
@@ -85,7 +90,7 @@ def create_app(test_config=None):
             }
         }
 
-        members = [
+        members = [  # TODO: sort by number of commits
             {
                 "name": "Aidan T. Manning",
                 "bio": "Computational chemistry major (May 2020). Interested in writing software to assist chemical research and education. Also makes bot accounts in his spare time.",
