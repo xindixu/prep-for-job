@@ -48,8 +48,10 @@ def create_app(test_config=None):
 
     @app.route('/about')
     def about():
+        
         commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits", params={"all": "true", "per_page": 100}).json()
         issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all", params={"scope": "all", "per_page": 100}).json()
+
 
         member_contribs = {
             "aidan": {
