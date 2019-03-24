@@ -100,7 +100,7 @@ def create_app(test_config=None):
             {
                 "name": "Srishtti Talwar",
                 "bio": "Mathematics and Economics major. Pursuing Elements of Computing Certificate. Graduating May 2020.",
-                "responsibilities": "Skills Page, GCP Deployment (Co-partnering with Dylan), Technical Report",
+                "responsibilities": "Skills Page, Technical Report",
                 "contribs": member_contribs["srishtti"],
                 "photo": "srishtti"
             },
