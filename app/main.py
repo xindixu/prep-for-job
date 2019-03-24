@@ -1,7 +1,6 @@
 import os
 
 from flask import Flask, render_template, g
-import json
 import requests
 from bls_datasets import oes, qcew
 
@@ -51,39 +50,37 @@ def create_app(test_config=None):
         commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits", params={"all": "true", "per_page": 100}).json()
         issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all", params={"scope": "all", "per_page": 100}).json()
 
-
         member_contribs = {
-            "aidan": {
-                "commits": len([commit for commit in commits
-                                if commit["committer_email"] == "periodicaidan@gmail.com"]),
-                "issues": len([issue for issue in issues
-                               if issue["author"]["username"] == "periodicaidan"])
-            },
-            "xindi": {
-                "commits": len([commit for commit in commits
-                                if commit["committer_email"] == "xindixu@utexas.edu"]),
-                "issues": len([issue for issue in issues
-                               if issue["author"]["username"] == "xindixu"])
-            },
-            "srishtti": {
-                "commits": len([commit for commit in commits
-                                if commit["committer_email"] == "tsrishtti@gmail.com"]),
-                "issues": len([issue for issue in issues
-                               if issue["author"]["username"] == "stalwar5"])
-            },
-            "dylan": {
-                "commits": len([commit for commit in commits
-                                if commit["committer_email"] == "dmulrooney@utexas.edu"]),
-                "issues": len([issue for issue in issues
-                               if issue["author"]["username"] == "dmulrooney"])
-            },
-            "yiran": {
-                "commits": len([commit for commit in commits
-                                if commit["committer_email"] == "yiranzhang@utexas.edu"]),
-                "issues": len([issue for issue in issues
-                               if issue["author"]["username"] == "yiranzhang"])
-            }
+            "aidan": {"commits": 0, "issues": 0},
+            "xindi": {"commits": 0, "issues": 0},
+            "srishtti": {"commits": 0, "issues": 0},
+            "dylan": {"commits": 0, "issues": 0},
+            "yiran": {"commits": 0, "issues": 0}
         }
+
+        for commit in commits:
+            if commit["committer_email"] == "periodicaidan@gmail.com":
+                member_contribs["aidan"]["commits"] += 1
+            elif commit["committer_email"] == "xindixu@utexas.edu":
+                member_contribs["xindi"]["commits"] += 1
+            elif commit["committer_email"] == "tsrishtti@gmail.com":
+                member_contribs["srishtti"]["commits"] += 1
+            elif commit["committer_email"] == "dmulrooney@utexas.edu":
+                member_contribs["dylan"]["commits"] += 1
+            elif commit["committer_email"] == "yiranzhang@utexas.edu":
+                member_contribs["yiran"]["commits"] += 1
+
+        for issue in issues:
+            if issue["author"]["username"] == "periodicaidan":
+                member_contribs["aidan"]["issues"] += 1
+            elif issue["author"]["username"] == "xindixu":
+                member_contribs["xindi"]["issues"] += 1
+            elif issue["author"]["username"] == "stalwar5":
+                member_contribs["srishtti"]["issues"] += 1
+            elif issue["author"]["username"] == "dmulrooney":
+                member_contribs["dylan"]["issues"] += 1
+            elif issue["author"]["username"] == "yiranzhang":
+                member_contribs["yiran"]["issues"] += 1
 
         members = [  # TODO: sort by number of commits
             {
@@ -103,7 +100,7 @@ def create_app(test_config=None):
             {
                 "name": "Srishtti Talwar",
                 "bio": "Mathematics and Economics major. Pursuing Elements of Computing Certificate. Graduating May 2020.",
-                "responsibilities": "Skills Page, GCP Deployment (Co-partnering with Dylan), Technical Report",
+                "responsibilities": "Skills Page, Technical Report",
                 "contribs": member_contribs["srishtti"],
                 "photo": "srishtti"
             },
@@ -122,6 +119,7 @@ def create_app(test_config=None):
                 "photo": "yiran"
             }
         ]
+        members = sorted(members, reverse=True, key=lambda m: sum(m["contribs"].values()))
 
         stats = {
             "total_commits": 0,
