@@ -1,7 +1,6 @@
 import os
 
 from flask import Flask, render_template, g
-import json
 import requests
 
 
@@ -120,6 +119,7 @@ def create_app(test_config=None):
                 "photo": "yiran"
             }
         ]
+        members = sorted(members, reverse=True, key=lambda m: sum(m["contribs"].values()))
 
         stats = {
             "total_commits": 0,
