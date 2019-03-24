@@ -48,38 +48,44 @@ def create_app(test_config=None):
 
     @app.route('/about')
     def about():
-        commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits", params={"all": "true", "per_page": 100})
-        issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all", params={"scope": "all", "per_page": 100})
+<<<<<<< app/main.py
+        commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits", params={"all": "true", "per_page": 100}).json()
+        issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all", params={"scope": "all", "per_page": 100}).json()
+=======
+        commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits?all=true").json()
+        issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all").json()
+
+>>>>>>> app/main.py
 
         member_contribs = {
             "aidan": {
-                "commits": len([commit for commit in commits.json()
+                "commits": len([commit for commit in commits
                                 if commit["committer_email"] == "periodicaidan@gmail.com"]),
-                "issues": len([issue for issue in issues.json()
+                "issues": len([issue for issue in issues
                                if issue["author"]["username"] == "periodicaidan"])
             },
             "xindi": {
-                "commits": len([commit for commit in commits.json()
+                "commits": len([commit for commit in commits
                                 if commit["committer_email"] == "xindixu@utexas.edu"]),
-                "issues": len([issue for issue in issues.json()
+                "issues": len([issue for issue in issues
                                if issue["author"]["username"] == "xindixu"])
             },
             "srishtti": {
-                "commits": len([commit for commit in commits.json()
+                "commits": len([commit for commit in commits
                                 if commit["committer_email"] == "tsrishtti@gmail.com"]),
-                "issues": len([issue for issue in issues.json()
+                "issues": len([issue for issue in issues
                                if issue["author"]["username"] == "stalwar5"])
             },
             "dylan": {
-                "commits": len([commit for commit in commits.json()
+                "commits": len([commit for commit in commits
                                 if commit["committer_email"] == "dmulrooney@utexas.edu"]),
-                "issues": len([issue for issue in issues.json()
+                "issues": len([issue for issue in issues
                                if issue["author"]["username"] == "dmulrooney"])
             },
             "yiran": {
-                "commits": len([commit for commit in commits.json()
+                "commits": len([commit for commit in commits
                                 if commit["committer_email"] == "yiranzhang@utexas.edu"]),
-                "issues": len([issue for issue in issues.json()
+                "issues": len([issue for issue in issues
                                if issue["author"]["username"] == "yiranzhang"])
             }
         }
