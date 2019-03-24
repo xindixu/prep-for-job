@@ -37,7 +37,91 @@ def create_app(test_config=None):
 
     @app.route('/about')
     def about():
-        return render_template("about.html")
+        commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits?all=true")
+        issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all")
+
+        member_contribs = {
+            "aidan": {
+                "commits": len([commit for commit in commits.json()
+                                if commit["committer_email"] == "periodicaidan@gmail.com"]),
+                "issues": len([issue for issue in issues.json()
+                               if issue["author"]["username"] == "periodicaidan"])
+            },
+            "xindi": {
+                "commits": len([commit for commit in commits.json()
+                                if commit["committer_email"] == "xindixu@utexas.edu"]),
+                "issues": len([issue for issue in issues.json()
+                               if issue["author"]["username"] == "xindixu"])
+            },
+            "srishtti": {
+                "commits": len([commit for commit in commits.json()
+                                if commit["committer_email"] == "tsrishtti@gmail.com"]),
+                "issues": len([issue for issue in issues.json()
+                               if issue["author"]["username"] == "stalwar5"])
+            },
+            "dylan": {
+                "commits": len([commit for commit in commits.json()
+                                if commit["committer_email"] == "dmulrooney@utexas.edu"]),
+                "issues": len([issue for issue in issues.json()
+                               if issue["author"]["username"] == "dmulrooney"])
+            },
+            "yiran": {
+                "commits": len([commit for commit in commits.json()
+                                if commit["committer_email"] == "yiranzhang@utexas.edu"]),
+                "issues": len([issue for issue in issues.json()
+                               if issue["author"]["username"] == "yiranzhang"])
+            }
+        }
+
+        members = [
+            {
+                "name": "Aidan T. Manning",
+                "bio": "Computational chemistry major (May 2020). Interested in writing software to assist chemical research and education. Also makes bot accounts in his spare time.",
+                "responsibilities": "Backend, about page, job and skill info pages",
+                "contribs": member_contribs["aidan"],
+                "photo": "aidan"
+            },
+            {
+                "name": "Xindi Xu",
+                "bio": "Advertising and Japanese; Completed Elements of Computing Certificate. Graduating May 2020.",
+                "responsibilities": "Job Info Page, Front End",
+                "contribs": member_contribs["xindi"],
+                "photo": "xindi"
+            },
+            {
+                "name": "Srishtti Talwar",
+                "bio": "Mathematics and Economics major. Pursuing Elements of Computing Certificate. Graduating May 2020.",
+                "responsibilities": "Skills Page, GCP Deployment (Co-partnering with Dylan), Technical Report",
+                "contribs": member_contribs["srishtti"],
+                "photo": "srishtti"
+            },
+            {
+                "name": "Dylan Mulrooney",
+                "bio": "Undeclared, Computer Science internal transfer. Blockchain developer.",
+                "responsibilities": "Google Cloud Platform and home page",
+                "contribs": member_contribs["dylan"],
+                "photo": "dylan"
+            },
+            {
+                "name": "Yiran Zhang",
+                "bio": "senior, actuarial science major, pursuing elements of computing certificate, music lover and drum player.",
+                "responsibilities": "Tech report, Salary page",
+                "contribs": member_contribs["yiran"],
+                "photo": "yiran"
+            }
+        ]
+
+        stats = {
+            "total_commits": 0,
+            "total_issues": 0,
+            "total_unittests": 0
+        }
+
+        for _, contribs in member_contribs.items():
+            stats["total_commits"] += contribs["commits"]
+            stats["total_issues"] += contribs["issues"]
+
+        return render_template("about.html", members=members, stats=stats)
 
     @app.route('/job/')
     @app.route('/job/<string:uuid>')

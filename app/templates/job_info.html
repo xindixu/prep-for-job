@@ -6,11 +6,12 @@
 
 {% block content %}
     <h1>{{ job.title }}</h1>
+        <hr>
     <h2>Skills</h2>
-    <ul>
+    <ul class="list-group">
         {% for skill in skills.skills %}
-            <li>
-              <a href="#">
+            <li class="list-group-item list-group-item-action">
+              <a href="{{ url_for("skill", uuid=skill.skill_uuid) }}">
                 {{ skill.skill_name }}:
               </a>
               {{ skill.description }}

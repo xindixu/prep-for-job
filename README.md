@@ -1,7 +1,7 @@
 # CS 329E Website
 
 ## To Run
-1. `export FLASK_APP=app`
+1. `export FLASK_APP=app/main`
 1. `export FLASK_ENV=development`
 1. `flask run`
 
