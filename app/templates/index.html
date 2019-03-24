@@ -3,68 +3,91 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <!--
+<!--
     <h1>Jobs - 10</h1>
     <p>Skills - 30</p>
     -->
-    <style>
-      .my-card
-      {
-          position:absolute;
-          left:40%;
-          top:-20px;
-          border-radius:50%;
-      }
-      .effect {
-        position: relative;
-        top: 0;
-        transition: top ease 0.22s;
-      }
-      .effect:hover {
-        top: -8px;
-      }
-      </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css
+<style>
+  .my-card {
+    position: absolute;
+    left: 40%;
+    top: -20px;
+    border-radius: 50%;
+  }
+
+  .effect {
+    position: relative;
+    top: 0;
+    transition: top ease 0.22s;
+  }
+
+  .effect:hover {
+    top: -8px;
+  }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css
 ">
-    <br>
-    <div class="jumbotron">
-<div class="row w-100">
-        <div class="col-md-3 effect">
-            <div class="card border-info mx-sm-1 p-3" onclick="window.location='{{ url_for("job") }}';">
-                <div class="card border-info shadow text-info p-3 my-card" ><span class="fa fa-briefcase" aria-hidden="true"></span></div>
-                <div class="text-info text-center mt-3"><h4>Jobs</h4></div>
-                <div class="text-info text-center mt-2"><h1>{{num_jobs}}</h1></div>
-            </div>
+<br>
+<div class="jumbotron">
+  <div class="row w-100">
+    <div class="col-md-3 effect">
+      <div class="card border-info mx-sm-1 p-3" onclick="window.location='{{ url_for("job") }}';">
+        <div class="card border-info shadow text-info p-3 my-card"><span class="fa fa-briefcase" aria-hidden="true"></span></div>
+        <div class="text-info text-center mt-3">
+          <h4>Jobs</h4>
         </div>
-        <div class="col-md-3 effect">
-            <div class="card border-success mx-sm-1 p-3" onclick="window.location='{{ url_for("salary") }}';">
-                <div class="card border-success shadow text-success p-3 my-card"><span class="fa fa-credit-card" aria-hidden="true"></span></div>
-                <div class="text-success text-center mt-3"><h4>Salary</h4></div>
-                <div class="text-success text-center mt-2"><h1>&nbsp;</h1></div>
-            </div>
+        <div class="text-info text-center mt-2">
+          <h1>{{num_jobs}}</h1>
         </div>
-        <div class="col-md-3 effect">
-            <div class="card border-danger mx-sm-1 p-3" onclick="window.location='{{ url_for("skill") }}';">
-                <div class="card border-danger shadow text-danger p-3 my-card" ><span class="fa fa-spinner" aria-hidden="true"></span></div>
-                <div class="text-danger text-center mt-3"><h4>Skills</h4></div>
-                <div class="text-danger text-center mt-2"><h1>{{num_skills}}</h1></div>
-            </div>
+      </div>
+    </div>
+    <div class="col-md-3 effect">
+      <div class="card border-success mx-sm-1 p-3" onclick="window.location='{{ url_for("salary") }}';">
+        <div class="card border-success shadow text-success p-3 my-card"><span class="fa fa-credit-card" aria-hidden="true"></span></div>
+        <div class="text-success text-center mt-3">
+          <h4>Salary</h4>
         </div>
-        <div class="col-md-3 effect">
-            <div class="card border-warning mx-sm-1 p-3" onclick="window.location='{{ url_for("about") }}';">
-                <div class="card border-warning shadow text-warning p-3 my-card" ><span class="fa fa-question-circle" aria-hidden="true"></span></div>
-                <div class="text-warning text-center mt-3"><h4>About</h4></div>
-                <div class="text-warning text-center mt-2"><h1>&nbsp;</h1></div>
-            </div>
+        <div class="text-success text-center mt-2">
+          <h1>&nbsp;</h1>
         </div>
-     </div>
+      </div>
+    </div>
+    <div class="col-md-3 effect">
+      <div class="card border-danger mx-sm-1 p-3" onclick="window.location='{{ url_for("skill") }}';">
+        <div class="card border-danger shadow text-danger p-3 my-card"><span class="fa fa-spinner" aria-hidden="true"></span></div>
+        <div class="text-danger text-center mt-3">
+          <h4>Skills</h4>
+        </div>
+        <div class="text-danger text-center mt-2">
+          <h1>{{num_skills}}</h1>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 effect">
+      <div class="card border-warning mx-sm-1 p-3" onclick="window.location='{{ url_for("about") }}';">
+        <div class="card border-warning shadow text-warning p-3 my-card"><span class="fa fa-question-circle" aria-hidden="true"></span></div>
+        <div class="text-warning text-center mt-3">
+          <h4>About</h4>
+        </div>
+        <div class="text-warning text-center mt-2">
+          <h1>&nbsp;</h1>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <div style="width: 100%; text-align: center;">
-  <a style="float: left;" href="{{ url_for("salary") }}">Find salaries</a>
-  <a style="float: center;" href="{{ url_for("job") }}">Looking for a job?</a>
-  <span style="float: center; margin-left: 6%; margin-right: 6%;"></span>
-  <a style="float: center;" href="{{ url_for("skill") }}">Got skills?</a>
-  <a style="float: right;" href="{{ url_for("about") }}">Learn a bit about us!</a>
+  <div class="row">
+    <div class="col-3"> <a class="btn btn-outline-primary" href="{{ url_for("salary") }}">Find salaries</a>
+    </div>
+    <div class="col-3"> <a class="btn btn-outline-primary" href="{{ url_for("job") }}">Looking up a job</a>
+    </div>
+    <div class="col-3"> <a class="btn btn-outline-primary" href="{{ url_for("skill") }}">Got skills?</a>
+    </div>
+    <div class="col-3"> <a class="btn btn-outline-primary" href="{{ url_for("about") }}">Learn more about us!</a>
+    </div>
+
+  </div>
 </div>
 </br>
 
