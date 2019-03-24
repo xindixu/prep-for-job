@@ -37,13 +37,13 @@ def create_app(test_config=None):
         if jobs.status_code != 200:
             num_jobs = 0
         else:
-            num_jobs = len(jobs.json())-1
+            num_jobs = len(jobs.json()[:-1])
 
         skills = requests.get(f"http://api.dataatwork.org/v1/skills", params={"limit": 30, "offset" : 19930})
         if skills.status_code != 200:
             num_skills = 0
         else:
-            num_skills = len(skills.json())-1
+            num_skills = len(skills.json()[:-1])
         return render_template('index.html', num_jobs=num_jobs, num_skills=num_skills)
 
     @app.route('/about')
@@ -142,7 +142,7 @@ def create_app(test_config=None):
             if jobs.status_code != 200:
                 return "Not Found", 404
             else:
-                return render_template("job.html", jobs=jobs.json())
+                return render_template("job.html", jobs=jobs.json()[:-1])
         else:
             job_info = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}")
             related_jobs = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_jobs")
@@ -160,7 +160,7 @@ def create_app(test_config=None):
             if skills.status_code != 200:
                 return "Not Found", 404
             else:
-                return render_template("skill.html", skills=skills.json())
+                return render_template("skill.html", skills=skills.json()[:-1])
         else:
             skills_info = requests.get(f"http://api.dataatwork.org/v1/skills/{uuid}")
             related_jobs = requests.get(f"http://api.dataatwork.org/v1/skills/{uuid}/related_jobs")
