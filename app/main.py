@@ -93,7 +93,7 @@ def create_app(test_config=None):
             {
                 "name": "Xindi Xu",
                 "bio": "Advertising and Japanese; Completed Elements of Computing Certificate. Graduating May 2020.",
-                "responsibilities": "Job Info Page, Front End",
+                "responsibilities": "Job Info Page, Salary page, BLS API connection, Front End",
                 "contribs": member_contribs["xindi"],
                 "photo": "xindi"
             },
@@ -137,7 +137,7 @@ def create_app(test_config=None):
     @app.route('/job/<string:uuid>')
     def job(uuid=None):
         if uuid is None:
-            jobs = requests.get(f"http://api.dataatwork.org/v1/jobs", params={"limit": 10})
+            jobs = requests.get(f"http://api.dataatwork.org/v1/jobs", params={"limit": 20})
             if jobs.status_code != 200:
                 return "Not Found", 404
             else:
@@ -187,18 +187,7 @@ def create_app(test_config=None):
         austin = df_qcew[(df_qcew.own_code == 0) & (df_qcew.area_fips == '48015')]
         weekly_avg = austin.avg_wkly_wage.values[0]
 
-        # headers = {'Content-type': 'application/json'}
-        # data = json.dumps({"seriesid": ['NCU5306633300003']})
-        # p = requests.post("https://api.bls.gov/publicAPI/v2/timeseries/data/", data=data, headers=headers)
-        #
-        # json_data = json.loads(p.data)
-        #
-        # # if data['status'] != 200:
-        # #     return "Not Found", 404
-        # # else:
-        # #     return render_template("salary.html", salary=data)
-        #
-        return render_template("salary.html", obj=obj, weekly_avg=weekly_avg)
+        return render_template("salary.html", job_to_salary=obj, loc_to_salary=weekly_avg)
 
     # auth
     import auth
@@ -210,5 +199,5 @@ def create_app(test_config=None):
     return app
 
 #if __name__ == '__main__':
-#may need a run file or something
+# may need a run file or something
 app = create_app()
