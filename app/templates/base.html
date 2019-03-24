@@ -64,24 +64,27 @@
           <a class="nav-link" href="{{ url_for('auth.logout') }}">Log Out</a>
         </li>
       {% else %}
+        <!--
         <li class="nav-item {% if g.endpoint == "auth.register" %}active{% endif %}">
           <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
         </li>
         <li class="nav-item {% if g.endpoint == "auth.login" %}active{% endif %}">
           <a class="nav-link" href="{{ url_for('auth.login') }}">Log In</a>
         </li>
+        -->
       {% endif %}
       </ul>
 
     </div>
   </nav>
-  
+
   <main class="container">
     {% block content %}{% endblock %}
   </main>
 
   <footer>
-    All rights reserved - 2019
+    <br>
+    <p style="float: right; margin: 12px;">All rights reserved - 2019</p>
   </footer>
 </body>
 
