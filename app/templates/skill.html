@@ -5,11 +5,12 @@
 {% block content %}
 
 <h1>Skills</h1>
-    <ul>
+    <hr>
+    <div class="list-group">
     {% for skill in skills %}
-        <li><a href="{{ url_for("skill", uuid=skill.uuid) }}">
+        <a class="list-group-item" href="{{ url_for("skill", uuid=skill.uuid) }}">
             {{ skill.name }}
-        </a></li>
+        </a>
     {% endfor %}
-    </ul>
+    </div>
 {% endblock %}

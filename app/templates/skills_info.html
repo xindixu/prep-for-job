@@ -6,15 +6,17 @@
 
 {% block content %}
     <h1>{{ skills.skill_name }}</h1>
+    <hr>
       {% if "error" in jobs.keys() %}
         <h4> No Related Jobs </h4>
       {% else %}
-    <ul>
+    <div>
         {% for job in jobs.jobs %}
-            <li><a href="{{ url_for("job", uuid = job.job_uuid) }}">
+            <a href="{{ url_for("job", uuid = job.job_uuid) }}"
+            class="list-group-item">
                 {{ job.job_title }}
-            </a></li>
+            </a>
         {% endfor %}
-    </ul>
+    </div>
     {% endif %}
 {% endblock %}
