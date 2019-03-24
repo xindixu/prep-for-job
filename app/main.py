@@ -27,7 +27,7 @@ def create_app(test_config=None):
         pass
 
     # connect to db
-    from . import db
+    import db
     db.init_app(app)
 
     # routes
@@ -81,15 +81,14 @@ def create_app(test_config=None):
         return render_template("salary.html")
 
     # auth
-    from . import auth
+    import auth
     app.register_blueprint(auth.bp)
 
     @app.url_value_preprocessor
     def get_endpoint(endpoint, values):
         g.endpoint = endpoint
-
     return app
 
-
-if __name__ == '__main__':
-    create_app()
+#if __name__ == '__main__':
+#may need a run file or something
+app = create_app()
