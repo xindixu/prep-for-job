@@ -6,7 +6,7 @@
     <h1>About Us</h1>
     <hr>
 
-    <h2>Members</h2>
+    <h2 class="mt-5">Members</h2>
     <div class="row">
     {% for member in members %}
         <div class="col-sm-6">
@@ -25,16 +25,17 @@
             <li class="list-group-item">
                 <b>Contributions</b>: Made {{ member.contribs.commits }}
                 {% if member.contribs.commits == 1 %}
-                    commit
+                    commit,
                 {% else %}
-                    commits
+                    commits,
                 {% endif %}
-                and opened {{ member.contribs.issues }}
+                opened {{ member.contribs.issues }}
                 {% if member.contribs.issues == 1 %}
-                    issue
+                    issue,
                 {% else %}
-                    issues
+                    issues,
                 {% endif %}
+                and made 0 unit tests
             </li>
         </ul>
     </div>
@@ -42,7 +43,7 @@
     {% endfor %}
     </div>
 
-    <h2>Repository Statistics</h2>
+    <h2 class="mt-5">Repository Statistics</h2>
 
     <table class="table table-striped">
         <thead>
@@ -90,7 +91,7 @@
         </tbody>
     </table>
 
-    <h2>Data Sources</h2>
+    <h2 class="mt-5">Data Sources</h2>
     <hr>
     <div class="list-group">
         <a href="https://any-api.com/dataatwork_org/dataatwork_org/docs/API_Description"
@@ -112,4 +113,26 @@
             <i class="fas fa-external-link-alt"></i>
         </a>
     </div>
+
+    <h2 class="mt-5">Technologies</h2>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Flask</th>
+                <td>Server-side scripting</td>
+            </tr>
+            <tr>
+                <th>GitLab</th>
+                <td>Git client for collaboration</td>
+            </tr>
+            <tr>
+                <th>Google Cloud Platform</th>
+                <td>Deployment of website</td>
+            </tr>
+            <tr>
+                <th>Bootstrap 4</th>
+                <td>Styling</td>
+            </tr>
+        </tbody>
+    </table>
 {% endblock %}
