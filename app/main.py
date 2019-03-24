@@ -37,13 +37,13 @@ def create_app(test_config=None):
         if jobs.status_code != 200:
             num_jobs = 0
         else:
-            num_jobs = len(jobs.json())
+            num_jobs = len(jobs.json())-1
 
-        related_jobs = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_jobs")
-        if related_jobs.status_code != 200:
+        skills = requests.get(f"http://api.dataatwork.org/v1/skills", params={"limit": 30, "offset" : 19930})
+        if skills.status_code != 200:
             num_skills = 0
         else:
-            num_skills = len(related_jobs.json())
+            num_skills = len(skills.json())-1
         return render_template('index.html', num_jobs=num_jobs, num_skills=num_skills)
 
     @app.route('/about')
