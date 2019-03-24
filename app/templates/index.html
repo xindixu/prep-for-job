@@ -33,7 +33,7 @@
             <div class="card border-info mx-sm-1 p-3" onclick="window.location='{{ url_for("job") }}';">
                 <div class="card border-info shadow text-info p-3 my-card" ><span class="fa fa-briefcase" aria-hidden="true"></span></div>
                 <div class="text-info text-center mt-3"><h4>Jobs</h4></div>
-                <div class="text-info text-center mt-2"><h1>10</h1></div>
+                <div class="text-info text-center mt-2"><h1>{{num_jobs}}</h1></div>
             </div>
         </div>
         <div class="col-md-3 effect">
@@ -47,7 +47,7 @@
             <div class="card border-danger mx-sm-1 p-3" onclick="window.location='{{ url_for("skill") }}';">
                 <div class="card border-danger shadow text-danger p-3 my-card" ><span class="fa fa-spinner" aria-hidden="true"></span></div>
                 <div class="text-danger text-center mt-3"><h4>Skills</h4></div>
-                <div class="text-danger text-center mt-2"><h1>30</h1></div>
+                <div class="text-danger text-center mt-2"><h1>{{num_skills}}</h1></div>
             </div>
         </div>
         <div class="col-md-3 effect">
