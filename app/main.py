@@ -4,6 +4,8 @@ from flask import Flask, render_template, g
 import requests
 from bls_datasets import oes, qcew
 
+
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -29,20 +31,14 @@ def create_app(test_config=None):
     import db
     db.init_app(app)
 
+    num_jobs = 20
+    num_skills = 30
+
     # routes
     @app.route('/')
     def index():
-        jobs = requests.get(f"http://api.dataatwork.org/v1/jobs", params={"limit": 10})
-        if jobs.status_code != 200:
-            num_jobs = 0
-        else:
-            num_jobs = len(jobs.json()[:-1])
+        # WARNING: changed! we are calling apis while we don't have to!
 
-        skills = requests.get(f"http://api.dataatwork.org/v1/skills", params={"limit": 30, "offset" : 19930})
-        if skills.status_code != 200:
-            num_skills = 0
-        else:
-            num_skills = len(skills.json()[:-1])
         return render_template('index.html', num_jobs=num_jobs, num_skills=num_skills)
 
     @app.route('/about')
@@ -92,8 +88,8 @@ def create_app(test_config=None):
             },
             {
                 "name": "Xindi Xu",
-                "bio": "Advertising and Japanese; Completed Elements of Computing Certificate. Graduating May 2020.",
-                "responsibilities": "Job Info Page, Salary page, BLS API connection, Front End",
+                "bio": "Advertising, Elements of Computing Certificate (May 2020). Front End Developer",
+                "responsibilities": "Job Info Page, Salary page, BLS API connection, Login/Register & database, Front End",
                 "contribs": member_contribs["xindi"],
                 "photo": "xindi"
             },
@@ -137,7 +133,7 @@ def create_app(test_config=None):
     @app.route('/job/<string:uuid>')
     def job(uuid=None):
         if uuid is None:
-            jobs = requests.get(f"http://api.dataatwork.org/v1/jobs", params={"limit": 20})
+            jobs = requests.get(f"http://api.dataatwork.org/v1/jobs", params={"limit": num_jobs})
             if jobs.status_code != 200:
                 return "Not Found", 404
             else:
@@ -155,7 +151,7 @@ def create_app(test_config=None):
     @app.route('/skill/<string:uuid>')
     def skill(uuid=None):
         if uuid is None:
-            skills = requests.get(f"http://api.dataatwork.org/v1/skills", params={"limit": 30, "offset" : 19930})
+            skills = requests.get(f"http://api.dataatwork.org/v1/skills", params={"limit": num_skills, "offset" : 19930})
             if skills.status_code != 200:
                 return "Not Found", 404
             else:
@@ -172,7 +168,6 @@ def create_app(test_config=None):
 
     @app.route('/salary')
     def salary():
-
         df_oes = oes.get_data(year=2017)
         detailed = df_oes[df_oes.OCC_GROUP == 'detailed']
         job = detailed.OCC_TITLE
