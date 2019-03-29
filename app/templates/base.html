@@ -77,14 +77,14 @@
           <span class="navbar-text">Hi, {{ g.user['username'] }}</span>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('auth.logout') }}">Log Out</a>
+          <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
         </li>
       {% else %}
         <li class="nav-item {% if g.endpoint == "auth.register" %}active{% endif %}">
-          <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
+          <a class="nav-link" href="{{ url_for('register') }}">Register</a>
         </li>
-        <li class="nav-item {% if g.endpoint == "auth.login" %}active{% endif %}">
-          <a class="nav-link" href="{{ url_for('auth.login') }}">Log In</a>
+        <li class="nav-item {% if g.endpoint == "login" %}active{% endif %}">
+          <a class="nav-link" href="{{ url_for('login') }}">Log In</a>
         </li>
       {% endif %}
       </ul>

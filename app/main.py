@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, g
+from flask import Flask, render_template, g, request
 from flask_sqlalchemy import SQLAlchemy
 import requests
 from bls_datasets import oes, qcew
@@ -28,8 +28,29 @@ def create_app(test_config=None):
 
     class Users (db.Model):
         __tablename__ = "users"
+        id = db.Column(db.Integer, primary_key=True)
+        email = db.Column(db.String(256), nullable=False)
         hash = db.Column(db.String(256), nullable=False)
-
+        def new_member(self, email, password):
+            exists = db.engine.execute(text("SELECT * FROM users WHERE email='{}';".format(email))).execution_options(autocommit=True)
+            if exists:
+                return False
+            else:
+                # hash the password first
+                hashed_pass = "jhwfiwf" #todo
+                if db.engine.execute(text("INSERT INTO users (id, email, hash) VALUES(null, '{}', '{}')';".format(email, hashed_pass))).execution_options(autocommit=True):
+                    return True
+                else:
+                    return False
+        def view_members(self):
+            return db.engine.execute(text("SELECT * FROM users")).execution_options(autocommit=True)
+        def check_password(self, email, hpassword):
+            #todo hash password before passing
+            real_hash = db.engine.execute(text("SELECT hash FROM users WHERE email='{}';".format(email))).execution_options(autocommit=True)
+            if hpassword == real_hash:
+                return True
+            else:
+                return False
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -43,10 +64,6 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-
-    # connect to db
-    import db
-    db.init_app(app)
 
     # routes
     @app.route('/')
@@ -151,6 +168,51 @@ def create_app(test_config=None):
             stats["total_issues"] += contribs["issues"]
 
         return render_template("about.html", members=members, stats=stats)
+    @app.route('/auth/register/', methods=('GET', 'POST'))
+    def register():
+        if request.method == 'POST':
+            email = request.form['email']
+            if "@" not in email and "." not in email:
+                return "Bad email"
+            password = request.form['password']
+            password2 = request.form['password2']
+            if password != password2:
+                return("Passwords must match.")
+            if not email:
+                return 'Email with an @ and (.) is required.'
+            if len(email) < 6 or len(email) >= 50:
+                return 'Email must be more than 5 letters less than 50.'
+            if not password:
+                return 'Password is required.'
+            if len(password) < 8 or len(password) >= 50:
+                return 'Password must be more than 7 characters less than 50.'
+            u = Users()
+            k = u.view_members()
+            print(k)
+            return str(k)
+            return "welcome friend: "+email
+        else:
+            return render_template("auth/register.html")
+    @app.route('/auth/login/', methods=('GET', 'POST'))
+    def login():
+        if request.method == 'POST':
+            email = request.form['email']
+            password = request.form['password']
+            if not email:
+                error = 'Email is required.'
+            elif not password:
+                error = 'Password is required.'
+            u = Users()
+            k = u.check_password(email, password) #TODO hash the pass
+            if k == True:
+                return "LOGGED IN"
+            else:
+                return "NOT LOGGED IN WRONG"
+        return render_template("auth/login.html")
+
+    @app.route('/auth/logout/', methods=('GET', 'POST'))
+    def logout():
+        return "TODO: add session, hash passwords, add postgress uri, and test db functions"
 
     @app.route('/job/')
     @app.route('/job/<string:uuid>')
@@ -220,8 +282,6 @@ def create_app(test_config=None):
         return render_template("salary.html", obj=obj, weekly_avg=weekly_avg)
 
     # auth
-    import auth
-    app.register_blueprint(auth.bp)
 
     @app.url_value_preprocessor
     def get_endpoint(endpoint, values):
