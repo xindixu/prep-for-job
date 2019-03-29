@@ -1,8 +1,10 @@
 import os
 
 from flask import Flask, render_template, g
+from flask_sqlalchemy import SQLAlchemy
 import requests
 from bls_datasets import oes, qcew
+from passlib.hash import sha256_crypt
 
 def create_app(test_config=None):
     # create and configure the app
@@ -10,7 +12,24 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
+        SQLALCHEMY_DATABASE_URI=""
     )
+
+    db = SQLAlchemy(app)
+
+    class Jobs (db.Model):
+        __tablename__ = "jobs"
+        id = db.Column(db.Integer, primary_key=True)
+        title = db.Column(db.String(255), nullable=False)
+
+    class Skills (db.Model):
+        __tablename__ = "skills"
+        id = db.Column(db.Integer, primary_key=True)
+
+    class Users (db.Model):
+        __tablename__ = "users"
+        hash = db.Column(db.String(256), nullable=False)
+
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
