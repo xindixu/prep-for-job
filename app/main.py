@@ -1,10 +1,13 @@
 import os
 
-from flask import Flask, render_template, g, request
+from flask import Flask, render_template, g, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import requests
 from bls_datasets import oes, qcew
 from passlib.hash import sha256_crypt
+from .forms import RegistrationForm, LoginForm
+from secrets import DB_STRING
+import datetime
 
 def create_app(test_config=None):
     # create and configure the app
@@ -12,7 +15,8 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-        SQLALCHEMY_DATABASE_URI=""
+        SQLALCHEMY_DATABASE_URI=DB_STRING,
+        SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
 
     db = SQLAlchemy(app)
@@ -29,28 +33,43 @@ def create_app(test_config=None):
     class Users (db.Model):
         __tablename__ = "users"
         id = db.Column(db.Integer, primary_key=True)
-        email = db.Column(db.String(256), nullable=False)
+        email = db.Column(db.String(256), nullable=False, unique=True)
         hash = db.Column(db.String(256), nullable=False)
-        def new_member(self, email, password):
-            exists = db.engine.execute(text("SELECT * FROM users WHERE email='{}';".format(email))).execution_options(autocommit=True)
-            if exists:
-                return False
-            else:
-                # hash the password first
-                hashed_pass = "jhwfiwf" #todo
-                if db.engine.execute(text("INSERT INTO users (id, email, hash) VALUES(null, '{}', '{}')';".format(email, hashed_pass))).execution_options(autocommit=True):
-                    return True
-                else:
-                    return False
-        def view_members(self):
-            return db.engine.execute(text("SELECT * FROM users")).execution_options(autocommit=True)
-        def check_password(self, email, hpassword):
+
+        def __repr__(self):
+            return f"User({self.id}, {self.email})"
+
+        @classmethod
+        def new_member(cls, email, password):
+            u = cls(email=email, hash=password)
+            db.session.add(u)
+            db.session.commit()
+            return u
+            # exists = db.engine.execute(text("SELECT * FROM users WHERE email='{}';".format(email))).execution_options(autocommit=True)
+            # if exists:
+            #     return False
+            # else:
+            #     # hash the password first
+            #     hashed_pass = "jhwfiwf" #todo
+            #     if db.engine.execute("INSERT INTO users (id, email, hash) VALUES(null, '{}', '{}')';".format(email, hashed_pass)).execution_options(autocommit=True):
+            #         return True
+            #     else:
+            #         return False
+
+        @classmethod
+        def view_members(cls):
+            return cls.query.all()
+
+        @classmethod
+        def check_password(cls, email, hpassword):
             #todo hash password before passing
-            real_hash = db.engine.execute(text("SELECT hash FROM users WHERE email='{}';".format(email))).execution_options(autocommit=True)
-            if hpassword == real_hash:
+            u = cls.query.filter_by(email=email).first()
+            if hpassword == u.hash:
                 return True
             else:
                 return False
+
+    db.create_all()
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -168,47 +187,38 @@ def create_app(test_config=None):
             stats["total_issues"] += contribs["issues"]
 
         return render_template("about.html", members=members, stats=stats)
+
     @app.route('/auth/register/', methods=('GET', 'POST'))
     def register():
-        if request.method == 'POST':
-            email = request.form['email']
-            if "@" not in email and "." not in email:
-                return "Bad email"
-            password = request.form['password']
-            password2 = request.form['password2']
-            if password != password2:
-                return("Passwords must match.")
-            if not email:
-                return 'Email with an @ and (.) is required.'
-            if len(email) < 6 or len(email) >= 50:
-                return 'Email must be more than 5 letters less than 50.'
-            if not password:
-                return 'Password is required.'
-            if len(password) < 8 or len(password) >= 50:
-                return 'Password must be more than 7 characters less than 50.'
-            u = Users()
+        form = RegistrationForm()
+        if request.method == 'POST' and form.validate_on_submit():
+            email = form.email.data
+            password = form.password.data
+            try:
+                u = Users.new_member(email, password)
+            except:  # todo: make this more specific
+                flash(f"User {email} already exists", "danger")
+                return render_template("auth/register.html", form=form)
             k = u.view_members()
             print(k)
-            return str(k)
-            return "welcome friend: "+email
+            flash("You have been registered successfully", category="success")
+            return redirect(url_for("login"))
         else:
-            return render_template("auth/register.html")
+            return render_template("auth/register.html", form=form)
+
     @app.route('/auth/login/', methods=('GET', 'POST'))
     def login():
-        if request.method == 'POST':
-            email = request.form['email']
-            password = request.form['password']
-            if not email:
-                error = 'Email is required.'
-            elif not password:
-                error = 'Password is required.'
+        form = LoginForm()
+        if request.method == 'POST' and form.validate_on_submit():
+            email = form.email.data
+            password = form.password.data
             u = Users()
             k = u.check_password(email, password) #TODO hash the pass
-            if k == True:
+            if k:
                 return "LOGGED IN"
             else:
                 return "NOT LOGGED IN WRONG"
-        return render_template("auth/login.html")
+        return render_template("auth/login.html", form=form)
 
     @app.route('/auth/logout/', methods=('GET', 'POST'))
     def logout():
@@ -286,6 +296,7 @@ def create_app(test_config=None):
     @app.url_value_preprocessor
     def get_endpoint(endpoint, values):
         g.endpoint = endpoint
+
     return app
 
 #if __name__ == '__main__':
