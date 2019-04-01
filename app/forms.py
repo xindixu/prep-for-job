@@ -18,6 +18,3 @@ class LoginForm (FlaskForm):
     email = StringField(u"Email", validators=[validators.DataRequired(), validators.Email("Email invalid")])
     password = PasswordField(u"Password", validators=[validators.DataRequired()])
     submit = SubmitField(u"Log In")
-
-
-

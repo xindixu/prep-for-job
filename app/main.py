@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 import requests
 from bls_datasets import oes, qcew
 from passlib.hash import sha256_crypt
-from .forms import RegistrationForm, LoginForm
+from forms import RegistrationForm, LoginForm
 from secrets import DB_STRING
 import datetime
 
