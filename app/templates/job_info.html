@@ -15,16 +15,17 @@
     <h1>{{ job.title }}</h1>
         <hr>
     <h2>Skills</h2>
-    <ul class="list-group">
-        {% for skill in skills.skills %}
-            <li class="list-group-item list-group-item-action">
-              <a href="{{ url_for("skill", uuid=skill.skill_uuid) }}">
-                {{ skill.skill_name }}:
-              </a>
-              {{ skill.description }}
-            </li>
+    <div>
+        {% for group in skills.group %}
+            <h3>{{ group.title.name }}:</h3>
+            <ul class="list-group">
+            {% for skill in group.element %}
+              <li class="list-group-item">{{skill.name}}</li>
+            {% endfor %}
+            </ul>
         {% endfor %}
-    </ul>
+      </div>
+
     <h2>Related Jobs</h2>
 
     <ul>
