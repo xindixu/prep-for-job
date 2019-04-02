@@ -10,16 +10,20 @@
   a {
     text-transform: capitalize;
   }
+  .nav .nav-item .nav-link:hover, .nav .nav-item .nav-link:focus{
+    background-color: #66615B;
+    color: #fff;
+  }
 </style>
 <h1>{{ job.title }}</h1>
 <hr>
 <section id="basic_info">
 <q>{{job.what_they_do}}</q>
 
-<h2>Hourly Wage:</h2>
+<h2>Hourly Wage</h2>
 <!-- TODO: conditional rendering; api request exceed -->
 {% if wage.status != 'REQUEST_NOT_PROCESSED'%}
-<span>$ {{wage.Results.series[0].data[0].value}}/hr</span>
+<p><strong>$ {{wage.Results.series[0].data[0].value}}/hr</strong></p>
 {% else %}
 <div class="alert alert-warning" role="alert">
   Daily api limit exceeded!
