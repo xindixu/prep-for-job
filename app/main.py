@@ -243,12 +243,17 @@ def create_app(test_config=None):
 
     @app.route('/job/')
     @app.route('/job/<string:code>')
-    def job(code=None, job_title=None):
+    def job(page=None, code=None):
+        page = int(request.args.get('page', 1))
         if code is None:
-            # TODO: load next batch of data
             headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
-            jobs = requests.get("https://services.onetcenter.org/ws/mnm/careers/", headers=headers)
-            return render_template("job.html", jobs=json.loads(jobs.text))
+            url = "https://services.onetcenter.org/ws/mnm/careers/"
+            if page is not None:
+                url += f"?start={(page-1)*20+1}"
+            jobs = requests.get(url, headers=headers)
+            return render_template("job.html", jobs=json.loads(jobs.text), page=page)
+
+
         else:
             # connect any api with onet
             # QUESTION: skill relationship in onet only or anyapi
