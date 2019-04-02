@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 import requests
 from bls_datasets import oes, qcew
 from passlib.hash import sha256_crypt
-from forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm #relative path notation
 from secrets import DB_STRING
 import datetime
 
@@ -15,7 +15,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-        SQLALCHEMY_DATABASE_URI=DB_STRING,
+        SQLALCHEMY_DATABASE_URI= DB_STRING,
         SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
 
@@ -24,17 +24,31 @@ def create_app(test_config=None):
     class Jobs (db.Model):
         __tablename__ = "jobs"
         id = db.Column(db.Integer, primary_key=True)
+        created_at = db.Column(db.DateTime,nullable = False)
+        updated_at = db.Column(db.DateTime,nullable = False)
         title = db.Column(db.String(255), nullable=False)
+        salary = db.Column(db.Numeric)
+        description = db.Column(db.Text, nullable = False)
+        parent_skill = db.Column(db.String(255), nullable = False)
 
     class Skills (db.Model):
         __tablename__ = "skills"
         id = db.Column(db.Integer, primary_key=True)
+        created_at = db.Column(db.DateTime,nullable = False)
+        updated_at = db.Column(db.DateTime,nullable = False)
+        title = db.Column(db.String(255), nullable=False)
+        description = db.Column(db.Text, nullable = False)
+        parent_skill = db.Column(db.String(255), nullable = False)
+        importance = db.Column(db.String(255), nullable = False)
 
     class Users (db.Model):
         __tablename__ = "users"
-        id = db.Column(db.Integer, primary_key=True)
-        email = db.Column(db.String(256), nullable=False, unique=True)
         hash = db.Column(db.String(256), nullable=False)
+        username = db.Column(db.String(256), nullable = False)
+        is_admin = db.Column(db.Boolean, nullable = False)
+        bio = db.Column(db.Text)
+        id = db.Column(db.Integer, primary_key=True)
+        image = db.Column(db.String(500))
 
         def __repr__(self):
             return f"User({self.id}, {self.email})"
