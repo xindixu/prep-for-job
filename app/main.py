@@ -264,7 +264,26 @@ def create_app(test_config=None):
             technology = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/technology", headers=headers)
             related_jobs = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/explore_more", headers=headers)
 
-            print(job_info.text)
+            # construct seriesid for bls api
+            base = 'OEUN'
+            # national wide
+            area_code = '0000000'
+            # total
+            industry_code = '000000'
+            # Registered Nurses
+            arr = code[:7].split('-')
+            print(arr)
+            job_code = arr[0]+arr[1]
+            print(job_code)
+            # hourly wage
+            statistic_code = '03'
+            seriesid = base+area_code+industry_code+job_code+statistic_code
+
+            headers = {'Content-type': 'application/json'}
+            data = json.dumps({"seriesid": [seriesid], "startyear": "2018", "endyear": "2018"})
+            wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
+
+
             if job_info.status_code != 200:
                 return "Not Found", 404
             else:
@@ -275,7 +294,8 @@ def create_app(test_config=None):
                                        skills=json.loads(skills.text),
                                        abilities=json.loads(abilities.text),
                                        technology=json.loads(technology.text),
-                                       related_jobs=json.loads(related_jobs.text)
+                                       related_jobs=json.loads(related_jobs.text),
+                                       wage=json.loads(wage.text)
                                        )
 
     @app.route('/skill/')
@@ -299,6 +319,9 @@ def create_app(test_config=None):
 
     @app.route('/salary')
     def salary():
+        # TODO: load multiple wage data
+        # connect job titles back to job page
+
         df_oes = oes.get_data(year=2017)
         detailed = df_oes[df_oes.OCC_GROUP == 'detailed']
         job = detailed.OCC_TITLE
@@ -313,7 +336,33 @@ def create_app(test_config=None):
         austin = df_qcew[(df_qcew.own_code == 0) & (df_qcew.area_fips == '48015')]
         weekly_avg = austin.avg_wkly_wage.values[0]
 
-        return render_template("salary.html", job_to_salary=obj, loc_to_salary=weekly_avg)
+
+        # TODO: load multiple wage data
+        # api
+
+        base = 'OEUN'
+        # national wide
+        area_code = '0000000'
+        # total
+        industry_code = '000000'
+        # Registered Nurses
+        job_code = '291141'
+        # hourly wage
+        statistic_code = '03'
+        seriesid = base+area_code+industry_code+job_code+statistic_code
+
+        # url = "http://api.bls.gov/publicAPI/v2/timeseries/data/"
+        # wage = requests.get(url, data=data, headers=headers)
+
+
+        headers = {'Content-type': 'application/json'}
+        data = json.dumps({"seriesid": [seriesid]})
+        wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
+
+
+        print(json_data)
+
+        return render_template("salary.html", job_to_salary=obj, loc_to_salary=weekly_avg, wage=wage)
 
     # auth
     @app.url_value_preprocessor

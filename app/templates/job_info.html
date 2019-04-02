@@ -11,10 +11,11 @@
     text-transform: capitalize;
   }
 </style>
-
     <h1>{{ job.title }}</h1>
     <hr>
     <q>{{job.what_they_do}}</q>
+
+    <h2>Hourly Wage: $ {{wage.Results.series[0].data[0].value}}/hr</h2> 
 
     <h2>Tasks</h2>
     <ul class="list-group">
