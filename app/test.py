@@ -1,4 +1,4 @@
-from main import create_app
+from main import create_app, Jobs, Skills, Salary, db
 import unittest
 from random import randint
 
@@ -76,25 +76,129 @@ class FlaskBookshelfTests(unittest.TestCase):
 
 
 # test for job table
-# description is not null
-# Salary is not null
-# job is unique
+    # insertion is working
+    def test_job_insert(self):
+        s = Jobs(id='9999', created_at ='1999-01-08', updated_at = '1999-10-08',title = 'job', salary = 0, description = 'this is a job',parent_skill = "none")
+        db.session.add(s)
+        db.session.commit()
+
+
+        r = db.session.query(Jobs).filter_by(id = '9999').one()
+        self.assertEqual(str(r.id), '9999')
+
+        db.session.query(Jobs).filter_by(id = '9999').delete()
+        db.session.commit()
+
+    # description is not null
+    def test_job_description(self):
+        error = False
+        s = Jobs(id='9999', created_at ='1999-01-08', updated_at = '1999-10-08',title = 'job', salary = 0, description = '',parent_skill = "none")
+        try:
+            db.session.add(s)
+            db.session.commit()
+        except:
+            error = True
+
+        self.assertEqual(error, True)
+
+        try:
+            db.session.query(Jobs).filter_by(id = '9999').delete()
+
+    # Salary is nullable
+    def test_job_salary(self):
+        error = False
+        s = Jobs(id='9999', created_at ='1999-01-08', updated_at = '1999-10-08',title = 'job', description = 'this is a job',parent_skill = "none")
+        try:
+            db.session.add(s)
+            db.session.commit()
+        except:
+            error = True
+
+        self.assertEqual(error, False)
+
+        db.session.query(Jobs).filter_by(id = '9999').delete()
 
 # test for skill table
-# description is not null
-# skill is unique
-# title is not null
+    # insertion is working
+    def test_skill_insert(self):
+        s = Skills(id='9999', created_at ='1999-01-08', updated_at = '1999-10-08',title = 'skill', importance = 0, description = 'this is a skill',parent_skill = "none")
+        db.session.add(s)
+        db.session.commit()
 
-# test for skill-job table
-# unique skill-job
 
-# test for register table
-# email unique
-# email is an email (must have @ and .)
-# password is same with retype
-# cannot be blank
+        r = db.session.query(Skills).filter_by(id = '9999').one()
+        self.assertEqual(str(r.id), '9999')
+
+        db.session.query(Jobs).filter_by(id = '9999').delete()
+        db.session.commit()
+    # description is nullable
+    def test_skill_description(self):
+        error = False
+        s = Skills(id='9999', created_at ='1999-01-08', updated_at = '1999-10-08',title = 'skill', importance = 0, description = '',parent_skill = "none")
+
+        try:
+            db.session.add(s)
+            db.session.commit()
+        except:
+            error = True
+        self.assertEqual(error, False)        
+
+        try:
+            db.session.query(Skills).filter_by(id = '9999').delete()
+    # parent_skill is nullable
+    def test_skill_description(self):
+        error = False
+        s = Skills(id='9999', created_at ='1999-01-08', updated_at = '1999-10-08',title = 'skill', importance = 0, description = 'this is a skill',parent_skill = "")
+
+        try:
+            db.session.add(s)
+            db.session.commit()
+        except:
+            error = True
+        self.assertEqual(error, False)        
+
+        try:
+            db.session.query(Skills).filter_by(id = '9999').delete()
+
+
+
 
 # test for login table
-# password is correct
-# password cannot be blank
-# retrieve password is working
+    # password is correct
+    def test_password_incorrect(self):
+        # sends HTTP GET request on path /
+        params = {
+            'email': 'bobby_'+str(str(randint(1000,99999))+'@hotmail.com'),
+            'password': 'iLikePizza1',
+        }
+        result = self.app.post('/auth/login/', data=params)
+
+        # assert the data
+        self.assertEqual(result.data, "NOT LOGGED IN WRONG")
+
+    # password correct
+    def test_password_correct(self):
+        # sends HTTP GET request on path /
+        params = {
+            'email': 'tsrishtti@gmail.com',
+            'password': 'Montana@123',
+        }
+        result = self.app.post('/auth/login/', data=params)
+
+        # assert the data
+        self.assertEqual(result.data, "LOGGED IN")
+
+    # logout 
+    def test_log_out(self):
+        # sends HTTP GET request on path /
+
+        result = self.app.post('/auth/logout/', data=params)
+
+        # assert the data
+        self.assertEqual(result.data, "LOGGED OUT")
+
+# test for about page
+
+# test for skill-job table
+
+# test for Users class
