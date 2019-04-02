@@ -18,7 +18,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-        SQLALCHEMY_DATABASE_URI='',
+        SQLALCHEMY_DATABASE_URI='postgresql://postgres;dbPassword1@localhost:5432/maindb',
         SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
 
@@ -44,7 +44,7 @@ def create_app(test_config=None):
         description = db.Column(db.Text, nullable = True)
         # check if parent skill can be null
         parent_skill = db.Column(db.String(255), nullable = True)
-        importance = db.Column(db.Real, nullable = False)
+        importance = db.Column(db.Float, nullable = False)
 
     class Users (db.Model):
         __tablename__ = "users"
