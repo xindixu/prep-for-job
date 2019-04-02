@@ -19,16 +19,14 @@
     </tr>
   </thead>
   <tbody>
-    {% for j,p in job_to_salary.items() %}
+    {% for obj in salary_info %}
     <tr>
-      <th scope="row">{{j}}</th>
-      <!-- TODO: somehow this is not working -->
-      {% if p=='NaN' %}
-      <td>NaN</td>
-      {% endif %}
-      <td>$ {{ "{:,}".format(p) }}</td>
+      <th scope="row">
+        <a href="{{ url_for("job", code=obj[1])}}">{{obj[0]}}</a>
+      </th>
+      <td>$ {{ "{:,}".format(obj[2]) }}</td>
+      <td>code: {{ obj[1] }}</td>
     </tr>
-
     {% endfor %}
 
   </tbody>

@@ -264,17 +264,16 @@ def create_app(test_config=None):
             technology = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/technology", headers=headers)
             related_jobs = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/explore_more", headers=headers)
 
-            # construct seriesid for bls api
+
+
+            # construct seriesid for bls api for wage
             base = 'OEUN'
-            # national wide
-            area_code = '0000000'
-            # total
-            industry_code = '000000'
-            # Registered Nurses
+            area_code = '0000000' # national wide
+            industry_code = '000000' # total
+
             arr = code[:7].split('-')
-            print(arr)
             job_code = arr[0]+arr[1]
-            print(job_code)
+
             # hourly wage
             statistic_code = '03'
             seriesid = base+area_code+industry_code+job_code+statistic_code
@@ -282,6 +281,8 @@ def create_app(test_config=None):
             headers = {'Content-type': 'application/json'}
             data = json.dumps({"seriesid": [seriesid], "startyear": "2018", "endyear": "2018"})
             wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
+
+
 
 
             if job_info.status_code != 200:
@@ -324,12 +325,16 @@ def create_app(test_config=None):
 
         df_oes = oes.get_data(year=2017)
         detailed = df_oes[df_oes.OCC_GROUP == 'detailed']
-        job = detailed.OCC_TITLE
+        job = detailed.OCC_TITLE.values
+        code = detailed.OCC_CODE.values
+        salary = detailed.A_MEDIAN.values
 
-        obj = {}
-        for j in job:
-            p = detailed[detailed.OCC_TITLE == j].A_MEDIAN.values[0]
-            obj[j] = p
+        salary_info = zip(job,code,salary)
+
+        # for i in job.index:
+        #     salary_info += {'title': job.get(i), 'code': code.get(i), 'salary': salary.get(i)}
+            # salary = detailed[detailed.OCC_TITLE == j].A_MEDIAN.values[0]
+
 
         # avg weekly wage
         df_qcew = qcew.get_data('industry', rtype='dataframe', year='2017', qtr='1', industry='10')
@@ -360,9 +365,7 @@ def create_app(test_config=None):
         wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
 
 
-        print(json_data)
-
-        return render_template("salary.html", job_to_salary=obj, loc_to_salary=weekly_avg, wage=wage)
+        return render_template("salary.html", salary_info=salary_info, loc_to_salary=weekly_avg)
 
     # auth
     @app.url_value_preprocessor

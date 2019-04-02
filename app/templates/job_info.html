@@ -15,7 +15,15 @@
     <hr>
     <q>{{job.what_they_do}}</q>
 
-    <h2>Hourly Wage: $ {{wage.Results.series[0].data[0].value}}/hr</h2> 
+    <h2>Hourly Wage:</h2>
+    <!-- TODO: conditional rendering; api request exceed -->
+    {% if wage.status != 'REQUEST_NOT_PROCESSED'%}
+      <span>$ {{wage.Results.series[0].data[0].value}}/hr</span>
+    {% else %}
+    <div class="alert alert-warning" role="alert">
+      Daily api limit exceeded!
+    </div>
+    {% endif %}
 
     <h2>Tasks</h2>
     <ul class="list-group">
