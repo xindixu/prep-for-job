@@ -244,11 +244,20 @@ def create_app(test_config=None):
     @app.route('/job/<string:uuid>')
     def job(uuid=None):
         if uuid is None:
-            jobs = requests.get(f"http://api.dataatwork.org/v1/jobs", params={"limit": 10})
+            # jobs = requests.get(f"http://api.dataatwork.org/v1/jobs", params={"limit": 10})
+            url = "https://services.onetcenter.org/ws/mnm/careers/"
+            headers = {'Authorization':'Basic dXRleGFzOjk3NDRxZmc=',
+                       "Accept": "application/json"}
+            jobs = requests.get(url, headers=headers)
+
+            # TODO: use try .... catch instead
             if jobs.status_code != 200:
                 return "Not Found", 404
             else:
-                return render_template("job.html", jobs=jobs.json()[:-1])
+                #return render_template("job.html", jobs=jobs.json()[:-1])
+                print(jobs.text)
+                print(jobs.headers['Content-Type'])
+                return render_template("job.html", jobs=jobs.text)
         else:
             job_info = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}")
             related_jobs = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_jobs")
