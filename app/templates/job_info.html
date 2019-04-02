@@ -14,8 +14,7 @@
 
     <h1>{{ job.title }}</h1>
     <hr>
-{{related_skills}}
-    <p>{{job.what_they_do}}</p>
+    <q>{{job.what_they_do}}</q>
 
     <h2>Tasks</h2>
     <ul class="list-group">
@@ -25,6 +24,8 @@
     </ul>
 
 
+
+  <!-- From o*net -->
     <h2>Skills</h2>
     {% for group in skills.group %}
         <h3>{{ group.title.name }}:</h3>
@@ -37,28 +38,22 @@
 
 
     <h2>Abilities</h2>
-    {{abilities.group}}
     {% for group in abilities.group %}
         <h3>{{ group.title.name }}:</h3>
-        <ul class="list-group">
+        <ul>
         {% for ability in group.element %}
-          <li class="list-group-item">{{ability.name}}</li>
+          <li>{{ability.name}}</li>
         {% endfor %}
         </ul>
     {% endfor %}
 
     <h2>Technology</h2>
-    {{technology.group}}
-    <div>
-        {% for group in technology.group %}
-            <h3>{{ group.title.name }}:</h3>
-            <ul class="list-group">
-            {% for tech in group.element %}
-              <li class="list-group-item">{{tech.name}}</li>
-            {% endfor %}
-            </ul>
-        {% endfor %}
-      </div>
+    <ul class="list-group">
+      {% for category in technology.category %}
+      <li class="list-group-item">{{ category.title.name }}</li>
+      {% endfor %}
+    </ul>
+
 
     <h2>Related Jobs</h2>
     <ul class="list-group">
@@ -70,4 +65,20 @@
       </li>
       {% endfor %}
     </ul>
+
+    <!-- From anyapi -->
+    <h2>All Skills</h2>
+    <ul class="list-group">
+    {% for skill in related_skills.skills %}
+      <li class="list-group-item">
+        <a href="{{ url_for("skill", uuid=skill.skill_uuid) }}">
+        {{skill.skill_name}}
+        </a>
+      {{skill.description}}
+      </li>
+
+    {% endfor %}
+    </ul>
+
+
 {% endblock %}

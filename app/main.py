@@ -253,7 +253,9 @@ def create_app(test_config=None):
             # connect any api with onet
             # QUESTION: skill relationship in onet only or anyapi
             job_obj = requests.get(f"http://api.dataatwork.org/v1/jobs/{code}")
-            print(job_obj.text)
+            uuid = (json.loads(job_obj.text))["uuid"]
+            related_skills = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_skills")
+
             headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
             job_info = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}", headers=headers)
             knowledge = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/knowledge", headers=headers)
@@ -262,11 +264,13 @@ def create_app(test_config=None):
             technology = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/technology", headers=headers)
             related_jobs = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/explore_more", headers=headers)
 
+            print(job_info.text)
             if job_info.status_code != 200:
                 return "Not Found", 404
             else:
                 return render_template("job_info.html", job=json.loads(job_info.text),
                                        job_obj=json.loads(job_obj.text),
+                                       related_skills=json.loads(related_skills.text),
                                        knowledge=json.loads(knowledge.text),
                                        skills=json.loads(skills.text),
                                        abilities=json.loads(abilities.text),
