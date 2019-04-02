@@ -13,80 +13,80 @@ import datetime
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-        SQLALCHEMY_DATABASE_URI='',
-        SQLALCHEMY_TRACK_MODIFICATIONS=False
-    )
-
-    db = SQLAlchemy(app)
-
-    class Jobs (db.Model):
-        __tablename__ = "jobs"
-        id = db.Column(db.Integer, primary_key=True)
-        created_at = db.Column(db.DateTime,nullable = False)
-        updated_at = db.Column(db.DateTime,nullable = False)
-        title = db.Column(db.String(255), nullable=False)
-        salary = db.Column(db.Numeric)
-        description = db.Column(db.Text, nullable = False)
-        parent_skill = db.Column(db.String(255), nullable = False)
-
-    class Skills (db.Model):
-        __tablename__ = "skills"
-        id = db.Column(db.Integer, primary_key=True)
-        created_at = db.Column(db.DateTime,nullable = False)
-        updated_at = db.Column(db.DateTime,nullable = False)
-        title = db.Column(db.String(255), nullable=False)
-        # description is nullable
-        description = db.Column(db.Text, nullable = True)
-        # check if parent skill can be null
-        parent_skill = db.Column(db.String(255), nullable = True)
-        importance = db.Column(db.Real, nullable = False)
-
-    class Users (db.Model):
-        __tablename__ = "users"
-        hash = db.Column(db.String(256), nullable=False)
-        username = db.Column(db.String(256), nullable = False)
-        is_admin = db.Column(db.Boolean, nullable = False)
-        bio = db.Column(db.Text)
-        id = db.Column(db.Integer, primary_key=True)
-        image = db.Column(db.String(500))
-
-        def __repr__(self):
-            return f"User({self.id}, {self.email})"
-
-        @classmethod
-        def new_member(cls, email, password):
-            u = cls(email=email, hash=password)
-            db.session.add(u)
-            db.session.commit()
-            return u
-            # exists = db.engine.execute(text("SELECT * FROM users WHERE email='{}';".format(email))).execution_options(autocommit=True)
-            # if exists:
-            #     return False
-            # else:
-            #     # hash the password first
-            #     hashed_pass = "jhwfiwf" #todo
-            #     if db.engine.execute("INSERT INTO users (id, email, hash) VALUES(null, '{}', '{}')';".format(email, hashed_pass)).execution_options(autocommit=True):
-            #         return True
-            #     else:
-            #         return False
-
-        @classmethod
-        def view_members(cls):
-            return cls.query.all()
-
-        @classmethod
-        def check_password(cls, email, hpassword):
-            #todo hash password before passing
-            u = cls.query.filter_by(email=email).first()
-            if hpassword == u.hash:
-                return True
-            else:
-                return False
-
-    db.create_all()
+    # app.config.from_mapping(
+    #     SECRET_KEY='dev',
+    #     DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
+    #     SQLALCHEMY_DATABASE_URI='',
+    #     SQLALCHEMY_TRACK_MODIFICATIONS=False
+    # )
+    #
+    # db = SQLAlchemy(app)
+    #
+    # class Jobs (db.Model):
+    #     __tablename__ = "jobs"
+    #     id = db.Column(db.Integer, primary_key=True)
+    #     created_at = db.Column(db.DateTime,nullable = False)
+    #     updated_at = db.Column(db.DateTime,nullable = False)
+    #     title = db.Column(db.String(255), nullable=False)
+    #     salary = db.Column(db.Numeric)
+    #     description = db.Column(db.Text, nullable = False)
+    #     parent_skill = db.Column(db.String(255), nullable = False)
+    #
+    # class Skills (db.Model):
+    #     __tablename__ = "skills"
+    #     id = db.Column(db.Integer, primary_key=True)
+    #     created_at = db.Column(db.DateTime,nullable = False)
+    #     updated_at = db.Column(db.DateTime,nullable = False)
+    #     title = db.Column(db.String(255), nullable=False)
+    #     # description is nullable
+    #     description = db.Column(db.Text, nullable = True)
+    #     # check if parent skill can be null
+    #     parent_skill = db.Column(db.String(255), nullable = True)
+    #     importance = db.Column(db.Real, nullable = False)
+    #
+    # class Users (db.Model):
+    #     __tablename__ = "users"
+    #     hash = db.Column(db.String(256), nullable=False)
+    #     username = db.Column(db.String(256), nullable = False)
+    #     is_admin = db.Column(db.Boolean, nullable = False)
+    #     bio = db.Column(db.Text)
+    #     id = db.Column(db.Integer, primary_key=True)
+    #     image = db.Column(db.String(500))
+    #
+    #     def __repr__(self):
+    #         return f"User({self.id}, {self.email})"
+    #
+    #     @classmethod
+    #     def new_member(cls, email, password):
+    #         u = cls(email=email, hash=password)
+    #         db.session.add(u)
+    #         db.session.commit()
+    #         return u
+    #         # exists = db.engine.execute(text("SELECT * FROM users WHERE email='{}';".format(email))).execution_options(autocommit=True)
+    #         # if exists:
+    #         #     return False
+    #         # else:
+    #         #     # hash the password first
+    #         #     hashed_pass = "jhwfiwf" #todo
+    #         #     if db.engine.execute("INSERT INTO users (id, email, hash) VALUES(null, '{}', '{}')';".format(email, hashed_pass)).execution_options(autocommit=True):
+    #         #         return True
+    #         #     else:
+    #         #         return False
+    #
+    #     @classmethod
+    #     def view_members(cls):
+    #         return cls.query.all()
+    #
+    #     @classmethod
+    #     def check_password(cls, email, hpassword):
+    #         #todo hash password before passing
+    #         u = cls.query.filter_by(email=email).first()
+    #         if hpassword == u.hash:
+    #             return True
+    #         else:
+    #             return False
+    #
+    # db.create_all()
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -243,32 +243,36 @@ def create_app(test_config=None):
 
     @app.route('/job/')
     @app.route('/job/<string:code>')
-    def job(code=None):
+    def job(code=None, job_title=None):
         if code is None:
-            # jobs = requests.get(f"http://api.dataatwork.org/v1/jobs", params={"limit": 10})
-
             # TODO: load next batch of data
-            headers = {'Authorization':'Basic dXRleGFzOjk3NDRxZmc=',
-                       "Accept": "application/json"}
+            headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
             jobs = requests.get("https://services.onetcenter.org/ws/mnm/careers/", headers=headers)
-
-            # TODO: use try .... catch instead
-            if jobs.status_code != 200:
-                return "Not Found", 404
-            else:
-                return render_template("job.html", jobs=json.loads(jobs.text))
+            return render_template("job.html", jobs=json.loads(jobs.text))
         else:
-            headers = {'Authorization':'Basic dXRleGFzOjk3NDRxZmc=',
-                       "Accept": "application/json"}
+            # connect any api with onet
+            # QUESTION: skill relationship in onet only or anyapi
+            job_obj = requests.get(f"http://api.dataatwork.org/v1/jobs/{code}")
+            print(job_obj.text)
+            headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
             job_info = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}", headers=headers)
+            knowledge = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/knowledge", headers=headers)
             skills = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/skills", headers=headers)
+            abilities = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/abilities", headers=headers)
+            technology = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/technology", headers=headers)
             related_jobs = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/explore_more", headers=headers)
 
             if job_info.status_code != 200:
                 return "Not Found", 404
             else:
-                print(related_jobs.text)
-                return render_template("job_info.html", job=json.loads(job_info.text), skills=json.loads(skills.text), related_jobs=json.loads(related_jobs.text))
+                return render_template("job_info.html", job=json.loads(job_info.text),
+                                       job_obj=json.loads(job_obj.text),
+                                       knowledge=json.loads(knowledge.text),
+                                       skills=json.loads(skills.text),
+                                       abilities=json.loads(abilities.text),
+                                       technology=json.loads(technology.text),
+                                       related_jobs=json.loads(related_jobs.text)
+                                       )
 
     @app.route('/skill/')
     @app.route('/skill/<string:uuid>')

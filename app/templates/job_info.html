@@ -13,29 +13,61 @@
 </style>
 
     <h1>{{ job.title }}</h1>
-        <hr>
+    <hr>
+{{related_skills}}
+    <p>{{job.what_they_do}}</p>
+
+    <h2>Tasks</h2>
+    <ul class="list-group">
+    {% for task in job.on_the_job.task %}
+      <li class="list-group-item">{{task}}</li>
+    {% endfor %}
+    </ul>
+
+
     <h2>Skills</h2>
+    {% for group in skills.group %}
+        <h3>{{ group.title.name }}:</h3>
+        <ul class="list-group">
+        {% for skill in group.element %}
+          <li class="list-group-item">{{skill.name}}</li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+
+
+    <h2>Abilities</h2>
+    {{abilities.group}}
+    {% for group in abilities.group %}
+        <h3>{{ group.title.name }}:</h3>
+        <ul class="list-group">
+        {% for ability in group.element %}
+          <li class="list-group-item">{{ability.name}}</li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+
+    <h2>Technology</h2>
+    {{technology.group}}
     <div>
-        {% for group in skills.group %}
+        {% for group in technology.group %}
             <h3>{{ group.title.name }}:</h3>
             <ul class="list-group">
-            {% for skill in group.element %}
-              <li class="list-group-item">{{skill.name}}</li>
+            {% for tech in group.element %}
+              <li class="list-group-item">{{tech.name}}</li>
             {% endfor %}
             </ul>
         {% endfor %}
       </div>
 
     <h2>Related Jobs</h2>
-
-    <ul>
-      {% for job in related_jobs.related_job_titles %}
-      <li>
-        <a href="{{ url_for("job", uuid=job.uuid) }}">
+    <ul class="list-group">
+      {% for job in related_jobs.careers.career %}
+      <li class="list-group-item">
+        <a href="{{ url_for("job", code=job.code) }}">
           {{ job.title }}
         </a>
       </li>
       {% endfor %}
-
     </ul>
 {% endblock %}

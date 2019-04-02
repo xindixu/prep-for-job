@@ -10,10 +10,9 @@
 
     <div class="list-group">
     {% for job in jobs["career"] %}
-      <a class="list-group-item" href="{{ url_for("job", code=job.code) }}">
+      <a class="list-group-item" href="{{ url_for("job", code=job.code, job_title=job.title )}}">
         {{ job.title }}
       </a>
-      {{ job.href }}
     {% endfor %}
     </div>
 {% endblock %}
