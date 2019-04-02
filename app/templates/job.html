@@ -5,10 +5,12 @@
 {% block content %}
 <h1>Jobs</h1>
     <hr>
-    {{jobs}}
+    start: {{jobs["start"]}}
+    end: {{jobs["end"]}}
+
     <div class="list-group">
-    {% for job in jobs["careers"] %}
-      <a class="list-group-item" href="{{ url_for("job", uuid=job.uuid) }}">
+    {% for job in jobs["career"] %}
+      <a class="list-group-item" href="{{ url_for("job", code=job.code, job_title=job.title )}}">
         {{ job.title }}
       </a>
     {% endfor %}

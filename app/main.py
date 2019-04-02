@@ -3,6 +3,7 @@ import os
 from flask import Flask, render_template, g, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import requests
+import json
 from bls_datasets import oes, qcew
 from passlib.hash import sha256_crypt
 from forms import RegistrationForm, LoginForm #relative path notation
@@ -14,80 +15,80 @@ import datetime
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-        SQLALCHEMY_DATABASE_URI='',
-        SQLALCHEMY_TRACK_MODIFICATIONS=False
-    )
-
-    db = SQLAlchemy(app)
-
-    class Jobs (db.Model):
-        __tablename__ = "jobs"
-        id = db.Column(db.Integer, primary_key=True)
-        created_at = db.Column(db.DateTime,nullable = False)
-        updated_at = db.Column(db.DateTime,nullable = False)
-        title = db.Column(db.String(255), nullable=False)
-        salary = db.Column(db.Numeric)
-        description = db.Column(db.Text, nullable = False)
-        parent_skill = db.Column(db.String(255), nullable = False)
-
-    class Skills (db.Model):
-        __tablename__ = "skills"
-        id = db.Column(db.Integer, primary_key=True)
-        created_at = db.Column(db.DateTime,nullable = False)
-        updated_at = db.Column(db.DateTime,nullable = False)
-        title = db.Column(db.String(255), nullable=False)
-        # description is nullable
-        description = db.Column(db.Text, nullable = True)
-        # check if parent skill can be null
-        parent_skill = db.Column(db.String(255), nullable = True)
-        importance = db.Column(db.Real, nullable = False)
-
-    class Users (db.Model):
-        __tablename__ = "users"
-        hash = db.Column(db.String(256), nullable=False)
-        username = db.Column(db.String(256), nullable = False)
-        is_admin = db.Column(db.Boolean, nullable = False)
-        bio = db.Column(db.Text)
-        id = db.Column(db.Integer, primary_key=True)
-        image = db.Column(db.String(500))
-
-        def __repr__(self):
-            return f"User({self.id}, {self.email})"
-
-        @classmethod
-        def new_member(cls, email, password):
-            u = cls(email=email, hash=password)
-            db.session.add(u)
-            db.session.commit()
-            return u
-            # exists = db.engine.execute(text("SELECT * FROM users WHERE email='{}';".format(email))).execution_options(autocommit=True)
-            # if exists:
-            #     return False
-            # else:
-            #     # hash the password first
-            #     hashed_pass = "jhwfiwf" #todo
-            #     if db.engine.execute("INSERT INTO users (id, email, hash) VALUES(null, '{}', '{}')';".format(email, hashed_pass)).execution_options(autocommit=True):
-            #         return True
-            #     else:
-            #         return False
-
-        @classmethod
-        def view_members(cls):
-            return cls.query.all()
-
-        @classmethod
-        def check_password(cls, email, hpassword):
-            #todo hash password before passing
-            u = cls.query.filter_by(email=email).first()
-            if hpassword == u.hash:
-                return True
-            else:
-                return False
-
-    db.create_all()
+    # app.config.from_mapping(
+    #     SECRET_KEY='dev',
+    #     DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
+    #     SQLALCHEMY_DATABASE_URI='',
+    #     SQLALCHEMY_TRACK_MODIFICATIONS=False
+    # )
+    #
+    # db = SQLAlchemy(app)
+    #
+    # class Jobs (db.Model):
+    #     __tablename__ = "jobs"
+    #     id = db.Column(db.Integer, primary_key=True)
+    #     created_at = db.Column(db.DateTime,nullable = False)
+    #     updated_at = db.Column(db.DateTime,nullable = False)
+    #     title = db.Column(db.String(255), nullable=False)
+    #     salary = db.Column(db.Numeric)
+    #     description = db.Column(db.Text, nullable = False)
+    #     parent_skill = db.Column(db.String(255), nullable = False)
+    #
+    # class Skills (db.Model):
+    #     __tablename__ = "skills"
+    #     id = db.Column(db.Integer, primary_key=True)
+    #     created_at = db.Column(db.DateTime,nullable = False)
+    #     updated_at = db.Column(db.DateTime,nullable = False)
+    #     title = db.Column(db.String(255), nullable=False)
+    #     # description is nullable
+    #     description = db.Column(db.Text, nullable = True)
+    #     # check if parent skill can be null
+    #     parent_skill = db.Column(db.String(255), nullable = True)
+    #     importance = db.Column(db.Real, nullable = False)
+    #
+    # class Users (db.Model):
+    #     __tablename__ = "users"
+    #     hash = db.Column(db.String(256), nullable=False)
+    #     username = db.Column(db.String(256), nullable = False)
+    #     is_admin = db.Column(db.Boolean, nullable = False)
+    #     bio = db.Column(db.Text)
+    #     id = db.Column(db.Integer, primary_key=True)
+    #     image = db.Column(db.String(500))
+    #
+    #     def __repr__(self):
+    #         return f"User({self.id}, {self.email})"
+    #
+    #     @classmethod
+    #     def new_member(cls, email, password):
+    #         u = cls(email=email, hash=password)
+    #         db.session.add(u)
+    #         db.session.commit()
+    #         return u
+    #         # exists = db.engine.execute(text("SELECT * FROM users WHERE email='{}';".format(email))).execution_options(autocommit=True)
+    #         # if exists:
+    #         #     return False
+    #         # else:
+    #         #     # hash the password first
+    #         #     hashed_pass = "jhwfiwf" #todo
+    #         #     if db.engine.execute("INSERT INTO users (id, email, hash) VALUES(null, '{}', '{}')';".format(email, hashed_pass)).execution_options(autocommit=True):
+    #         #         return True
+    #         #     else:
+    #         #         return False
+    #
+    #     @classmethod
+    #     def view_members(cls):
+    #         return cls.query.all()
+    #
+    #     @classmethod
+    #     def check_password(cls, email, hpassword):
+    #         #todo hash password before passing
+    #         u = cls.query.filter_by(email=email).first()
+    #         if hpassword == u.hash:
+    #             return True
+    #         else:
+    #             return False
+    #
+    # db.create_all()
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -241,31 +242,62 @@ def create_app(test_config=None):
         return "TODO: add session, hash passwords, add postgress uri, and test db functions"
 
     @app.route('/job/')
-    @app.route('/job/<string:uuid>')
-    def job(uuid=None):
-        if uuid is None:
-            # jobs = requests.get(f"http://api.dataatwork.org/v1/jobs", params={"limit": 10})
-            url = "https://services.onetcenter.org/ws/mnm/careers/"
-            headers = {'Authorization':'Basic dXRleGFzOjk3NDRxZmc=',
-                       "Accept": "application/json"}
-            jobs = requests.get(url, headers=headers)
-
-            # TODO: use try .... catch instead
-            if jobs.status_code != 200:
-                return "Not Found", 404
-            else:
-                #return render_template("job.html", jobs=jobs.json()[:-1])
-                print(jobs.text)
-                print(jobs.headers['Content-Type'])
-                return render_template("job.html", jobs=jobs.text)
+    @app.route('/job/<string:code>')
+    def job(code=None, job_title=None):
+        if code is None:
+            # TODO: load next batch of data
+            headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
+            jobs = requests.get("https://services.onetcenter.org/ws/mnm/careers/", headers=headers)
+            return render_template("job.html", jobs=json.loads(jobs.text))
         else:
-            job_info = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}")
-            related_jobs = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_jobs")
+            # connect any api with onet
+            # QUESTION: skill relationship in onet only or anyapi
+            job_obj = requests.get(f"http://api.dataatwork.org/v1/jobs/{code}")
+            uuid = (json.loads(job_obj.text))["uuid"]
             related_skills = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_skills")
-            if job_info.status_code != 200 or related_skills.status_code != 200 or related_jobs.status_code != 200:
+
+            headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
+            job_info = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}", headers=headers)
+            knowledge = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/knowledge", headers=headers)
+            skills = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/skills", headers=headers)
+            abilities = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/abilities", headers=headers)
+            technology = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/technology", headers=headers)
+            related_jobs = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/explore_more", headers=headers)
+
+
+
+            # construct seriesid for bls api for wage
+            base = 'OEUN'
+            area_code = '0000000' # national wide
+            industry_code = '000000' # total
+
+            arr = code[:7].split('-')
+            job_code = arr[0]+arr[1]
+
+            # hourly wage
+            statistic_code = '03'
+            seriesid = base+area_code+industry_code+job_code+statistic_code
+
+            headers = {'Content-type': 'application/json'}
+            data = json.dumps({"seriesid": [seriesid], "startyear": "2018", "endyear": "2018"})
+            wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
+
+
+
+
+            if job_info.status_code != 200:
                 return "Not Found", 404
             else:
-                return render_template("job_info.html", job=job_info.json(), skills=related_skills.json(), related_jobs=related_jobs.json())
+                return render_template("job_info.html", job=json.loads(job_info.text),
+                                       job_obj=json.loads(job_obj.text),
+                                       related_skills=json.loads(related_skills.text),
+                                       knowledge=json.loads(knowledge.text),
+                                       skills=json.loads(skills.text),
+                                       abilities=json.loads(abilities.text),
+                                       technology=json.loads(technology.text),
+                                       related_jobs=json.loads(related_jobs.text),
+                                       wage=json.loads(wage.text)
+                                       )
 
     @app.route('/skill/')
     @app.route('/skill/<string:uuid>')
@@ -288,21 +320,52 @@ def create_app(test_config=None):
 
     @app.route('/salary')
     def salary():
+        # TODO: load multiple wage data
+        # connect job titles back to job page
+
         df_oes = oes.get_data(year=2017)
         detailed = df_oes[df_oes.OCC_GROUP == 'detailed']
-        job = detailed.OCC_TITLE
+        job = detailed.OCC_TITLE.values
+        code = detailed.OCC_CODE.values
+        salary = detailed.A_MEDIAN.values
 
-        obj = {}
-        for j in job:
-            p = detailed[detailed.OCC_TITLE == j].A_MEDIAN.values[0]
-            obj[j] = p
+        salary_info = zip(job,code,salary)
+
+        # for i in job.index:
+        #     salary_info += {'title': job.get(i), 'code': code.get(i), 'salary': salary.get(i)}
+            # salary = detailed[detailed.OCC_TITLE == j].A_MEDIAN.values[0]
+
 
         # avg weekly wage
         df_qcew = qcew.get_data('industry', rtype='dataframe', year='2017', qtr='1', industry='10')
         austin = df_qcew[(df_qcew.own_code == 0) & (df_qcew.area_fips == '48015')]
         weekly_avg = austin.avg_wkly_wage.values[0]
 
-        return render_template("salary.html", job_to_salary=obj, loc_to_salary=weekly_avg)
+
+        # TODO: load multiple wage data
+        # api
+
+        base = 'OEUN'
+        # national wide
+        area_code = '0000000'
+        # total
+        industry_code = '000000'
+        # Registered Nurses
+        job_code = '291141'
+        # hourly wage
+        statistic_code = '03'
+        seriesid = base+area_code+industry_code+job_code+statistic_code
+
+        # url = "http://api.bls.gov/publicAPI/v2/timeseries/data/"
+        # wage = requests.get(url, data=data, headers=headers)
+
+
+        headers = {'Content-type': 'application/json'}
+        data = json.dumps({"seriesid": [seriesid]})
+        wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
+
+
+        return render_template("salary.html", salary_info=salary_info, loc_to_salary=weekly_avg)
 
     # auth
     @app.url_value_preprocessor
