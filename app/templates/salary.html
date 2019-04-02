@@ -3,19 +3,56 @@
 {% block title %}Salary{% endblock %}
 
 {% block content %}
-    <h1>Salary</h1>
-    <hr>
+<style media="screen" scoped>
+  td {}
+</style>
+<h1>Salary</h1>
+<hr>
+<h2>Salary By Occupation</h2>
 
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Occupation</th>
+      <th scope="col">Annual Salary</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for j,p in job_to_salary.items() %}
+    <tr>
+      <th scope="row">{{j}}</th>
+      <!-- TODO: somehow this is not working -->
+      {% if p=='NaN' %}
+      <td>NaN</td>
+      {% endif %}
+      <td>$ {{ "{:,}".format(p) }}</td>
+    </tr>
 
-    {% for j,p in obj.items() %}
-    <p>{{j}} - ${{p}}/yr </p>
     {% endfor %}
 
+  </tbody>
+</table>
 
 
-    <h2>Weekly Average in Austin, TX</h2>
-    ${{weekly_avg}}
+<h2>Salary By Location</h2>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Location</th>
+      <th scope="col">Weekly Salary</th>
+    </tr>
+  </thead>
+  <tbody>
 
+    <tr>
+      <th scope="row">Austin, TX</th>
+      <td>$ {{ "{:,}".format(loc_to_salary) }}</td>
+    </tr>
+
+  </tbody>
+</table>
+
+<!--
     <h4><i>$0 ~ $50000/yr</i></h4>
     <li>1st Grade Teacher $47,263</li>
     <li>Bicycle Repairers $28,390</li>
@@ -37,9 +74,7 @@
     <h4><i>$70000 ~ $80000/yr</i></h4>
     <li>Multimedia Artist and Animator Salaries in United States $74,089</li>
     <li>Airport Operations Manager $76,791</li>
-    <li>Asset Manager $76,232</li>
-
-
+    <li>Asset Manager $76,232</li> -->
 
 
 {% endblock %}

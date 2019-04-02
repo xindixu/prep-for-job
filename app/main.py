@@ -5,8 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 import requests
 from bls_datasets import oes, qcew
 from passlib.hash import sha256_crypt
-from .forms import RegistrationForm, LoginForm #relative path notation
-from secrets import DB_STRING
+from forms import RegistrationForm, LoginForm #relative path notation
+# from secrets import DB_STRING
 import datetime
 
 def create_app(test_config=None):
@@ -15,7 +15,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-        SQLALCHEMY_DATABASE_URI= DB_STRING,
+        SQLALCHEMY_DATABASE_URI='',
         SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
 
@@ -277,7 +277,6 @@ def create_app(test_config=None):
 
     @app.route('/salary')
     def salary():
-
         df_oes = oes.get_data(year=2017)
         detailed = df_oes[df_oes.OCC_GROUP == 'detailed']
         job = detailed.OCC_TITLE
@@ -292,21 +291,9 @@ def create_app(test_config=None):
         austin = df_qcew[(df_qcew.own_code == 0) & (df_qcew.area_fips == '48015')]
         weekly_avg = austin.avg_wkly_wage.values[0]
 
-        # headers = {'Content-type': 'application/json'}
-        # data = json.dumps({"seriesid": ['NCU5306633300003']})
-        # p = requests.post("https://api.bls.gov/publicAPI/v2/timeseries/data/", data=data, headers=headers)
-        #
-        # json_data = json.loads(p.data)
-        #
-        # # if data['status'] != 200:
-        # #     return "Not Found", 404
-        # # else:
-        # #     return render_template("salary.html", salary=data)
-        #
-        return render_template("salary.html", obj=obj, weekly_avg=weekly_avg)
+        return render_template("salary.html", job_to_salary=obj, loc_to_salary=weekly_avg)
 
     # auth
-
     @app.url_value_preprocessor
     def get_endpoint(endpoint, values):
         g.endpoint = endpoint

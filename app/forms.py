@@ -2,7 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, validators
 from wtforms.csrf.core import CSRFTokenField
 
-
 class RegistrationForm (FlaskForm):
     email = StringField(u"Email", validators=[validators.DataRequired(), validators.Email("Email invalid")])
     password = PasswordField(u"Password", validators=[

@@ -4,3 +4,4 @@ bls-datasets==0.0.9
 flask_sqlalchemy
 requests
 flask_wtf
+passlib==1.7.1
