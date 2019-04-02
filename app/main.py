@@ -264,8 +264,6 @@ def create_app(test_config=None):
             technology = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/technology", headers=headers)
             related_jobs = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/explore_more", headers=headers)
 
-
-
             # construct seriesid for bls api for wage
             base = 'OEUN'
             area_code = '0000000' # national wide
