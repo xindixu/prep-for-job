@@ -1,8 +1,13 @@
 import os
 
-from flask import Flask, render_template, g
+from flask import Flask, render_template, g, request, flash, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
 import requests
 from bls_datasets import oes, qcew
+from passlib.hash import sha256_crypt
+from forms import RegistrationForm, LoginForm #relative path notation
+# from secrets import DB_STRING
+import datetime
 
 
 
@@ -12,7 +17,77 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
+        SQLALCHEMY_DATABASE_URI='',
+        SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
+
+    db = SQLAlchemy(app)
+
+    class Jobs (db.Model):
+        __tablename__ = "jobs"
+        id = db.Column(db.Integer, primary_key=True)
+        created_at = db.Column(db.DateTime,nullable = False)
+        updated_at = db.Column(db.DateTime,nullable = False)
+        title = db.Column(db.String(255), nullable=False)
+        salary = db.Column(db.Numeric)
+        description = db.Column(db.Text, nullable = False)
+        parent_skill = db.Column(db.String(255), nullable = False)
+
+    class Skills (db.Model):
+        __tablename__ = "skills"
+        id = db.Column(db.Integer, primary_key=True)
+        created_at = db.Column(db.DateTime,nullable = False)
+        updated_at = db.Column(db.DateTime,nullable = False)
+        title = db.Column(db.String(255), nullable=False)
+        # description is nullable
+        description = db.Column(db.Text, nullable = True)
+        # check if parent skill can be null
+        parent_skill = db.Column(db.String(255), nullable = True)
+        importance = db.Column(db.Real, nullable = False)
+
+    class Users (db.Model):
+        __tablename__ = "users"
+        hash = db.Column(db.String(256), nullable=False)
+        username = db.Column(db.String(256), nullable = False)
+        is_admin = db.Column(db.Boolean, nullable = False)
+        bio = db.Column(db.Text)
+        id = db.Column(db.Integer, primary_key=True)
+        image = db.Column(db.String(500))
+
+        def __repr__(self):
+            return f"User({self.id}, {self.email})"
+
+        @classmethod
+        def new_member(cls, email, password):
+            u = cls(email=email, hash=password)
+            db.session.add(u)
+            db.session.commit()
+            return u
+            # exists = db.engine.execute(text("SELECT * FROM users WHERE email='{}';".format(email))).execution_options(autocommit=True)
+            # if exists:
+            #     return False
+            # else:
+            #     # hash the password first
+            #     hashed_pass = "jhwfiwf" #todo
+            #     if db.engine.execute("INSERT INTO users (id, email, hash) VALUES(null, '{}', '{}')';".format(email, hashed_pass)).execution_options(autocommit=True):
+            #         return True
+            #     else:
+            #         return False
+
+        @classmethod
+        def view_members(cls):
+            return cls.query.all()
+
+        @classmethod
+        def check_password(cls, email, hpassword):
+            #todo hash password before passing
+            u = cls.query.filter_by(email=email).first()
+            if hpassword == u.hash:
+                return True
+            else:
+                return False
+
+    db.create_all()
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -129,15 +204,60 @@ def create_app(test_config=None):
 
         return render_template("about.html", members=members, stats=stats)
 
+    @app.route('/auth/register/', methods=('GET', 'POST'))
+    def register():
+        form = RegistrationForm()
+        if request.method == 'POST' and form.validate_on_submit():
+            email = form.email.data
+            password = form.password.data
+            try:
+                u = Users.new_member(email, password)
+            except:  # todo: make this more specific
+                flash(f"User {email} already exists", "danger")
+                return render_template("auth/register.html", form=form)
+            k = u.view_members()
+            print(k)
+            flash("You have been registered successfully", category="success")
+            return redirect(url_for("login"))
+        else:
+            return render_template("auth/register.html", form=form)
+
+    @app.route('/auth/login/', methods=('GET', 'POST'))
+    def login():
+        form = LoginForm()
+        if request.method == 'POST' and form.validate_on_submit():
+            email = form.email.data
+            password = form.password.data
+            u = Users()
+            k = u.check_password(email, password) #TODO hash the pass
+            if k:
+                return "LOGGED IN"
+            else:
+                return "NOT LOGGED IN WRONG"
+        return render_template("auth/login.html", form=form)
+
+    @app.route('/auth/logout/', methods=('GET', 'POST'))
+    def logout():
+        return "TODO: add session, hash passwords, add postgress uri, and test db functions"
+
     @app.route('/job/')
     @app.route('/job/<string:uuid>')
     def job(uuid=None):
         if uuid is None:
-            jobs = requests.get(f"http://api.dataatwork.org/v1/jobs", params={"limit": num_jobs})
+            # jobs = requests.get(f"http://api.dataatwork.org/v1/jobs", params={"limit": 10})
+            url = "https://services.onetcenter.org/ws/mnm/careers/"
+            headers = {'Authorization':'Basic dXRleGFzOjk3NDRxZmc=',
+                       "Accept": "application/json"}
+            jobs = requests.get(url, headers=headers)
+
+            # TODO: use try .... catch instead
             if jobs.status_code != 200:
                 return "Not Found", 404
             else:
-                return render_template("job.html", jobs=jobs.json()[:-1])
+                #return render_template("job.html", jobs=jobs.json()[:-1])
+                print(jobs.text)
+                print(jobs.headers['Content-Type'])
+                return render_template("job.html", jobs=jobs.text)
         else:
             job_info = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}")
             related_jobs = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_jobs")
@@ -185,12 +305,10 @@ def create_app(test_config=None):
         return render_template("salary.html", job_to_salary=obj, loc_to_salary=weekly_avg)
 
     # auth
-    import auth
-    app.register_blueprint(auth.bp)
-
     @app.url_value_preprocessor
     def get_endpoint(endpoint, values):
         g.endpoint = endpoint
+
     return app
 
 #if __name__ == '__main__':

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profile for {{ user.name }}
+{% endblock %}
+
+{% block content %}
+{# name, email, profile_picture, bio, education, location #}
+    <div class="col-sm-4">
+        <div class="card">
+            {% if user.profile_picture == None %}
+                <svg data-jdenticon-value="{{ user.name }}"></svg>
+            {% else %}
+                <img src="{{ user.profile_picture }}" alt="{{ user.name }}">
+            {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">
+                {{ user.name }}
+            </h5>
+            <p>
+                {{ user.email }}
+            </p>
+        </div>
+            <ul class="list-group list-group-flush">
+{#                <li class="list-group-item">#}
+{#                    <i class="fas fa-at"></i>&nbsp;&nbsp;#}
+{#                </li>#}
+                <li class="list-group-item">
+                    {{ user.bio }}
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-user-graduate"></i>&nbsp;&nbsp;{{ user.education }}
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;{{ user.location }}
+                </li>
+            </ul>
+        </div>
+    </div>
+            <dl>
+
+    {% for k, v in user.items() %}
+            <dt>{{ k }}</dt>
+            <dd>{{ v }}</dd>
+
+    {% endfor %}
+                    </dl>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jdenticon@2.1.1" async></script>
+{% endblock %}
