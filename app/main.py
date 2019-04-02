@@ -37,9 +37,11 @@ def create_app(test_config=None):
         created_at = db.Column(db.DateTime,nullable = False)
         updated_at = db.Column(db.DateTime,nullable = False)
         title = db.Column(db.String(255), nullable=False)
-        description = db.Column(db.Text, nullable = False)
-        parent_skill = db.Column(db.String(255), nullable = False)
-        importance = db.Column(db.String(255), nullable = False)
+        # description is nullable
+        description = db.Column(db.Text, nullable = True)
+        # check if parent skill can be null
+        parent_skill = db.Column(db.String(255), nullable = True)
+        importance = db.Column(db.Real, nullable = False)
 
     class Users (db.Model):
         __tablename__ = "users"
