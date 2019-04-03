@@ -7,7 +7,7 @@ import json
 from bls_datasets import oes, qcew
 from passlib.hash import sha256_crypt
 from forms import RegistrationForm, LoginForm
-from models import Users, Skills, Jobs, db
+from models import Users, Skills, JobPages, Jobs, db
 # from secrets import DB_STRING
 import datetime
 
@@ -18,7 +18,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-        SQLALCHEMY_DATABASE_URI='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb2',
+        SQLALCHEMY_DATABASE_URI='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb3',
         SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
 
@@ -26,6 +26,7 @@ def create_app(test_config=None):
 
     @app.before_first_request
     def setup():
+        db.drop_all()
         db.create_all()
 
     if test_config is None:
@@ -203,15 +204,34 @@ def create_app(test_config=None):
     def job(page=None, code=None):
         page = int(request.args.get('page', 1))
         if code is None:
-            headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
-            url = "https://services.onetcenter.org/ws/mnm/careers/"
-            if page is not None:
-                url += f"?start={(page-1)*20+1}"
-            jobs = requests.get(url, headers=headers)
-            return render_template("job.html", jobs=json.loads(jobs.text), page=page)
-
-
+            J = JobPages.need_cache_page(page)
+            print("**** J: "+str(J))
+            if J == True:
+                jobs = JobPages.new_page(page)
+                jobs = json.loads(jobs)
+            else:
+                print("OMW!")
+                jobs = json.loads(str(JobPages.get_page(page).jobs))
+            #print(json.loads(jobs.text))
+            return render_template("job.html", jobs=jobs, page=page)
         else:
+            if Jobs.need_cache_code(code):
+                print("FIRST API VALUE: ")
+                jarray = Jobs.new_job(code)
+            else:
+                print("CACHED VALUE: ")
+                jarray = Jobs.get_code(code)
+            job_obj = jarray[0]
+            uuid = jarray[1]
+            related_skills = jarray[2]
+            job_info = jarray[3]
+            knowledge = jarray[4]
+            skills = jarray[5]
+            abilities = jarray[6]
+            technology = jarray[7]
+            related_jobs = jarray[8]
+            wage = jarray[9]
+            #return [job_obj, uuid, related_skills, job_info, knowledge, skills, abilities, technology, related_jobs, wage]
             # connect any api with onet
             # QUESTION: skill relationship in onet only or anyapi
             job_obj = requests.get(f"http://api.dataatwork.org/v1/jobs/{code}")

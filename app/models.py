@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-
-
+import requests, json
+from datetime import datetime
 db = SQLAlchemy()
 
 
@@ -43,15 +43,112 @@ class Users(db.Model):
         else:
             return False
 
-class Jobs (db.Model):
+class Jobs(db.Model):
     __tablename__ = "jobs"
     id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime,nullable = False)
-    updated_at = db.Column(db.DateTime,nullable = False)
-    title = db.Column(db.String(255), nullable=False)
-    salary = db.Column(db.Numeric)
-    description = db.Column(db.Text, nullable = False)
-    parent_skill = db.Column(db.String(255), nullable = False)
+    created_at = db.Column(db.DateTime,nullable = False, default=datetime.utcnow())
+    updated_at = db.Column(db.DateTime,nullable = False, default=datetime.utcnow())
+    code = db.Column(db.String(255), nullable=False)
+    #title = db.Column(db.String(255), nullable=False)
+    #job = db.Column(db.String(255), nullable=False)
+    job_obj = db.Column(db.Text, nullable=False)
+    job_info = db.Column(db.Text, nullable=False)
+    uuid = db.Column(db.Text, nullable=False)
+    related_skills = db.Column(db.Text, nullable=False)
+    knowledge = db.Column(db.Text, nullable=False)
+    skills = db.Column(db.Text, nullable=False)
+    abilities = db.Column(db.Text, nullable=False)
+    technology = db.Column(db.Text, nullable=False)
+    related_jobs = db.Column(db.Text, nullable=False)
+    wage = db.Column(db.String(255))
+
+    @classmethod
+    def new_job(cls, code):
+        if cls.query.filter_by(code=code).one_or_none() is None:
+            print("Need to call API for this Job!")
+            job_obj = requests.get(f"http://api.dataatwork.org/v1/jobs/{code}")
+            uuid = (json.loads(job_obj.text))["uuid"]
+            related_skills = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_skills")
+            headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
+            job_info = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}", headers=headers)
+            knowledge = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/knowledge", headers=headers)
+            skills = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/skills", headers=headers)
+            abilities = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/abilities", headers=headers)
+            technology = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/technology", headers=headers)
+            related_jobs = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/explore_more", headers=headers)
+            if job_info.status_code != 200:
+                return "Not Found", 404 #this does not work btw
+            base = 'OEUN'
+            area_code = '0000000' # national wide
+            industry_code = '000000' # total
+
+            arr = code[:7].split('-')
+            job_code = arr[0]+arr[1]
+
+            # hourly wage
+            statistic_code = '03'
+            seriesid = base+area_code+industry_code+job_code+statistic_code
+
+            headers = {'Content-type': 'application/json'}
+            data = json.dumps({"seriesid": [seriesid], "startyear": "2018", "endyear": "2018"})
+            wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
+            u = cls(code=code, job_obj=job_obj.text, job_info=job_info.text, uuid=uuid, related_skills=related_skills.text, knowledge=knowledge.text, skills=skills.text, abilities=abilities.text, technology=technology.text, related_jobs=related_jobs.text, wage=wage.text)
+            db.session.add(u)
+            db.session.commit()
+            return [job_obj, uuid, related_skills, job_info, knowledge, skills, abilities, technology, related_jobs, wage]
+        else:
+            print("No need to call!")
+            return None
+    @classmethod
+    def need_cache_code(cls, code):
+        # todo hash password before passing
+        u = cls.query.filter_by(code=code).one_or_none()
+        if u == None:
+            return True
+        else:
+            return False
+    @classmethod
+    def get_code(cls, code):
+        u = cls.query.filter_by(code=code).one_or_none()
+        jarray = [u.job_obj, u.uuid, u.related_skills, u.job_info, u.knowledge, u.skills, u.abilities, u.technology, u.related_jobs, u.wage]
+        return jarray
+
+class JobPages (db.Model):
+    __tablename__ = "jobpages"
+    page = db.Column(db.Integer, nullable = False, primary_key=True, autoincrement=False)
+    created_at = db.Column(db.DateTime,nullable = False, default=datetime.utcnow())
+    updated_at = db.Column(db.DateTime,nullable = False, default=datetime.utcnow())
+    jobs = db.Column(db.Text, nullable=False)
+    @classmethod
+    def new_page(cls, page):
+        if cls.query.filter_by(page=page).one_or_none() is None:
+            print("NEED TO POPULATE DB PAGE #"+str(page)+"!")
+            headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
+            url = "https://services.onetcenter.org/ws/mnm/careers/"
+            if page is not None:
+                url += f"?start={(page-1)*20+1}"
+            print("API REQUESTED FOR PAGE: "+str(page))
+            jobs = requests.get(url, headers=headers)
+            jobs = jobs.text
+            u = cls(page=page, jobs=str(jobs))
+            print("INSERTED!")
+            #u = cls(id=page, code=code, title=title, job=job, job_obj=job_obj, related_skills=related_skills, knowledge=knowledge, skills=skills, abilities=abilities, technology=technology, related_jobs=related_jobs, wage=wage)
+            db.session.add(u)
+            db.session.commit()
+            return jobs
+    @classmethod
+    def need_cache_page(cls, page):
+        # todo hash password before passing
+        u = cls.query.filter_by(page=page).one_or_none()
+        if u == None:
+            return True
+        else:
+            return False
+
+    @classmethod
+    def get_page(cls, page):
+        return cls.query.filter_by(page=page).one_or_none()
+
 
 class Skills (db.Model):
     __tablename__ = "skills"
@@ -64,6 +161,3 @@ class Skills (db.Model):
     # check if parent skill can be null
     parent_skill = db.Column(db.String(255), nullable = True)
     importance = db.Column(db.Float, nullable = False)
-
-
-
