@@ -6,8 +6,8 @@ import requests
 import json
 from bls_datasets import oes, qcew
 from passlib.hash import sha256_crypt
-from app.forms import RegistrationForm, LoginForm
-from app.models import Users, Skills, Jobs, db
+from forms import RegistrationForm, LoginForm
+from models import Users, Skills, Jobs, db
 # from secrets import DB_STRING
 import datetime
 

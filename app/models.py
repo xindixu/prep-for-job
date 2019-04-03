@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 
 db = SQLAlchemy()
@@ -11,12 +12,12 @@ class Users(db.Model):
     email = db.Column(db.String(256), nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(75), nullable=False)
-    location = db.Column(db.String(100))
-    education = db.Column(db.String(100))
+    location = db.Column(db.String(100),nullable = True)
+    education = db.Column(db.String(100),nullable = True)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
-    bio = db.Column(db.Text())
+    bio = db.Column(db.Text(),nullable = True)
     id = db.Column(db.Integer(), primary_key=True)
-    image = db.Column(db.String(500))
+    image = db.Column(db.String(500),nullable = True)
 
     def __repr__(self):
         return f"User({self.id}, {self.email})"
@@ -49,7 +50,7 @@ class Jobs (db.Model):
     created_at = db.Column(db.DateTime,nullable = False)
     updated_at = db.Column(db.DateTime,nullable = False)
     title = db.Column(db.String(255), nullable=False)
-    salary = db.Column(db.Numeric)
+    salary = db.Column(db.Numeric, nullable=False)
     description = db.Column(db.Text, nullable = False)
     parent_skill = db.Column(db.String(255), nullable = False)
 
