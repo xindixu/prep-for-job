@@ -9,19 +9,23 @@ class Users(db.Model):
     __tablename__ = "users"
     hash = db.Column(db.String(256), nullable=False)
     email = db.Column(db.String(256), nullable=False)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(75), nullable=False)
+    location = db.Column(db.String(100))
+    education = db.Column(db.String(100))
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
-    bio = db.Column(db.Text)
-    id = db.Column(db.Integer, primary_key=True)
+    bio = db.Column(db.Text())
+    id = db.Column(db.Integer(), primary_key=True)
     image = db.Column(db.String(500))
 
     def __repr__(self):
         return f"User({self.id}, {self.email})"
 
     @classmethod
-    def new_member(cls, email, password):
-        u = cls(email=email, hash=password)
-        if cls.query.filter_by(email=email).exists():
-            return False
+    def new_member(cls, email, password, first_name, last_name):
+        if cls.query.filter_by(email=email).one_or_none() is not None:
+            return None
+        u = cls(email=email, hash=password, first_name=first_name, last_name=last_name)
         db.session.add(u)
         db.session.commit()
         return u

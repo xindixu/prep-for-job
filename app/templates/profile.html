@@ -5,7 +5,7 @@ Profile for {{ user.name }}
 {% endblock %}
 {% block content %}
 {# name, email, profile_picture, bio, education, location #}
-    <div class="col-sm-4">
+    <div class="col-md-5 mb-5">
         <div class="card">
             {% if user.image == None %}
                 <svg data-jdenticon-value="{{ user.email }}"></svg>
@@ -14,10 +14,12 @@ Profile for {{ user.name }}
             {% endif %}
         <div class="card-body">
             <h5 class="card-title">
-                {{ user.name }}
+                {{ user.first_name }} {{ user.last_name }}
             </h5>
             <p>
-                {{ user.email }}
+                <a href="mailto:{{ user.email }}">
+                    {{ user.email }}
+                </a>
             </p>
         </div>
             <ul class="list-group list-group-flush">
@@ -38,14 +40,16 @@ Profile for {{ user.name }}
             </ul>
         </div>
     </div>
-            <dl>
 
+    {# A var dump of the user object, for debugging/testing purposes #}
+    <table class="table table-striped table-bordered">
     {% for k, v in user.__dict__.items() %}
-            <dt>{{ k }}</dt>
-            <dd>{{ v }}</dd>
-
+        <tr>
+            <th>{{ k }}</th>
+            <td>{{ v }}</td>
+        </tr>
     {% endfor %}
-                    </dl>
+    </table>
 
 
 <script src="https://cdn.jsdelivr.net/npm/jdenticon@2.1.1" async></script>

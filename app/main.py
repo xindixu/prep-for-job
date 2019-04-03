@@ -145,9 +145,12 @@ def create_app(test_config=None):
         if request.method == 'POST' and form.validate_on_submit():
             email = form.email.data
             password = form.password.data
+            first_name = form.first_name.data
+            last_name = form.last_name.data
             try:
-                u = Users.new_member(email, password)
-                if not u:
+                u = Users.new_member(email, password, first_name, last_name)
+                if u is None:
+                    print(u)
                     flash(f"User {email} already exists", "danger")
                     return render_template("auth/register.html", form=form)
             except Exception as e:  # todo: make this more specific
@@ -183,7 +186,8 @@ def create_app(test_config=None):
 
     @app.route("/profile/<user_id>")
     def profile(user_id):
-        u = Users.query.filter_by(id=4).first()
+        u = Users.query.filter_by(id=user_id).first()
+        print(u)
         # user = {
         #     "name": "John Smith",
         #     "email": "johnsmith1@example.com",
