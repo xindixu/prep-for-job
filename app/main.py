@@ -6,89 +6,27 @@ import requests
 import json
 from bls_datasets import oes, qcew
 from passlib.hash import sha256_crypt
-from forms import RegistrationForm, LoginForm #relative path notation
+from app.forms import RegistrationForm, LoginForm
+from app.models import Users, Skills, Jobs, db
 # from secrets import DB_STRING
 import datetime
-
 
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    # app.config.from_mapping(
-    #     SECRET_KEY='dev',
-    #     DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-    #     SQLALCHEMY_DATABASE_URI='',
-    #     SQLALCHEMY_TRACK_MODIFICATIONS=False
-    # )
-    #
-    # db = SQLAlchemy(app)
-    #
-    # class Jobs (db.Model):
-    #     __tablename__ = "jobs"
-    #     id = db.Column(db.Integer, primary_key=True)
-    #     created_at = db.Column(db.DateTime,nullable = False)
-    #     updated_at = db.Column(db.DateTime,nullable = False)
-    #     title = db.Column(db.String(255), nullable=False)
-    #     salary = db.Column(db.Numeric)
-    #     description = db.Column(db.Text, nullable = False)
-    #     parent_skill = db.Column(db.String(255), nullable = False)
-    #
-    # class Skills (db.Model):
-    #     __tablename__ = "skills"
-    #     id = db.Column(db.Integer, primary_key=True)
-    #     created_at = db.Column(db.DateTime,nullable = False)
-    #     updated_at = db.Column(db.DateTime,nullable = False)
-    #     title = db.Column(db.String(255), nullable=False)
-    #     # description is nullable
-    #     description = db.Column(db.Text, nullable = True)
-    #     # check if parent skill can be null
-    #     parent_skill = db.Column(db.String(255), nullable = True)
-    #     importance = db.Column(db.Real, nullable = False)
-    #
-    # class Users (db.Model):
-    #     __tablename__ = "users"
-    #     hash = db.Column(db.String(256), nullable=False)
-    #     username = db.Column(db.String(256), nullable = False)
-    #     is_admin = db.Column(db.Boolean, nullable = False)
-    #     bio = db.Column(db.Text)
-    #     id = db.Column(db.Integer, primary_key=True)
-    #     image = db.Column(db.String(500))
-    #
-    #     def __repr__(self):
-    #         return f"User({self.id}, {self.email})"
-    #
-    #     @classmethod
-    #     def new_member(cls, email, password):
-    #         u = cls(email=email, hash=password)
-    #         db.session.add(u)
-    #         db.session.commit()
-    #         return u
-    #         # exists = db.engine.execute(text("SELECT * FROM users WHERE email='{}';".format(email))).execution_options(autocommit=True)
-    #         # if exists:
-    #         #     return False
-    #         # else:
-    #         #     # hash the password first
-    #         #     hashed_pass = "jhwfiwf" #todo
-    #         #     if db.engine.execute("INSERT INTO users (id, email, hash) VALUES(null, '{}', '{}')';".format(email, hashed_pass)).execution_options(autocommit=True):
-    #         #         return True
-    #         #     else:
-    #         #         return False
-    #
-    #     @classmethod
-    #     def view_members(cls):
-    #         return cls.query.all()
-    #
-    #     @classmethod
-    #     def check_password(cls, email, hpassword):
-    #         #todo hash password before passing
-    #         u = cls.query.filter_by(email=email).first()
-    #         if hpassword == u.hash:
-    #             return True
-    #         else:
-    #             return False
-    #
-    # db.create_all()
+    app.config.from_mapping(
+        SECRET_KEY='dev',
+        DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
+        SQLALCHEMY_DATABASE_URI='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb2',
+        SQLALCHEMY_TRACK_MODIFICATIONS=False
+    )
+
+    db.init_app(app)
+
+    @app.before_first_request
+    def setup():
+        db.create_all()
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -102,10 +40,6 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-
-    # connect to db
-    import db
-    db.init_app(app)
 
     num_jobs = 20
     num_skills = 30
@@ -211,9 +145,16 @@ def create_app(test_config=None):
         if request.method == 'POST' and form.validate_on_submit():
             email = form.email.data
             password = form.password.data
+            first_name = form.first_name.data
+            last_name = form.last_name.data
             try:
-                u = Users.new_member(email, password)
-            except:  # todo: make this more specific
+                u = Users.new_member(email, password, first_name, last_name)
+                if u is None:
+                    print(u)
+                    flash(f"User {email} already exists", "danger")
+                    return render_template("auth/register.html", form=form)
+            except Exception as e:  # todo: make this more specific
+                print(e)
                 flash(f"User {email} already exists", "danger")
                 return render_template("auth/register.html", form=form)
             k = u.view_members()
@@ -229,17 +170,33 @@ def create_app(test_config=None):
         if request.method == 'POST' and form.validate_on_submit():
             email = form.email.data
             password = form.password.data
-            u = Users()
-            k = u.check_password(email, password) #TODO hash the pass
-            if k:
-                return "LOGGED IN"
+            u = Users.query.filter_by(email=email).one_or_none()
+            if u is None:
+                flash(f"{email} was not found.", "danger")
+            elif u.hash != password:
+                flash(f"Incorrect password for {email}", "danger")
             else:
-                return "NOT LOGGED IN WRONG"
+                return redirect(url_for("profile", user_id=u.id))
+
         return render_template("auth/login.html", form=form)
 
     @app.route('/auth/logout/', methods=('GET', 'POST'))
     def logout():
         return "TODO: add session, hash passwords, add postgress uri, and test db functions"
+
+    @app.route("/profile/<user_id>")
+    def profile(user_id):
+        u = Users.query.filter_by(id=user_id).first()
+        print(u)
+        # user = {
+        #     "name": "John Smith",
+        #     "email": "johnsmith1@example.com",
+        #     "profile_picture": None,
+        #     "bio": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam eaque ipsa labore pariatur porro sequi tenetur? Commodi nemo nisi nulla quam quos suscipit temporibus voluptatibus?",
+        #     "education": "Fuck school, teach yourself",
+        #     "location": "Hell, MI"
+        # }
+        return render_template("profile.html", user=u)
 
     @app.route('/job/')
     @app.route('/job/<string:code>')
