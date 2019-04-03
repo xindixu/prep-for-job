@@ -4,15 +4,37 @@
 
 {% block content %}
 <h1>Jobs</h1>
-    <hr>
-    start: {{jobs["start"]}}
-    end: {{jobs["end"]}}
+<hr>
 
-    <div class="list-group">
-    {% for job in jobs["career"] %}
-      <a class="list-group-item" href="{{ url_for("job", code=job.code, job_title=job.title )}}">
-        {{ job.title }}
+<div class="list-group">
+  {% for job in jobs["career"] %}
+  <a class="list-group-item" href="{{ url_for("job", code=job.code)}}">
+    {{ job.title }}
+  </a>
+  {% endfor %}
+</div>
+
+<nav aria-label="Page navigation" class="my-4">
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link" href="{{ url_for("job", page=1)}}" aria-label="First">
+        <span aria-hidden="true">&laquo;</span>
       </a>
+    </li>
+    {% for i in range([1,page-3]|max,page)%}
+    <li class="page-item"><a class="page-link" href="{{ url_for("job", page=i)}}">{{i}}</a></li>
     {% endfor %}
-    </div>
+
+    <li class="page-item"><a class="page-link active" disabled>{{page}}</a></li>
+
+    {% for i in range(page+1,[page+4,49]|min)%}
+    <li class="page-item"><a class="page-link" href="{{ url_for("job", page=i)}}">{{i}}</a></li>
+    {% endfor %}
+    <li class="page-item">
+      <a class="page-link"href="{{ url_for("job", page=49)}}" aria-label="Last">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
 {% endblock %}

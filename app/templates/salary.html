@@ -22,10 +22,9 @@
     {% for obj in salary_info %}
     <tr>
       <th scope="row">
-        <a href="{{ url_for("job", code=obj[1])}}">{{obj[0]}}</a>
+        <a href="{{ url_for("job", code=obj[1] + '.00')}}">{{obj[0]}}</a>
       </th>
       <td>$ {{ "{:,}".format(obj[2]) }}</td>
-      <td>code: {{ obj[1] }}</td>
     </tr>
     {% endfor %}
 
@@ -50,30 +49,5 @@
 
   </tbody>
 </table>
-
-<!--
-    <h4><i>$0 ~ $50000/yr</i></h4>
-    <li>1st Grade Teacher $47,263</li>
-    <li>Bicycle Repairers $28,390</li>
-    <li>Customer Service Representatives $32,890</li>
-
-    <br>
-    <h4><i>$50000 ~ $60000/yr</i></h4>
-
-    <li>Assessor $54,010</li>
-    <li>Structural Iron and Steel Workers $52,610</li>
-
-    <br>
-    <h4><i>$60000 ~ $70000/yr</i></h4>
-    <li>Biomedical Scientist $64,000</li>
-    <li>Assessment Services Manager $63,723</li>
-
-
-    <br>
-    <h4><i>$70000 ~ $80000/yr</i></h4>
-    <li>Multimedia Artist and Animator Salaries in United States $74,089</li>
-    <li>Airport Operations Manager $76,791</li>
-    <li>Asset Manager $76,232</li> -->
-
 
 {% endblock %}
