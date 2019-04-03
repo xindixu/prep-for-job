@@ -54,6 +54,7 @@ def create_app(test_config=None):
 
     @app.route('/about')
     def about():
+        # TODO: fix this when network is slow
         commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits", params={"all": "true", "per_page": 100}).json()
         issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all", params={"scope": "all", "per_page": 100}).json()
 
@@ -227,6 +228,7 @@ def create_app(test_config=None):
             technology = jarray[7]
             related_jobs = jarray[8]
             wage = jarray[9]
+
             if job_info.status_code != 200:
                 return "Not Found", 404
             else:
