@@ -204,22 +204,18 @@ def create_app(test_config=None):
     def job(page=None, code=None):
         page = int(request.args.get('page', 1))
         if code is None:
-            J = JobPages.need_cache_page(page)
-            print("**** J: "+str(J))
-            if J == True:
+            if JobPages.need_cache_page(page):
                 jobs = JobPages.new_page(page)
                 jobs = json.loads(jobs)
             else:
-                print("OMW!")
                 jobs = json.loads(str(JobPages.get_page(page).jobs))
-            #print(json.loads(jobs.text))
             return render_template("job.html", jobs=jobs, page=page)
         else:
             if Jobs.need_cache_code(code):
-                print("FIRST API VALUE: ")
+                print("Grabbing from API for first time and storing it!")
                 jarray = Jobs.new_job(code)
             else:
-                print("CACHED VALUE: ")
+                print("Pulling cached value from DB!")
                 jarray = Jobs.get_code(code)
             job_obj = jarray[0]
             uuid = jarray[1]
@@ -231,40 +227,6 @@ def create_app(test_config=None):
             technology = jarray[7]
             related_jobs = jarray[8]
             wage = jarray[9]
-            #return [job_obj, uuid, related_skills, job_info, knowledge, skills, abilities, technology, related_jobs, wage]
-            # connect any api with onet
-            # QUESTION: skill relationship in onet only or anyapi
-            job_obj = requests.get(f"http://api.dataatwork.org/v1/jobs/{code}")
-            uuid = (json.loads(job_obj.text))["uuid"]
-            related_skills = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_skills")
-
-            headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
-            job_info = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}", headers=headers)
-            knowledge = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/knowledge", headers=headers)
-            skills = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/skills", headers=headers)
-            abilities = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/abilities", headers=headers)
-            technology = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/technology", headers=headers)
-            related_jobs = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/explore_more", headers=headers)
-
-            # construct seriesid for bls api for wage
-            base = 'OEUN'
-            area_code = '0000000' # national wide
-            industry_code = '000000' # total
-
-            arr = code[:7].split('-')
-            job_code = arr[0]+arr[1]
-
-            # hourly wage
-            statistic_code = '03'
-            seriesid = base+area_code+industry_code+job_code+statistic_code
-
-            headers = {'Content-type': 'application/json'}
-            data = json.dumps({"seriesid": [seriesid], "startyear": "2018", "endyear": "2018"})
-            wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
-
-
-
-
             if job_info.status_code != 200:
                 return "Not Found", 404
             else:
@@ -283,6 +245,7 @@ def create_app(test_config=None):
     @app.route('/skill/<string:uuid>')
     def skill(uuid=None):
         if uuid is None:
+            #if JobPages.need_cache_page(page):
             skills = requests.get(f"http://api.dataatwork.org/v1/skills", params={"limit": num_skills, "offset" : 19930})
             if skills.status_code != 200:
                 return "Not Found", 404

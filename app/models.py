@@ -99,6 +99,7 @@ class Jobs(db.Model):
         else:
             print("No need to call!")
             return None
+
     @classmethod
     def need_cache_code(cls, code):
         # todo hash password before passing
@@ -136,6 +137,50 @@ class JobPages (db.Model):
             db.session.add(u)
             db.session.commit()
             return jobs
+    @classmethod
+    def need_cache_page(cls, page):
+        # todo hash password before passing
+        u = cls.query.filter_by(page=page).one_or_none()
+        if u == None:
+            return True
+        else:
+            return False
+
+    @classmethod
+    def get_page(cls, page):
+        return cls.query.filter_by(page=page).one_or_none()
+
+
+class Salary (db.Model):
+    __tablename__ = "salary"
+    id = db.Column(db.Integer, nullable = False, primary_key=True, autoincrement=False)
+    salary_info = db.Column(db.Text, nullable = False)
+    weekly_avg = db.Column(db.Text, nullable = False)
+    created_at = db.Column(db.DateTime,nullable = False, default=datetime.utcnow())
+    updated_at = db.Column(db.DateTime,nullable = False, default=datetime.utcnow())
+
+    @classmethod
+    def new_salary_page(cls):
+        # not done!
+        if cls.query.filter_by(id=1).one_or_none() is None:
+            print("NEED TO POPULATE DB PAGE #"+str(page)+"!")
+            headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
+            url = "https://services.onetcenter.org/ws/mnm/careers/"
+            if page is not None:
+                url += f"?start={(page-1)*20+1}"
+            print("API REQUESTED FOR PAGE: "+str(page))
+            jobs = requests.get(url, headers=headers)
+            jobs = jobs.text
+            u = cls(page=page, jobs=str(jobs))
+            print("INSERTED!")
+            #u = cls(id=page, code=code, title=title, job=job, job_obj=job_obj, related_skills=related_skills, knowledge=knowledge, skills=skills, abilities=abilities, technology=technology, related_jobs=related_jobs, wage=wage)
+            db.session.add(u)
+            db.session.commit()
+            return jobs
+        else:
+            # not done!
+            print("DATABASE source:")
+
     @classmethod
     def need_cache_page(cls, page):
         # todo hash password before passing
