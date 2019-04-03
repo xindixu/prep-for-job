@@ -11,10 +11,11 @@
 
 <h1>Skills</h1>
     <hr>
+    <h2>Hot Technologies</h2>
     <div class="list-group">
-    {% for skill in skills %}
-        <a class="list-group-item" href="{{ url_for("skill", uuid=skill.uuid) }}">
-            {{ skill.name }}
+    {% for tech in technology.technology %}
+        <a class="list-group-item" href="{{ url_for("skill", id=tech.id) }}">
+            {{ tech.name }}
         </a>
     {% endfor %}
     </div>

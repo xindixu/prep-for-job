@@ -66,9 +66,12 @@ class Jobs(db.Model):
     def new_job(cls, code):
         if cls.query.filter_by(code=code).one_or_none() is None:
             print("Need to call API for this Job!")
+            # from anyapi
             job_obj = requests.get(f"http://api.dataatwork.org/v1/jobs/{code}")
             uuid = (json.loads(job_obj.text))["uuid"]
             related_skills = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_skills")
+
+            #from onet
             headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
             job_info = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}", headers=headers)
             knowledge = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/knowledge", headers=headers)
@@ -78,6 +81,7 @@ class Jobs(db.Model):
             related_jobs = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/explore_more", headers=headers)
             if job_info.status_code != 200:
                 return "Not Found", 404 #this does not work btw
+
             base = 'OEUN'
             area_code = '0000000' # national wide
             industry_code = '000000' # total

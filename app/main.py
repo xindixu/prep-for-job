@@ -15,32 +15,32 @@ import datetime
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-        SQLALCHEMY_DATABASE_URI='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb3',
-        SQLALCHEMY_TRACK_MODIFICATIONS=False
-    )
-
-    db.init_app(app)
-
-    @app.before_first_request
-    def setup():
-        db.drop_all()
-        db.create_all()
-
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
-
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+    # app.config.from_mapping(
+    #     SECRET_KEY='dev',
+    #     DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
+    #     SQLALCHEMY_DATABASE_URI='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb3',
+    #     SQLALCHEMY_TRACK_MODIFICATIONS=False
+    # )
+    #
+    # db.init_app(app)
+    #
+    # @app.before_first_request
+    # def setup():
+    #     db.drop_all()
+    #     db.create_all()
+    #
+    # if test_config is None:
+    #     # load the instance config, if it exists, when not testing
+    #     app.config.from_pyfile('config.py', silent=True)
+    # else:
+    #     # load the test config if passed in
+    #     app.config.from_mapping(test_config)
+    #
+    # # ensure the instance folder exists
+    # try:
+    #     os.makedirs(app.instance_path)
+    # except OSError:
+    #     pass
 
     num_jobs = 20
     num_skills = 30
@@ -218,6 +218,7 @@ def create_app(test_config=None):
             else:
                 print("Pulling cached value from DB!")
                 jarray = Jobs.get_code(code)
+
             job_obj = jarray[0]
             uuid = jarray[1]
             related_skills = jarray[2]
@@ -244,23 +245,22 @@ def create_app(test_config=None):
                                        )
 
     @app.route('/skill/')
-    @app.route('/skill/<string:uuid>')
-    def skill(uuid=None):
-        if uuid is None:
-            #if JobPages.need_cache_page(page):
-            skills = requests.get(f"http://api.dataatwork.org/v1/skills", params={"limit": num_skills, "offset" : 19930})
-            if skills.status_code != 200:
-                return "Not Found", 404
-            else:
-                return render_template("skill.html", skills=skills.json()[:-1])
+    @app.route('/skill/<string:id>')
+    def skill(id=None):
+        headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
+        if id is None:
+            # Hot technology listing
+            url = 'https://services.onetcenter.org/ws/online/hot_technology/'
+            technology = requests.get(url, headers=headers)
+            return render_template("skill.html", technology=json.loads(technology.text))
         else:
-            skills_info = requests.get(f"http://api.dataatwork.org/v1/skills/{uuid}")
-            related_jobs = requests.get(f"http://api.dataatwork.org/v1/skills/{uuid}/related_jobs")
-            print(skills_info, related_jobs, sep="\n")
-            # if skills_info.status_code != 200 or related_jobs.status_code != 200:
-            #         return "Not Found", 404
-            # else:
-            return render_template("skills_info.html", skills=skills_info.json(), jobs=related_jobs.json())
+            technology = requests.get(f"https://services.onetcenter.org/ws/online/hot_technology/{id}",headers=headers)
+
+            technology = json.loads(technology.text)
+            print(technology)
+
+            return render_template("skills_info.html",
+                                   technology=technology)
 
 
     @app.route('/salary')
