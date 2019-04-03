@@ -20,24 +20,24 @@
 <h1>{{ job.title }}</h1>
 <hr>
 <section id="basic_info">
-  <q>{{job.what_they_do}}</q>
+<q>{{job.what_they_do}}</q>
 
-  <h2>Hourly Wage</h2>
-  <!-- TODO: conditional rendering; api request exceed -->
-  {% if wage.status != 'REQUEST_NOT_PROCESSED'%}
-  <p><strong>$ {{wage.Results.series[0].data[0].value}}/hr</strong></p>
-  {% else %}
-  <div class="alert alert-warning" role="alert">
-    Daily api limit exceeded!
-  </div>
-  {% endif %}
+<h2>Hourly Wage</h2>
+<!-- TODO: conditional rendering; api request exceed -->
+{% if wage.status != 'REQUEST_NOT_PROCESSED'%}
+<p><strong>$ {{wage.Results.series[0].data[0].value}}/hr</strong></p>
+{% else %}
+<div class="alert alert-warning" role="alert">
+  Daily api limit exceeded!
+</div>
+{% endif %}
 
-  <h2>Tasks</h2>
-  <ul class="list-group">
-    {% for task in job.on_the_job.task %}
-    <li class="list-group-item">{{task}}</li>
-    {% endfor %}
-  </ul>
+<h2>Tasks</h2>
+<ul class="list-group">
+  {% for task in job.on_the_job.task %}
+  <li class="list-group-item">{{task}}</li>
+  {% endfor %}
+</ul>
 
 </section>
 
@@ -129,8 +129,43 @@
       {{skill.description}}
     </li>
 
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+</section>
+
+<!-- From o*net -->
+
+<section id="related_jobs">
+  <h2>Related Jobs</h2>
+  <ul class="list-group">
+    {% for job in related_jobs.careers.career %}
+    <li class="list-group-item">
+      <a href="{{ url_for("job", code=job.code) }}">
+        {{ job.title }}
+      </a>
+    </li>
     {% endfor %}
   </ul>
+</section>
+
+<section id="all_skills">
+<!-- From anyapi -->
+<h2>All Skills</h2>
+<ul class="list-group">
+  {% for skill in related_skills.skills %}
+  <li class="list-group-item">
+    <a href="{{ url_for("skill", uuid=skill.skill_uuid) }}">
+      {{skill.skill_name}}
+    </a>
+    {{skill.description}}
+  </li>
+
+  {% endfor %}
+</ul>
 </section>
 
 {% endblock %}

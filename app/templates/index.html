@@ -24,6 +24,7 @@
     position: relative;
     top: 0;
     transition: top ease 0.22s;
+    height: 100% !important;
   }
 
   .effect:hover {
@@ -86,10 +87,10 @@
       <div class="card border-info p-3" onclick="window.location='{{ url_for("job") }}';">
         <div class="card border-info shadow text-info p-3 my-card"><span class="fa fa-briefcase" aria-hidden="true"></span></div>
         <div class="text-info text-center mt-3">
-          <h4>Job</h4>
+          <h4><b>Job</b></h4>
         </div>
         <div class="text-info text-center mt-2">
-          <h1>{{num_jobs}}</h1>
+          <span style="font-size: 15pt;"><i>Looking at the job tab to find your next dream job! {{num_jobs}} now available!</i></span>
         </div>
       </div>
     </div>
@@ -97,10 +98,10 @@
       <div class="card border-success p-3" onclick="window.location='{{ url_for("salary") }}';">
         <div class="card border-success shadow text-success p-3 my-card"><span class="fa fa-credit-card" aria-hidden="true"></span></div>
         <div class="text-success text-center mt-3">
-          <h4>Salary</h4>
+          <h4><b>Salary</b></h4>
         </div>
         <div class="text-success text-center mt-2">
-          <h1>&nbsp;</h1>
+          <span style="font-size: 15pt; ""><i>Look at the Salary tab and get more information about the your next monthly income!</i></span>
         </div>
       </div>
     </div>
@@ -108,10 +109,10 @@
       <div class="card border-danger p-3" onclick="window.location='{{ url_for("skill") }}';">
         <div class="card border-danger shadow text-danger p-3 my-card"><span class="fa fa-spinner" aria-hidden="true"></span></div>
         <div class="text-danger text-center mt-3">
-          <h4>Skill</h4>
+          <h4><b>Skill</b></h4>
         </div>
         <div class="text-danger text-center mt-2">
-          <h1>{{num_skills}}</h1>
+          <span style="font-size: 15pt; ""><i>Got Skills? Find your next job with skills you already have! {{num_skills}} skills now on skills tab!</i></span>
         </div>
       </div>
     </div>
@@ -119,10 +120,10 @@
       <div class="card border-warning p-3" onclick="window.location='{{ url_for("about") }}';">
         <div class="card border-warning shadow text-warning p-3 my-card"><span class="fa fa-question-circle" aria-hidden="true"></span></div>
         <div class="text-warning text-center mt-3">
-          <h4>About</h4>
+          <h4><b>About</b></h4>
         </div>
         <div class="text-warning text-center mt-2">
-          <h1>&nbsp;</h1>
+          <span style="font-size: 15pt; "><i>Learn more about us! We're here to find you you're next career!</i></span>
         </div>
       </div>
     </div>
