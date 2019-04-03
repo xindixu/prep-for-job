@@ -8,6 +8,8 @@
     <h1>{{ technology.title.name }}</h1>
     <hr>
 
+    <h2>Related Occupation</h2>
+
     <div>
         {% for job in technology.occupation %}
             <a href="{{ url_for("job", code=job.code) }}"

@@ -87,9 +87,9 @@
           <ul class="list-group">
             <li class="list-group-item mb-1">
               <h5>{{ category.title.name }}</h5>
-
               {% for ex in category.example %}
-              <span class="font-weight-light">{{ ex.name }}</span> <br />
+              {{ex}}
+              <span class="font-weight-light"><a href="{{ url_for("skill", id=ex.hot_technology) }}">{{ ex.name }}</a></span> <br />
               {% endfor %}
 
           </ul>

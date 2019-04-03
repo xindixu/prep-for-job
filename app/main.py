@@ -15,32 +15,32 @@ import datetime
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    # app.config.from_mapping(
-    #     SECRET_KEY='dev',
-    #     DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-    #     SQLALCHEMY_DATABASE_URI='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb3',
-    #     SQLALCHEMY_TRACK_MODIFICATIONS=False
-    # )
-    #
-    # db.init_app(app)
-    #
-    # @app.before_first_request
-    # def setup():
-    #     db.drop_all()
-    #     db.create_all()
-    #
-    # if test_config is None:
-    #     # load the instance config, if it exists, when not testing
-    #     app.config.from_pyfile('config.py', silent=True)
-    # else:
-    #     # load the test config if passed in
-    #     app.config.from_mapping(test_config)
-    #
-    # # ensure the instance folder exists
-    # try:
-    #     os.makedirs(app.instance_path)
-    # except OSError:
-    #     pass
+    app.config.from_mapping(
+        SECRET_KEY='dev',
+        DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
+        SQLALCHEMY_DATABASE_URI='postgresql://postgres:postgres@localhost:5434/prep-for-job',
+        SQLALCHEMY_TRACK_MODIFICATIONS=False
+    )
+
+    db.init_app(app)
+
+    @app.before_first_request
+    def setup():
+        db.drop_all()
+        db.create_all()
+
+    if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.from_mapping(test_config)
+
+    # ensure the instance folder exists
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
 
     num_jobs = 20
     num_skills = 30
@@ -230,23 +230,20 @@ def create_app(test_config=None):
             related_jobs = jarray[8]
             wage = jarray[9]
 
-            if job_info.status_code != 200:
-                return "Not Found", 404
-            else:
-                return render_template("job_info.html", job=json.loads(job_info.text),
-                                       job_obj=json.loads(job_obj.text),
-                                       related_skills=json.loads(related_skills.text),
-                                       knowledge=json.loads(knowledge.text),
-                                       skills=json.loads(skills.text),
-                                       abilities=json.loads(abilities.text),
-                                       technology=json.loads(technology.text),
-                                       related_jobs=json.loads(related_jobs.text),
-                                       wage=json.loads(wage.text)
-                                       )
+            return render_template("job_info.html", job=json.loads(job_info.text),
+                                   job_obj=json.loads(job_obj.text),
+                                   related_skills=json.loads(related_skills.text),
+                                   knowledge=json.loads(knowledge.text),
+                                   skills=json.loads(skills.text),
+                                   abilities=json.loads(abilities.text),
+                                   technology=json.loads(technology.text),
+                                   related_jobs=json.loads(related_jobs.text),
+                                   wage=json.loads(wage.text)
+                                   )
 
     @app.route('/skill/')
     @app.route('/skill/<string:id>')
-    def skill(id=None):
+    def skill(id=None, uuid=None):
         headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
         if id is None:
             # Hot technology listing
@@ -255,9 +252,7 @@ def create_app(test_config=None):
             return render_template("skill.html", technology=json.loads(technology.text))
         else:
             technology = requests.get(f"https://services.onetcenter.org/ws/online/hot_technology/{id}",headers=headers)
-
             technology = json.loads(technology.text)
-            print(technology)
 
             return render_template("skills_info.html",
                                    technology=technology)
