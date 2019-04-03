@@ -10,7 +10,9 @@
   a {
     text-transform: capitalize;
   }
-  .nav .nav-item .nav-link:hover, .nav .nav-item .nav-link:focus{
+
+  .nav .nav-item .nav-link:hover,
+  .nav .nav-item .nav-link:focus {
     background-color: #66615B;
     color: #fff;
   }
@@ -40,57 +42,92 @@
 </section>
 
 <section id="resources">
-<div class="card">
-  <div class="card-header">
-    <ul class="nav nav-pills" id="pills-tab" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" id="skill-tab" data-toggle="tab" href="#skills" role="tab" aria-controls="skills" aria-selected="true">Skills</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#abilities" role="tab" aria-controls="abilities" aria-selected="false">Abilities</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#technologies" role="tab" aria-controls="technologies" aria-selected="false">Technologies</a>
-      </li>
-    </ul>
+  <div class="card">
+    <div class="card-header">
+      <ul class="nav nav-pills" id="pills-tab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="skill-tab" data-toggle="tab" href="#skills" role="tab" aria-controls="skills" aria-selected="true">Skills</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#abilities" role="tab" aria-controls="abilities" aria-selected="false">Abilities</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="contact-tab" data-toggle="tab" href="#technologies" role="tab" aria-controls="technologies" aria-selected="false">Technologies</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body">
+      <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="skills" role="tabpanel" aria-labelledby="skills-tab">
+          {% for group in skills.group %}
+          <ul class="list-group">
+            <li class="list-group-item mb-1">
+              <h5>{{ group.title.name }}:</h5>
+              {% for skill in group.element %}
+              <span class="font-weight-light">{{skill.name}}</span><br />
+              {% endfor %}
+          </ul>
+          {% endfor %}
+        </div>
+        <div class="tab-pane fade" id="abilities" role="tabpanel" aria-labelledby="abilities-tab">
+          {% for group in abilities.group %}
+          <ul class="list-group">
+            <li class="list-group-item mb-1">
+              <h5>{{ group.title.name }}</h5>
+              {% for ability in group.element %}
+              <span class="font-weight-light">{{ability.name}}</span> <br />
+              {% endfor %}
+            </li>
+          </ul>
+          {% endfor %}
+        </div>
+        <div class="tab-pane fade" id="technologies" role="tabpanel" aria-labelledby="technologies-tab">
+
+          {% for category in technology.category %}
+          <ul class="list-group">
+            <li class="list-group-item mb-1">
+              <h5>{{ category.title.name }}</h5>
+
+              {% for ex in category.example %}
+              <span class="font-weight-light">{{ ex.name }}</span> <br />
+              {% endfor %}
+
+          </ul>
+
+          {% endfor %}
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="card-body">
-    <div class="tab-content" id="pills-tabContent">
-      <div class="tab-pane fade show active" id="skills" role="tabpanel" aria-labelledby="skills-tab">
-        {% for group in skills.group %}
-        <ul class="list-group">
-          <li class="list-group-item mb-1">
-            <h5>{{ group.title.name }}:</h5>
-            {% for skill in group.element %}
-            <span class="font-weight-light">{{skill.name}}</span><br />
-            {% endfor %}
-        </ul>
-        {% endfor %}
-      </div>
-      <div class="tab-pane fade" id="abilities" role="tabpanel" aria-labelledby="abilities-tab">
-        {% for group in abilities.group %}
-        <ul class="list-group">
-          <li class="list-group-item mb-1">
-            <h5>{{ group.title.name }}</h5>
-            {% for ability in group.element %}
-            <span class="font-weight-light">{{ability.name}}</span> <br />
-            {% endfor %}
-          </li>
-        </ul>
-        {% endfor %}
-      </div>
-      <div class="tab-pane fade" id="technologies" role="tabpanel" aria-labelledby="technologies-tab">
 
-        {% for category in technology.category %}
-        <ul class="list-group">
-          <li class="list-group-item mb-1">
-            <h5>{{ category.title.name }}</h5>
+</section>
 
-            {% for ex in category.example %}
-            <span class="font-weight-light">{{ ex.name }}</span> <br />
-            {% endfor %}
+<!-- From o*net -->
 
-        </ul>
+<section id="related_jobs">
+  <h2>Related Jobs</h2>
+  <ul class="list-group">
+    {% for job in related_jobs.careers.career %}
+    <li class="list-group-item">
+      <a href="{{ url_for("job", code=job.code) }}">
+        {{ job.title }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section id="all_skills">
+  <!-- From anyapi -->
+  <h2>All Skills</h2>
+  <ul class="list-group">
+    {% for skill in related_skills.skills %}
+    <li class="list-group-item">
+      <a href="{{ url_for("skill", uuid=skill.skill_uuid) }}">
+        {{skill.skill_name}}
+      </a>
+      {{skill.description}}
+    </li>
 
         {% endfor %}
       </div>

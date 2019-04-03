@@ -7,7 +7,7 @@ import json
 from bls_datasets import oes, qcew
 from passlib.hash import sha256_crypt
 from forms import RegistrationForm, LoginForm
-from models import Users, Skills, Jobs, db
+from models import Users, Skills, JobPages, Jobs, db
 # from secrets import DB_STRING
 import datetime
 
@@ -15,31 +15,32 @@ import datetime
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-        SQLALCHEMY_DATABASE_URI='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb2',
-        SQLALCHEMY_TRACK_MODIFICATIONS=False
-    )
-
-    db.init_app(app)
-
-    @app.before_first_request
-    def setup():
-        db.create_all()
-
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
-
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+    # app.config.from_mapping(
+    #     SECRET_KEY='dev',
+    #     DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
+    #     SQLALCHEMY_DATABASE_URI='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb3',
+    #     SQLALCHEMY_TRACK_MODIFICATIONS=False
+    # )
+    #
+    # db.init_app(app)
+    #
+    # @app.before_first_request
+    # def setup():
+    #     db.drop_all()
+    #     db.create_all()
+    #
+    # if test_config is None:
+    #     # load the instance config, if it exists, when not testing
+    #     app.config.from_pyfile('config.py', silent=True)
+    # else:
+    #     # load the test config if passed in
+    #     app.config.from_mapping(test_config)
+    #
+    # # ensure the instance folder exists
+    # try:
+    #     os.makedirs(app.instance_path)
+    # except OSError:
+    #     pass
 
     num_jobs = 20
     num_skills = 30
@@ -53,6 +54,7 @@ def create_app(test_config=None):
 
     @app.route('/about')
     def about():
+        # TODO: fix this when network is slow
         commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits", params={"all": "true", "per_page": 100}).json()
         issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all", params={"scope": "all", "per_page": 100}).json()
 
@@ -203,47 +205,30 @@ def create_app(test_config=None):
     def job(page=None, code=None):
         page = int(request.args.get('page', 1))
         if code is None:
-            headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
-            url = "https://services.onetcenter.org/ws/mnm/careers/"
-            if page is not None:
-                url += f"?start={(page-1)*20+1}"
-            jobs = requests.get(url, headers=headers)
-            return render_template("job.html", jobs=json.loads(jobs.text), page=page)
-
-
+            if JobPages.need_cache_page(page):
+                jobs = JobPages.new_page(page)
+                jobs = json.loads(jobs)
+            else:
+                jobs = json.loads(str(JobPages.get_page(page).jobs))
+            return render_template("job.html", jobs=jobs, page=page)
         else:
-            # connect any api with onet
-            # QUESTION: skill relationship in onet only or anyapi
-            job_obj = requests.get(f"http://api.dataatwork.org/v1/jobs/{code}")
-            uuid = (json.loads(job_obj.text))["uuid"]
-            related_skills = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_skills")
+            if Jobs.need_cache_code(code):
+                print("Grabbing from API for first time and storing it!")
+                jarray = Jobs.new_job(code)
+            else:
+                print("Pulling cached value from DB!")
+                jarray = Jobs.get_code(code)
 
-            headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
-            job_info = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}", headers=headers)
-            knowledge = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/knowledge", headers=headers)
-            skills = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/skills", headers=headers)
-            abilities = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/abilities", headers=headers)
-            technology = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/technology", headers=headers)
-            related_jobs = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}/explore_more", headers=headers)
-
-            # construct seriesid for bls api for wage
-            base = 'OEUN'
-            area_code = '0000000' # national wide
-            industry_code = '000000' # total
-
-            arr = code[:7].split('-')
-            job_code = arr[0]+arr[1]
-
-            # hourly wage
-            statistic_code = '03'
-            seriesid = base+area_code+industry_code+job_code+statistic_code
-
-            headers = {'Content-type': 'application/json'}
-            data = json.dumps({"seriesid": [seriesid], "startyear": "2018", "endyear": "2018"})
-            wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
-
-
-
+            job_obj = jarray[0]
+            uuid = jarray[1]
+            related_skills = jarray[2]
+            job_info = jarray[3]
+            knowledge = jarray[4]
+            skills = jarray[5]
+            abilities = jarray[6]
+            technology = jarray[7]
+            related_jobs = jarray[8]
+            wage = jarray[9]
 
             if job_info.status_code != 200:
                 return "Not Found", 404
@@ -260,22 +245,22 @@ def create_app(test_config=None):
                                        )
 
     @app.route('/skill/')
-    @app.route('/skill/<string:uuid>')
-    def skill(uuid=None):
-        if uuid is None:
-            skills = requests.get(f"http://api.dataatwork.org/v1/skills", params={"limit": num_skills, "offset" : 19930})
-            if skills.status_code != 200:
-                return "Not Found", 404
-            else:
-                return render_template("skill.html", skills=skills.json()[:-1])
+    @app.route('/skill/<string:id>')
+    def skill(id=None):
+        headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
+        if id is None:
+            # Hot technology listing
+            url = 'https://services.onetcenter.org/ws/online/hot_technology/'
+            technology = requests.get(url, headers=headers)
+            return render_template("skill.html", technology=json.loads(technology.text))
         else:
-            skills_info = requests.get(f"http://api.dataatwork.org/v1/skills/{uuid}")
-            related_jobs = requests.get(f"http://api.dataatwork.org/v1/skills/{uuid}/related_jobs")
-            print(skills_info, related_jobs, sep="\n")
-            # if skills_info.status_code != 200 or related_jobs.status_code != 200:
-            #         return "Not Found", 404
-            # else:
-            return render_template("skills_info.html", skills=skills_info.json(), jobs=related_jobs.json())
+            technology = requests.get(f"https://services.onetcenter.org/ws/online/hot_technology/{id}",headers=headers)
+
+            technology = json.loads(technology.text)
+            print(technology)
+
+            return render_template("skills_info.html",
+                                   technology=technology)
 
 
     @app.route('/salary')
