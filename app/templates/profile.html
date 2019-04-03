@@ -3,15 +3,14 @@
 {% block title %}
 Profile for {{ user.name }}
 {% endblock %}
-
 {% block content %}
 {# name, email, profile_picture, bio, education, location #}
     <div class="col-sm-4">
         <div class="card">
-            {% if user.profile_picture == None %}
-                <svg data-jdenticon-value="{{ user.name }}"></svg>
+            {% if user.image == None %}
+                <svg data-jdenticon-value="{{ user.email }}"></svg>
             {% else %}
-                <img src="{{ user.profile_picture }}" alt="{{ user.name }}">
+                <img src="{{ user.image }}" alt="{{ user.email }}">
             {% endif %}
         <div class="card-body">
             <h5 class="card-title">
@@ -25,9 +24,11 @@ Profile for {{ user.name }}
 {#                <li class="list-group-item">#}
 {#                    <i class="fas fa-at"></i>&nbsp;&nbsp;#}
 {#                </li>#}
+                {% if user.bio != None %}
                 <li class="list-group-item">
                     {{ user.bio }}
                 </li>
+                {% endif %}
                 <li class="list-group-item">
                     <i class="fas fa-user-graduate"></i>&nbsp;&nbsp;{{ user.education }}
                 </li>
@@ -39,7 +40,7 @@ Profile for {{ user.name }}
     </div>
             <dl>
 
-    {% for k, v in user.items() %}
+    {% for k, v in user.__dict__.items() %}
             <dt>{{ k }}</dt>
             <dd>{{ v }}</dd>
 
