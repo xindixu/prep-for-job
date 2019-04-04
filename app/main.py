@@ -42,15 +42,18 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    num_jobs = 20
-    num_skills = 30
 
     # routes
     @app.route('/')
     def index():
         # WARNING: changed! we are calling apis while we don't have to!
-
-        return render_template('index.html', num_jobs=num_jobs, num_skills=num_skills)
+        card_dict = {
+            "job": ["Find your next dream job.", "info", "briefcase"] ,
+            "salary": ["Get more information about the your next monthly income.", "success", "credit-card"],
+            "skill": ["Look up required skills for your dream job.", "danger", "spinner"],
+            "about": ["Learn more about us and the story behind our project.", "warning", "question-circle"]
+        }
+        return render_template('index.html', card_dict=card_dict)
 
     @app.route('/about')
     def about():
