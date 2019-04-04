@@ -16,20 +16,15 @@
     border-radius: 50%;
   }
 
-  .effect {
-    position: relative;
-    top: 0;
-    transition: top ease 0.22s;
-    height: 180px;
-  }
-
-  .effect:hover {
-    top: -8px;
-  }
-
   .carousel-inner,
   .carousel-item {
     border-radius: 12px;
+  }
+
+  .card-deck {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: .5rem;
   }
 
   h4{
@@ -76,7 +71,7 @@
 
   <div class="card-deck mt-5">
     {% for card in card_dict %}
-    <div class="card">
+    <div class="card my-4">
       <div class="card-body text-center" onclick="window.location='{{ url_for(card) }}';">
         <div class="card p-3 my-card text-{{card_dict[card][1]}}">
           <span class="fa fa-{{card_dict[card][2]}}" aria-hidden="true"></span>
