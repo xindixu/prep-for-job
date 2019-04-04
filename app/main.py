@@ -144,6 +144,51 @@ def create_app(test_config=None):
 
         return render_template("about.html", members=members, stats=stats)
 
+    @app.route('/skill_salary/<string:code>', methods=('GET', 'POST'))
+    def skill_salary(code):
+        if Jobs.need_cache_code(code):
+            print("Grabbing from API for first time and storing it!")
+            using_api = True
+            jarray = Jobs.new_job(code)
+        else:
+            print("Pulling cached value from DB!")
+            using_api = False
+            jarray = Jobs.get_code(code)
+
+        job_obj = jarray[0]
+        uuid = jarray[1]
+        related_skills = jarray[2]
+        job_info = jarray[3]
+        knowledge = jarray[4]
+        skills = jarray[5]
+        abilities = jarray[6]
+        technology = jarray[7]
+        related_jobs = jarray[8]
+        wage = jarray[9]
+
+        if using_api == True:
+            return render_template("job_info.html", job=json.loads(job_info.text),
+                               job_obj=json.loads(job_obj.text),
+                               related_skills=json.loads(related_skills.text),
+                               knowledge=json.loads(knowledge.text),
+                               skills=json.loads(skills.text),
+                               abilities=json.loads(abilities.text),
+                               technology=json.loads(technology.text),
+                               related_jobs=json.loads(related_jobs.text),
+                               wage=json.loads(wage.text)
+                               )
+        else:
+            return render_template("job_info.html", job=json.loads(job_info),
+                               job_obj=json.loads(job_obj),
+                               related_skills=json.loads(related_skills),
+                               knowledge=json.loads(knowledge),
+                               skills=json.loads(skills),
+                               abilities=json.loads(abilities),
+                               technology=json.loads(technology),
+                               related_jobs=json.loads(related_jobs),
+                               wage=json.loads(wage)
+                               )
+
     @app.route('/auth/register/', methods=('GET', 'POST'))
     def register():
         form = RegistrationForm()
@@ -216,10 +261,12 @@ def create_app(test_config=None):
             return render_template("job.html", jobs=jobs, page=page)
         else:
             if Jobs.need_cache_code(code):
+                using_api = True
                 print("Grabbing from API for first time and storing it!")
                 jarray = Jobs.new_job(code)
             else:
                 print("Pulling cached value from DB!")
+                using_api = False
                 jarray = Jobs.get_code(code)
 
             job_obj = jarray[0]
@@ -232,8 +279,8 @@ def create_app(test_config=None):
             technology = jarray[7]
             related_jobs = jarray[8]
             wage = jarray[9]
-
-            return render_template("job_info.html", job=json.loads(job_info.text),
+            if using_api == True:
+                return render_template("skill_salary.html", job=json.loads(job_info.text),
                                    job_obj=json.loads(job_obj.text),
                                    related_skills=json.loads(related_skills.text),
                                    knowledge=json.loads(knowledge.text),
@@ -242,6 +289,17 @@ def create_app(test_config=None):
                                    technology=json.loads(technology.text),
                                    related_jobs=json.loads(related_jobs.text),
                                    wage=json.loads(wage.text)
+                                   )
+            else:
+                return render_template("skill_salary.html", job=json.loads(job_info),
+                                   job_obj=json.loads(job_obj),
+                                   related_skills=json.loads(related_skills),
+                                   knowledge=json.loads(knowledge),
+                                   skills=json.loads(skills),
+                                   abilities=json.loads(abilities),
+                                   technology=json.loads(technology),
+                                   related_jobs=json.loads(related_jobs),
+                                   wage=json.loads(wage)
                                    )
 
     @app.route('/skill/')
