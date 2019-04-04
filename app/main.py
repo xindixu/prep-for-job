@@ -18,7 +18,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-        SQLALCHEMY_DATABASE_URI='postgresql://postgres:srishttitalwar@localhost:5432/srishttitalwar',
+        SQLALCHEMY_DATABASE_URI='postgresql://postgres:postgres@localhost:5434/prep-for-job',
         SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
 
@@ -269,7 +269,7 @@ def create_app(test_config=None):
     def salary(job_title=None, code=None):
         job_title = request.args.get('job_title')
         print(job_title)
-        
+
         if code is None:
             # TODO: load multiple wage data
             # connect job titles back to job page
