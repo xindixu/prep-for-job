@@ -265,53 +265,67 @@ def create_app(test_config=None):
 
 
     @app.route('/salary')
-    def salary():
-        # TODO: load multiple wage data
-        # connect job titles back to job page
+    @app.route('/salary/<string:code>')
+    def salary(job_title=None, code=None):
+        job_title = request.args.get('job_title')
+        print(job_title)
+        
+        if code is None:
+            # TODO: load multiple wage data
+            # connect job titles back to job page
+            df_oes = oes.get_data(year=2017)
+            detailed = df_oes[df_oes.OCC_GROUP == 'detailed']
+            job = detailed.OCC_TITLE.values
+            code = detailed.OCC_CODE.values
+            salary = detailed.A_MEDIAN.values
+            salary_info = zip(job,code,salary)
 
-        df_oes = oes.get_data(year=2017)
-        detailed = df_oes[df_oes.OCC_GROUP == 'detailed']
-        job = detailed.OCC_TITLE.values
-        code = detailed.OCC_CODE.values
-        salary = detailed.A_MEDIAN.values
+            # for i in job.index:
+            #     salary_info += {'title': job.get(i), 'code': code.get(i), 'salary': salary.get(i)}
+                # salary = detailed[detailed.OCC_TITLE == j].A_MEDIAN.values[0]
 
-        salary_info = zip(job,code,salary)
-
-        # for i in job.index:
-        #     salary_info += {'title': job.get(i), 'code': code.get(i), 'salary': salary.get(i)}
-            # salary = detailed[detailed.OCC_TITLE == j].A_MEDIAN.values[0]
-
-
-        # avg weekly wage
-        df_qcew = qcew.get_data('industry', rtype='dataframe', year='2017', qtr='1', industry='10')
-        austin = df_qcew[(df_qcew.own_code == 0) & (df_qcew.area_fips == '48015')]
-        weekly_avg = austin.avg_wkly_wage.values[0]
-
-
-        # TODO: load multiple wage data
-        # api
-
-        base = 'OEUN'
-        # national wide
-        area_code = '0000000'
-        # total
-        industry_code = '000000'
-        # Registered Nurses
-        job_code = '291141'
-        # hourly wage
-        statistic_code = '03'
-        seriesid = base+area_code+industry_code+job_code+statistic_code
-
-        # url = "http://api.bls.gov/publicAPI/v2/timeseries/data/"
-        # wage = requests.get(url, data=data, headers=headers)
+            # avg weekly wage
+            df_qcew = qcew.get_data('industry', rtype='dataframe', year='2017', qtr='1', industry='10')
+            austin = df_qcew[(df_qcew.own_code == 0) & (df_qcew.area_fips == '48015')]
+            weekly_avg = austin.avg_wkly_wage.values[0]
 
 
-        headers = {'Content-type': 'application/json'}
-        data = json.dumps({"seriesid": [seriesid]})
-        wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
+            # TODO: load multiple wage data
+            # api
+            base = 'OEUN'
+            # national wide
+            area_code = '0000000'
+            # total
+            industry_code = '000000'
+            # Registered Nurses
+            job_code = '291141'
+            # hourly wage
+            statistic_code = '03'
+            seriesid = base+area_code+industry_code+job_code+statistic_code
 
+            # url = "http://api.bls.gov/publicAPI/v2/timeseries/data/"
+            # wage = requests.get(url, data=data, headers=headers)
 
-        return render_template("salary.html", salary_info=salary_info, loc_to_salary=weekly_avg)
+            headers = {'Content-type': 'application/json'}
+            data = json.dumps({"seriesid": [seriesid]})
+            wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
+            return render_template("salary.html", salary_info=salary_info, loc_to_salary=weekly_avg)
+        else:
+            base = 'OEUN'
+            area_code = '0000000' # national wide
+            industry_code = '000000' # total
+
+            arr = code[:7].split('-')
+            job_code = arr[0]+arr[1]
+
+            # hourly wage
+            statistic_code = '03'
+            seriesid = base+area_code+industry_code+job_code+statistic_code
+
+            headers = {'Content-type': 'application/json'}
+            data = json.dumps({"seriesid": [seriesid], "startyear": "2018", "endyear": "2018"})
+            wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
+            return render_template("salary_info.html", wage=json.loads(wage.text), job_title=job_title)
 
     # auth
     @app.url_value_preprocessor

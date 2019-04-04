@@ -142,6 +142,7 @@ class JobPages (db.Model):
             db.session.add(u)
             db.session.commit()
             return jobs
+            
     @classmethod
     def need_cache_page(cls, page):
         # todo hash password before passing

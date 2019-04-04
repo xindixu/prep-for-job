@@ -36,7 +36,7 @@
             <a href="{{ url_for("job", code=job.code)}}">{{job.title}}</a>
           </th>
           <td>
-            <button type="button" class="btn btn-info">See Salary Info</button>
+            <a class="btn btn-info" href="{{ url_for("salary", job_title=job.title, code=job.code)}}">See Salary Info</a>
           </td>
         </tr>
         {% endfor %}
