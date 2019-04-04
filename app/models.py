@@ -92,7 +92,7 @@ class Jobs(db.Model):
 
             # hourly wage
             statistic_code = '03'
-            seriesid = base+area_code+industry_code+job_code+statistic_code
+            seriesid = base + area_code + industry_code + job_code + statistic_code
 
             headers = {'Content-type': 'application/json'}
             data = json.dumps({"seriesid": [seriesid], "startyear": "2018", "endyear": "2018"})
@@ -142,7 +142,7 @@ class JobPages (db.Model):
             db.session.add(u)
             db.session.commit()
             return jobs
-            
+
     @classmethod
     def need_cache_page(cls, page):
         # todo hash password before passing
