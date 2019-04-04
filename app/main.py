@@ -167,7 +167,7 @@ def create_app(test_config=None):
         wage = jarray[9]
 
         if using_api == True:
-            return render_template("job_info.html", job=json.loads(job_info.text),
+            return render_template("skill_salary.html", job=json.loads(job_info.text),
                                job_obj=json.loads(job_obj.text),
                                related_skills=json.loads(related_skills.text),
                                knowledge=json.loads(knowledge.text),
@@ -178,7 +178,7 @@ def create_app(test_config=None):
                                wage=json.loads(wage.text)
                                )
         else:
-            return render_template("job_info.html", job=json.loads(job_info),
+            return render_template("skill_salary.html", job=json.loads(job_info),
                                job_obj=json.loads(job_obj),
                                related_skills=json.loads(related_skills),
                                knowledge=json.loads(knowledge),
@@ -280,7 +280,7 @@ def create_app(test_config=None):
             related_jobs = jarray[8]
             wage = jarray[9]
             if using_api == True:
-                return render_template("skill_salary.html", job=json.loads(job_info.text),
+                return render_template("job_info.html", job=json.loads(job_info.text),
                                    job_obj=json.loads(job_obj.text),
                                    related_skills=json.loads(related_skills.text),
                                    knowledge=json.loads(knowledge.text),
@@ -291,7 +291,7 @@ def create_app(test_config=None):
                                    wage=json.loads(wage.text)
                                    )
             else:
-                return render_template("skill_salary.html", job=json.loads(job_info),
+                return render_template("job_info.html", job=json.loads(job_info),
                                    job_obj=json.loads(job_obj),
                                    related_skills=json.loads(related_skills),
                                    knowledge=json.loads(knowledge),

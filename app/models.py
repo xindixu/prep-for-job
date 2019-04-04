@@ -142,7 +142,7 @@ class JobPages (db.Model):
             db.session.add(u)
             db.session.commit()
             return jobs
-            
+
     @classmethod
     def need_cache_page(cls, page):
         # todo hash password before passing
@@ -211,4 +211,4 @@ class Skills (db.Model):
     description = db.Column(db.Text, nullable = True)
     # check if parent skill can be null
     parent_skill = db.Column(db.String(255), nullable = True)
-    importance = db.Column(db.Float, nullable = False)
+    #importance = db.Column(db.Float, nullable = False)
