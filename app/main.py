@@ -1,16 +1,14 @@
-import os
 
+from passlib.hash import sha256_crypt
+import os
+import datetime
 from flask import Flask, render_template, g, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import requests
 import json
 from bls_datasets import oes, qcew
-from passlib.hash import sha256_crypt
 from forms import RegistrationForm, LoginForm
-from models import Users, Skills, JobPages, Jobs, db
-# from secrets import DB_STRING
-import datetime
-
+from models import Users, JobPages, Jobs, db
 
 def create_app(test_config=None):
     # create and configure the app
@@ -192,11 +190,19 @@ def create_app(test_config=None):
     @app.route('/auth/register/', methods=('GET', 'POST'))
     def register():
         form = RegistrationForm()
+        if request.method != 'POST':
+            return render_template("auth/register.html", form=form)
         if request.method == 'POST' and form.validate_on_submit():
-            email = form.email.data
+            email = form.email.data.lower()
             password = form.password.data
             first_name = form.first_name.data
             last_name = form.last_name.data
+            if Users.exists(email):
+                return "Exists"
+            else:
+                Users.new_member(email, password, first_name, last_name)
+                return "Registered!"
+            """
             try:
                 u = Users.new_member(email, password, first_name, last_name)
                 if u is None:
@@ -213,6 +219,8 @@ def create_app(test_config=None):
             return redirect(url_for("login"))
         else:
             return render_template("auth/register.html", form=form)
+            """
+
 
     @app.route('/auth/login/', methods=('GET', 'POST'))
     def login():
@@ -220,15 +228,14 @@ def create_app(test_config=None):
         if request.method == 'POST' and form.validate_on_submit():
             email = form.email.data
             password = form.password.data
-            u = Users.query.filter_by(email=email).one_or_none()
-            if u is None:
-                flash(f"{email} was not found.", "danger")
-            elif u.hash != password:
-                flash(f"Incorrect password for {email}", "danger")
+            u = Users.check_password(email, password)
+            if u:
+                return render_template("auth/login.html", form=form)
             else:
-                return redirect(url_for("profile", user_id=u.id))
+                flash("Incorrect password for "+email)
+            return render_template("auth/login.html", form=form)
 
-        return render_template("auth/login.html", form=form)
+
 
     @app.route('/auth/logout/', methods=('GET', 'POST'))
     def logout():
