@@ -253,7 +253,15 @@ def create_app(test_config=None):
         else:
             technology = requests.get(f"https://services.onetcenter.org/ws/online/hot_technology/{id}",headers=headers)
             technology = json.loads(technology.text)
-            return render_template("skill_info.html", technology=technology)
+            occupations = []
+            for job in technology["occupation"]:
+                obj = {
+                    "code": job["code"],
+                    "title": job["title"]
+                }
+                occupations.append(obj)
+
+            return render_template("skill_info.html", technology=technology,occupations=occupations)
 
 
     @app.route('/salary')
