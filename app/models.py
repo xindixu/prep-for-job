@@ -69,6 +69,7 @@ class Jobs(db.Model):
             # from anyapi
             job_obj = requests.get(f"http://api.dataatwork.org/v1/jobs/{code}")
             uuid = (json.loads(job_obj.text))["uuid"]
+            # TODO: need to remove this from db
             related_skills = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_skills")
 
             #from onet

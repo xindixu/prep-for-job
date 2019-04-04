@@ -243,7 +243,7 @@ def create_app(test_config=None):
 
     @app.route('/skill/')
     @app.route('/skill/<string:id>')
-    def skill(id=None, uuid=None):
+    def skill(id=None):
         headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
         if id is None:
             # Hot technology listing
@@ -253,9 +253,7 @@ def create_app(test_config=None):
         else:
             technology = requests.get(f"https://services.onetcenter.org/ws/online/hot_technology/{id}",headers=headers)
             technology = json.loads(technology.text)
-
-            return render_template("skills_info.html",
-                                   technology=technology)
+            return render_template("skill_info.html", technology=technology)
 
 
     @app.route('/salary')

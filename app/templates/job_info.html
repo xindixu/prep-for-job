@@ -120,12 +120,14 @@
   </ul>
 </section>
 
+{#
 <section id="all_skills">
   <!-- From anyapi -->
   <h2>All Skills</h2>
   <ul class="list-group">
     {% for skill in related_skills.skills %}
     <li class="list-group-item">
+      {{skill.skill_uuid}}
       <a href="{{ url_for("skill", uuid=skill.skill_uuid) }}">
         {{skill.skill_name}}
       </a>
@@ -139,36 +141,5 @@
 </div>
 
 </section>
-
-<!-- From o*net -->
-
-<section id="related_jobs">
-  <h2>Related Jobs</h2>
-  <ul class="list-group">
-    {% for job in related_jobs.careers.career %}
-    <li class="list-group-item">
-      <a href="{{ url_for("job", code=job.code) }}">
-        {{ job.title }}
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
-</section>
-
-<section id="all_skills">
-<!-- From anyapi -->
-<h2>All Skills</h2>
-<ul class="list-group">
-  {% for skill in related_skills.skills %}
-  <li class="list-group-item">
-    <a href="{{ url_for("skill", uuid=skill.skill_uuid) }}">
-      {{skill.skill_name}}
-    </a>
-    {{skill.description}}
-  </li>
-
-  {% endfor %}
-</ul>
-</section>
-
+#}
 {% endblock %}
