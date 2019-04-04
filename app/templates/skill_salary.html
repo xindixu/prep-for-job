@@ -23,13 +23,10 @@
 </style>
 <h1>Skills and Salary: {{ job.title }}</h1>
 <hr>
-<section id="basic_info">
-
-<!--- THIS IS THE QUOTE -->
-<q>{{job.what_they_do}}</q>
+<section id="basic_info" style="margin-top: -35px;">
 <!-- TODO: conditional rendering; api request exceed -->
 {% if wage.status != 'REQUEST_NOT_PROCESSED'%}
-<h3>$ {{wage.Results.series[0].data[0].value}}/hr</h3>
+<h4><b> Look at the skills needed to earn a wage of $ {{wage.Results.series[0].data[0].value}}/hr! Related jobs mentioned below!</b></h4>
 {% else %}
 <div class="alert alert-warning" role="alert">
   Daily api limit exceeded!
