@@ -11,6 +11,10 @@
     text-transform: capitalize;
   }
 
+  a:hover, a:focus, a:visited{
+    font-weight: bold;
+  }
+
   .nav .nav-item .nav-link:hover,
   .nav .nav-item .nav-link:focus {
     background-color: #66615B;
@@ -88,7 +92,6 @@
             <li class="list-group-item mb-1">
               <h5>{{ category.title.name }}</h5>
               {% for ex in category.example %}
-              {{ex}}
               <span class="font-weight-light"><a href="{{ url_for("skill", id=ex.hot_technology) }}">{{ ex.name }}</a></span> <br />
               {% endfor %}
 
