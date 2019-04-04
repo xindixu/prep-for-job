@@ -58,8 +58,8 @@ def create_app(test_config=None):
     @app.route('/about')
     def about():
         # TODO: fix this when network is slow
-        commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits", params={"all": "true", "per_page": 100}).json()
-        issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all", params={"scope": "all", "per_page": 100}).json()
+        commits = requests.get("https://gitlab.com/api/v4/projects/11533899/repository/commits", params={"all": "true", "per_page": 100}).json()
+        issues = requests.get("https://gitlab.com/api/v4/projects/11533899/issues?scope=all", params={"scope": "all", "per_page": 100}).json()
 
         member_contribs = {
             "aidan": {"commits": 0, "issues": 0},
@@ -103,8 +103,8 @@ def create_app(test_config=None):
             },
             {
                 "name": "Xindi Xu",
-                "bio": "Advertising, Elements of Computing Certificate (May 2020). Front End Developer",
-                "responsibilities": "Job Info Page, Salary page, BLS API connection, Login/Register & database, Front End",
+                "bio": "Advertising major, Elements of Computing Certificate (May 2020). Front End Developer",
+                "responsibilities": "Job, Job_info, Skill, Skill_info, Salary, Salary_info, Home pages, O*Net/BLS API connection, Frontend & styling",
                 "contribs": member_contribs["xindi"],
                 "photo": "xindi"
             },

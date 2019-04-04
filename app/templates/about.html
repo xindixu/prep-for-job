@@ -3,7 +3,21 @@
 {% block title %}About{% endblock %}
 
 {% block content %}
+<style scoped>
+.card-img-top {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  overflow: hidden;
+}
 
+.card-img-top img {
+  position: absolute;
+  top: 0;
+  left:0;
+  height: 100%;
+}
+</style>
 
 <h1>About</h1>
 <hr>
@@ -13,7 +27,9 @@
   {% for member in members %}
   <div class="col-sm-6">
     <div class="card mb-4">
-      <img class="card-img-top img-fluid" src="{{ url_for("static", filename="images/" + member.photo + "_photo.jpg") }}" alt="{{ member.name }}">
+      <div class="card-img-top">
+        <img src="{{ url_for("static", filename="images/" + member.photo + "_photo.jpg") }}" alt="{{ member.name }}">
+      </div>
 
       <div class="card-body">
         <h5 class="card-title">{{ member.name }}</h5>
