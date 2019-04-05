@@ -1,3 +1,39 @@
+commit c86965e6021898ea385962be9879663be135c52e
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Fri Apr 5 02:58:52 2019 +0000
+
+    Update test.py
+
+ app/test.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit 610ae782e59e63951c3856bf57266bd5f85bd292
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 21:57:15 2019 -0500
+
+    remove log1
+
+ IDB1.log | 431 ---------------------------------------------------------------
+ 1 file changed, 431 deletions(-)
+
+commit c1b41ed640c018d0213317b7860f8630c5c6ee02
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Thu Apr 4 21:55:58 2019 -0500
+
+    pydoc
+
+ models.html | 420 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 420 insertions(+)
+
+commit d792af547a58b0ebf3eeaf0d38b5e992adb38210
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Thu Apr 4 21:50:28 2019 -0500
+
+    added log
+
+ IDB2.log | 1696 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 1696 insertions(+)
+
 commit bb29158eec2fa5ad8ddc9af6a1bae681d48b17c3
 Author: periodicaidan <periodicaidan@gmail.com>
 Date:   Thu Apr 4 21:45:56 2019 -0500
