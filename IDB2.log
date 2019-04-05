@@ -1,0 +1,1696 @@
+commit bb29158eec2fa5ad8ddc9af6a1bae681d48b17c3
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Thu Apr 4 21:45:56 2019 -0500
+
+    Unit tests now use an in-memory database instead of the production one
+
+ app/main.py     |  7 ++++---
+ app/test.py     | 44 +++++++++++++++++++++++++-------------------
+ cs329e-idb.wiki |  2 +-
+ 3 files changed, 30 insertions(+), 23 deletions(-)
+
+commit 9a6de26396cad253fb7b8e5d20349e2ac9bceff4
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Fri Apr 5 02:41:00 2019 +0000
+
+    Fixed table sorting and completed all web dependencies
+
+ app/templates/salary.html | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+commit f2622387f771870dadf273eaff9eafe0e7942440
+Merge: be38b0f 105d346
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 21:34:41 2019 -0500
+
+    Merge branch 'master' of https://gitlab.com/stalwar5/cs329e-idb
+
+commit be38b0f7907ce50ee6d325919867d80c28a866bd
+Merge: f089eab 26f4480
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 21:32:14 2019 -0500
+
+    Merge branch 'master' of https://gitlab.com/stalwar5/cs329e-idb
+
+commit 105d346656cf9789de95f833d8a3ca66aaaf236c
+Merge: f089eab 26f4480
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 21:32:14 2019 -0500
+
+    Merge branch 'master' of https://gitlab.com/stalwar5/cs329e-idb
+
+commit f089eabdf9fa11e881687886f539a9aeaae0f102
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 21:31:21 2019 -0500
+
+    add pagination for salary page
+
+ app/main.py               | 26 +++++++++++++++++---------
+ app/templates/salary.html | 30 +++++++++++++++++++++++++++---
+ 2 files changed, 44 insertions(+), 12 deletions(-)
+
+commit 26f4480092f69ddf577f710a44347cf4f8f52e24
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Fri Apr 5 02:27:09 2019 +0000
+
+    Alphabetized the tables
+
+ app/static/js/tablesort.min.js |  5 +++++
+ app/templates/base.html        |  2 +-
+ app/templates/job_info.html    |  5 +++++
+ app/templates/salary.html      | 11 +++++++++--
+ app/templates/skill_info.html  |  9 ++++++++-
+ 5 files changed, 28 insertions(+), 4 deletions(-)
+
+commit 6f526f7b136f016502e7559f8c52569d0593f051
+Merge: 181aabc 0e365b1
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 21:11:52 2019 -0500
+
+    Merge branch 'master' of https://gitlab.com/stalwar5/cs329e-idb
+
+commit 181aabcbc0762f6cf4505e0af28d373bbb8c0667
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 21:11:46 2019 -0500
+
+    add pagination for skills page
+
+ app/main.py              | 12 +++++++++---
+ app/templates/skill.html | 25 +++++++++++++++++++++++++
+ 2 files changed, 34 insertions(+), 3 deletions(-)
+
+commit 0e365b12867162f95ce96e67da45304dbaee78f6
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Fri Apr 5 02:04:16 2019 +0000
+
+    Unit tests
+
+ app/models.py |  15 +------
+ app/test.py   | 124 ++++++----------------------------------------------------
+ 2 files changed, 13 insertions(+), 126 deletions(-)
+
+commit a53bf785eae0f394fdb7fd83be534b4bd30f8ca4
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Thu Apr 4 20:45:23 2019 -0500
+
+    About page now always displays the correct number of commits and issues.
+
+ app/main.py     | 27 ++++++++++++++++++++++++---
+ cs329e-idb.wiki |  2 +-
+ 2 files changed, 25 insertions(+), 4 deletions(-)
+
+commit 63baebe41dce993e78db11f1948315709be4fe2d
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Thu Apr 4 20:43:28 2019 -0500
+
+    changes made to about page
+
+ app/main.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+commit 0d87adf4e7a17ba12bb4aa5335ba85d04d074beb
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Fri Apr 5 01:30:06 2019 +0000
+
+    Added unit tests
+
+ app/test.py | 42 +++++++++++++++++++++++-------------------
+ 1 file changed, 23 insertions(+), 19 deletions(-)
+
+commit d345bbecd2bb4a2d181bbec31e946642f1357143
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Fri Apr 5 01:15:19 2019 +0000
+
+    Fixed general HTML template issues and the no related jobs error
+
+ app/main.py                     |  2 +-
+ app/models.py                   |  6 +++---
+ app/templates/about.html        |  2 +-
+ app/templates/job_info.html     | 19 ++++++++++++-------
+ app/templates/salary.html       |  4 +++-
+ app/templates/skill_salary.html | 21 +++++++++++++--------
+ 6 files changed, 33 insertions(+), 21 deletions(-)
+
+commit fc0edbd540cb3f135c5264d0da1ccbbec96b912c
+Merge: fbdc39c d508e9c
+Author: Aidan T. Manning <periodicaidan@gmail.com>
+Date:   Fri Apr 5 00:30:49 2019 +0000
+
+    Merge branch 'dev' into 'master'
+    
+    Dev
+    
+    See merge request stalwar5/cs329e-idb!12
+
+commit d508e9cfa70fe306fe12a394ebf51926cc49ccd8
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Thu Apr 4 19:25:47 2019 -0500
+
+    Got login and register to work with salted and hashed passwords
+
+ app/main.py                    | 171 +++++++++++++----------------------------
+ app/models.py                  |  71 +++++++++++++----
+ app/secrets.py                 |   0
+ app/templates/error404.html    |  11 +++
+ app/templates/job_info.html    |   3 +-
+ app/templates/profile.html     |  17 ++--
+ app/templates/salary_info.html |  14 +++-
+ 7 files changed, 136 insertions(+), 151 deletions(-)
+
+commit ae107edfd89cd4f2b5a1a336d42a66228c8fef62
+Merge: 365aade 2d13c9f
+Author: cloudashD <yiranzhang@utexas.edu>
+Date:   Thu Apr 4 19:14:46 2019 -0500
+
+    Add coverage to the requirements.
+
+commit 365aade09b20ec235ede9fbfae0cf18876056840
+Author: cloudashD <yiranzhang@utexas.edu>
+Date:   Thu Apr 4 19:09:48 2019 -0500
+
+    requirements
+
+ app/main.py      | 2 +-
+ requirements.txt | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+commit 2d13c9fe7f9de16336f6c400a1119b53c1867001
+Merge: 889c6d1 f4f956d
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Thu Apr 4 22:52:06 2019 +0000
+
+    Merge branch 'dev' of https://gitlab.com/periodicaidan/cs329e-idb into dev
+
+commit 889c6d125152df581ace423d77248221b432f3c2
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Thu Apr 4 22:50:14 2019 +0000
+
+    Fixed registration process and login forms
+
+ app/main.py   | 35 +++++++++++++++++++++--------------
+ app/models.py | 45 ++++++++++++++++++++++++++-------------------
+ 2 files changed, 47 insertions(+), 33 deletions(-)
+
+commit f4f956d57a3d09f79f8b1c93efe58054579548ec
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Thu Apr 4 17:16:02 2019 -0500
+
+    final touches to the link to skills from salary
+
+ app/templates/skill_salary.html | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+commit 02706a046c76ebb84d5511e6f7ae0fcffb3e0d8a
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Thu Apr 4 22:05:45 2019 +0000
+
+    Finished fixing the websites skill salary function
+
+ app/templates/salary.html       |  2 +-
+ app/templates/skill_salary.html | 23 +++++------------------
+ 2 files changed, 6 insertions(+), 19 deletions(-)
+
+commit 9cbd05a82c02a65c930d06f2d07ed02f6f25448d
+Merge: edc0fef 61a72f1
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 16:51:42 2019 -0500
+
+    Merge branch 'dev' of https://gitlab.com/periodicaidan/cs329e-idb into dev
+
+commit edc0fefe617ee26ed177f54a68a39dc628723c01
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 15:19:22 2019 -0500
+
+    style consistence
+
+ app/models.py                 |  4 ++--
+ app/templates/about.html      | 12 +++++-------
+ app/templates/base.html       |  6 ++++++
+ app/templates/skill.html      |  2 +-
+ app/templates/skill_info.html | 11 -----------
+ 5 files changed, 14 insertions(+), 21 deletions(-)
+
+commit 61a72f1b2f6f56ad5ea76bf147f2a523dc4ea2ee
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Thu Apr 4 21:39:33 2019 +0000
+
+    Fixed the jobs and salary skills pages and updated templates
+
+ app/main.py                     |   8 +--
+ app/models.py                   |   4 +-
+ app/templates/skill_salary.html | 121 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 127 insertions(+), 6 deletions(-)
+
+commit 3488f64166828d7824eb8ad30f6a44c122e18f7c
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Thu Apr 4 21:27:03 2019 +0000
+
+    Fixed errors on cached pages and added skillsalry page for the final technical page we had to add
+
+ app/main.py | 62 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 60 insertions(+), 2 deletions(-)
+
+commit 143e641547f62c3cc0e5ff50d2fc6387941ed9f5
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Thu Apr 4 16:12:31 2019 -0500
+
+    added few changes to styling of the salary page
+
+ app/main.py               | 2 +-
+ app/templates/salary.html | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 07f314c83f3d8e2948a88e461f6b6c5d9a576ac3
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 15:19:22 2019 -0500
+
+    style consistence
+
+ app/templates/about.html      | 12 +++++-------
+ app/templates/base.html       |  6 ++++++
+ app/templates/skill.html      |  2 +-
+ app/templates/skill_info.html | 11 -----------
+ 4 files changed, 12 insertions(+), 19 deletions(-)
+
+commit b07bc8415dc01baaae596748146b7adf1e0cbd12
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 15:11:26 2019 -0500
+
+    crop imgs to squre with css
+
+ app/main.py              |  8 ++++----
+ app/templates/about.html | 18 +++++++++++++++++-
+ 2 files changed, 21 insertions(+), 5 deletions(-)
+
+commit c4603ba7288223abd769aa712da29e2415253212
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 14:46:37 2019 -0500
+
+    card responsiveness
+
+ app/templates/index.html | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
+
+commit 69a1043f6011355cc6e6a5adff972ad9fb792fd3
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 14:40:40 2019 -0500
+
+    clean up home page
+
+ app/templates/index.html | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit c737eb5731ce72db1b75d5178bec754d75e9a2c0
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 14:36:21 2019 -0500
+
+    load card dynamiclly + clean up html code
+
+ app/main.py              |  11 +++--
+ app/templates/index.html | 120 +++++++++++++++--------------------------------
+ 2 files changed, 45 insertions(+), 86 deletions(-)
+
+commit 2f42dd2b8541b5ff4b4a643ca4bbc1600e137204
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 14:10:22 2019 -0500
+
+    fix slideshow + use for loop
+
+ app/main.py                                        |   4 +-
+ app/static/images/bg.jpg                           | Bin 5598569 -> 0 bytes
+ app/static/images/{aidan_photo2.jpg => home0.jpg}  | Bin
+ app/static/images/{xindi_photo2.jpg => home1.jpg}  | Bin
+ app/static/images/{yiran_photo2.jpg => home2.jpg}  | Bin
+ app/static/images/{dylan_photo2.jpg => home3.jpg}  | Bin
+ .../images/{srishtti_photo2.jpg => home4.jpg}      | Bin
+ app/templates/index.html                           |  47 +++++++--------------
+ 8 files changed, 18 insertions(+), 33 deletions(-)
+
+commit be9e358f97e5245622b4a1d8a3d28c6aa2c3e46a
+Merge: 3529973 3b1ab7e
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 13:28:16 2019 -0500
+
+    Merge branch 'dev' of https://gitlab.com/periodicaidan/cs329e-idb into dev
+
+commit 3529973a9f4fd84406f89110b5319f68684a2523
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 13:27:49 2019 -0500
+
+    salary_info page, linkage b/w salary_info to skill_info
+
+ app/main.py                    | 102 +++++++++++++++++++++++------------------
+ app/models.py                  |   1 +
+ app/templates/job.html         |   2 +-
+ app/templates/salary_info.html |  19 ++++++++
+ app/templates/skill_info.html  |   2 +-
+ 5 files changed, 80 insertions(+), 46 deletions(-)
+
+commit 3b1ab7e81cc527e0646ae1fb66a170404ac0bd74
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Thu Apr 4 13:09:40 2019 -0500
+
+    made a few changes in spellings - spelling errors fixed
+
+ app/templates/base.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit f40bc3eaa6b15807d3a7aafdfba91d747081fa18
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Thu Apr 4 12:48:48 2019 -0500
+
+    edited splash page- fixed the cards and edited carousel container sizes
+
+ app/main.py              | 2 +-
+ app/templates/index.html | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+commit ad1d04e291156ed4d7fdd8af2ac0404b7b3de309
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Apr 4 12:17:17 2019 -0500
+
+    add salary buttons to skill page
+
+ app/main.py                   | 10 +++++++++-
+ app/templates/skill_info.html | 28 ++++++++++++++++++++++++++--
+ 2 files changed, 35 insertions(+), 3 deletions(-)
+
+commit 7eab6be3ea1ac364bc6049b7e88afd507de710a2
+Merge: ee240b0 e1a1ae4
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Wed Apr 3 21:04:57 2019 -0500
+
+    Merge branch 'master' of https://gitlab.com/periodicaidan/cs329e-idb
+
+commit ee240b03e661f64ae425c8172579f3a15dffbaf2
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Wed Apr 3 20:09:30 2019 -0500
+
+    fix styling
+
+ app/templates/job_info.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit cb6dbc7e67e55e69e2fdc062267a3dc502218d5e
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Wed Apr 3 19:48:30 2019 -0500
+
+    changes
+
+ app/templates/job_info.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 08dfaddcb7580369fbe81668b0ea43786ae1ee51
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Wed Apr 3 19:34:32 2019 -0500
+
+    remove all_skills from anyapi
+
+ app/main.py                                        |  6 ++--
+ app/models.py                                      |  1 +
+ app/templates/job_info.html                        | 35 ++--------------------
+ .../{skills_info.html => skill_info.html}          |  6 ++--
+ app/templates/technology_info.html                 | 22 ++++++++++++++
+ 5 files changed, 31 insertions(+), 39 deletions(-)
+
+commit 257ff754d051f9a602acdc65e0f2c7191fcd821f
+Merge: bbc863b 0a34f6a
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Wed Apr 3 19:01:30 2019 -0500
+
+    Merge branch 'dev' of https://gitlab.com/periodicaidan/cs329e-idb into dev
+
+commit bbc863b2c222b7892c8e48733fe88aa6efe75f17
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Wed Apr 3 19:01:22 2019 -0500
+
+    styling + technologies linked
+
+ app/templates/job_info.html | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+commit 0a34f6af75e76df3c089ef31c5c5018c47daae52
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Wed Apr 3 18:59:23 2019 -0500
+
+    changed salary page - added a button that needs to be linked to skills page
+
+ app/templates/index.html  | 26 ++++++++++++++------------
+ app/templates/salary.html | 14 +++++++++-----
+ 2 files changed, 23 insertions(+), 17 deletions(-)
+
+commit ba00b74e307b181f205639e6562edd76ce72dcf8
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Wed Apr 3 18:57:59 2019 -0500
+
+    add skill_info page
+
+ app/main.py                    | 79 ++++++++++++++++++++----------------------
+ app/templates/job_info.html    |  4 +--
+ app/templates/skills_info.html |  2 ++
+ 3 files changed, 41 insertions(+), 44 deletions(-)
+
+commit e1a1ae4898118a57c4e04f259780574d2ffa1f9e
+Merge: 7b74892 09b6491
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Wed Apr 3 17:59:43 2019 -0500
+
+    merge to master
+
+commit 09b64915e78944e944c4a10335d8b026a71f4cca
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Wed Apr 3 17:51:27 2019 -0500
+
+    connect to onet for skill page listing + skill_info page
+
+ app/main.py                    | 84 +++++++++++++++++++++---------------------
+ app/models.py                  |  4 ++
+ app/templates/skill.html       |  7 ++--
+ app/templates/skills_info.html | 16 ++++----
+ 4 files changed, 57 insertions(+), 54 deletions(-)
+
+commit f5cb3414bbe3efcd84978b325750fc1b778205bb
+Merge: c311c26 62beae7
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Wed Apr 3 16:21:25 2019 -0500
+
+    Merge branch 'master' into dev
+
+commit c311c26e2d5d3bdb2a95f68394a734b1239e3dd5
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Wed Apr 3 21:02:06 2019 +0000
+
+    Fixed everything except skills which needs to be added before cached
+
+ app/main.py   | 45 ++++-----------------------------------------
+ app/models.py | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+), 41 deletions(-)
+
+commit a19affbd7ef601ba238013ab22e9e53756955c3c
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Wed Apr 3 20:41:30 2019 +0000
+
+    Implemented caches on Job pages, job skills and related data, it is only called once and it is stored in the database. Need to limit it to 50 though
+
+ app/main.py   |  40 +++++++++++++++-----
+ app/models.py | 118 ++++++++++++++++++++++++++++++++++++++++++++++++++++------
+ 2 files changed, 136 insertions(+), 22 deletions(-)
+
+commit 3d0c09611350ebc680f24a87a6305155c43ca402
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Wed Apr 3 13:25:44 2019 -0500
+
+    added info to each of the splash page cards
+
+ app/templates/index.html | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+
+commit c3c6d9047885a575f2fd8131b772b29a508633c0
+Author: Dylan Mulrooney <dmulrooney@utexas.edu>
+Date:   Wed Apr 3 13:18:24 2019 -0500
+
+    Updated the templates and images along with making changes to how the splash page handles requests
+
+ app/main.py                           |   15 +-
+ app/models.py                         |   11 +-
+ app/static/css/bootstrap.min.css      |    7 +
+ app/static/css/paper-kit.css          | 8187 +++++++++++++++++++++++++++++++++
+ app/static/images/aidan_photo2.jpg    |  Bin 0 -> 1132495 bytes
+ app/static/images/dylan_photo2.jpg    |  Bin 0 -> 1037322 bytes
+ app/static/images/srishtti_photo2.jpg |  Bin 0 -> 2727797 bytes
+ app/static/images/xindi_photo2.jpg    |  Bin 0 -> 1184269 bytes
+ app/static/images/yiran_photo2.jpg    |  Bin 0 -> 1192081 bytes
+ app/static/js/paper-kit.js            |  318 ++
+ app/templates/base.html               |   30 +-
+ app/templates/index.html              |   59 +-
+ app/templates/job.html                |   38 +-
+ app/templates/job_info.html           |  179 +-
+ app/templates/salary.html             |   28 +-
+ app/test.py                           |  156 +-
+ 16 files changed, 8779 insertions(+), 249 deletions(-)
+
+commit 7b748927f344d9baf55b22dfd4815f037692c69d
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Wed Apr 3 18:05:56 2019 +0000
+
+    Updated the image files for everyone and edited the orientation to landscape instead of portrait with the same 3000x4000 ratio, updated the images page with job, salary, skill, and about information with links to each
+
+ app/static/images/aidan_photo2.jpg | Bin 641976 -> 1132495 bytes
+ app/static/images/dylan_photo2.jpg | Bin 2870375 -> 1037322 bytes
+ app/static/images/xindi_photo2.jpg | Bin 2795287 -> 1184269 bytes
+ app/static/images/yiran_photo2.jpg | Bin 2876260 -> 1192081 bytes
+ 4 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 51d8c9054693c6aeb33dee5a5d43adf2910f70dd
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Wed Apr 3 16:44:12 2019 +0000
+
+    Fixed app.forms to forms
+
+ app/main.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit c5623eb8f33481f36e968068c0bfd1426386173a
+Author: cloudashD <yiranzhang@utexas.edu>
+Date:   Wed Apr 3 00:20:17 2019 -0500
+
+    more unit test
+
+ app/main.py   |   4 +-
+ app/models.py |  11 +++--
+ app/test.py   | 156 ++++++++++++++++++++++++++++++++++++++++++----------------
+ 3 files changed, 121 insertions(+), 50 deletions(-)
+
+commit 20df9e7d1fb1632487e1df6161a6dd5e42e8ef81
+Merge: 0964455 f3919f5
+Author: Aidan T. Manning <periodicaidan@gmail.com>
+Date:   Wed Apr 3 04:14:34 2019 +0000
+
+    Merge branch 'dev' into 'master'
+    
+    Dev
+    
+    See merge request periodicaidan/cs329e-idb!1
+
+commit f3919f5352514fce80ac2e86ab68c0d21f2c7eb6
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Tue Apr 2 22:54:24 2019 -0500
+
+    Added a few more fields to the users table
+
+ app/config.py                    |  2 +-
+ app/forms.py                     |  3 +++
+ app/main.py                      | 10 +++++++---
+ app/models.py                    | 16 ++++++++++------
+ app/templates/auth/register.html | 10 ++++++++++
+ app/templates/profile.html       | 20 ++++++++++++--------
+ 6 files changed, 43 insertions(+), 18 deletions(-)
+
+commit f66394af2d2dccb0aeca309ef0392dcf067ffa70
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Tue Apr 2 21:35:17 2019 -0500
+
+    Got register/login to work, refactored models into separate file
+
+ app/config.py              |   4 ++
+ app/db.py                  |  41 -----------------
+ app/main.py                | 111 +++++++++++++--------------------------------
+ app/models.py              |  62 ++++++++++++++++++++++++-
+ app/populate_db.py         |   0
+ app/templates/base.html    |   2 +-
+ app/templates/profile.html |  11 +++--
+ 7 files changed, 104 insertions(+), 127 deletions(-)
+
+commit 09644553abaaf1a7017a5705f2da5c0495323db4
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Tue Apr 2 18:13:21 2019 -0500
+
+    changes made to splash page - pictures added
+
+ app/static/images/aidan_photo2.jpg    | Bin 0 -> 641976 bytes
+ app/static/images/dylan_photo2.jpg    | Bin 0 -> 2870375 bytes
+ app/static/images/srishtti_photo2.jpg | Bin 0 -> 2727797 bytes
+ app/static/images/xindi_photo2.jpg    | Bin 0 -> 2795287 bytes
+ app/static/images/yiran_photo2.jpg    | Bin 0 -> 2876260 bytes
+ app/templates/index.html              |  59 ++++++++++++++++++++++++++++------
+ 6 files changed, 50 insertions(+), 9 deletions(-)
+
+commit 62beae76ad97342ca2ff437b49801cc589bd3f84
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 17:40:39 2019 -0500
+
+    footer styling
+
+ app/templates/about.html    |   2 -
+ app/templates/base.html     |  99 ++++++++++++++++++-------
+ app/templates/job_info.html | 174 ++++++++++++++++++++++----------------------
+ 3 files changed, 161 insertions(+), 114 deletions(-)
+
+commit c831237e3737506dfcdd2c4b24bd41bac8adf110
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 17:11:21 2019 -0500
+
+    add carousel
+
+ app/main.py              |  1 +
+ app/templates/base.html  |  3 +--
+ app/templates/index.html | 51 +++++++++++++++++++++++++++++++++++++++---------
+ 3 files changed, 44 insertions(+), 11 deletions(-)
+
+commit 3783774a4f7afa3d2c1cb7b6e3c4ea44a50373be
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Tue Apr 2 21:47:22 2019 +0000
+
+    Fixed .Real bug
+
+ app/main.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 40867633b7279f73b25fe6e706d33ce824be5f59
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Tue Apr 2 21:45:22 2019 +0000
+
+    Fixed bug and set database up for Digital Ocean and IP
+
+ app/main.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 154ce11930f549d0c8205c2be8fef253b80b68c5
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Tue Apr 2 21:44:40 2019 +0000
+
+    Fixed bug and set database up for Digital Ocean
+
+ app/main.py      | 4 ++--
+ requirements.txt | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+commit bb6775f843d1102f7489a27bb909db14151c4dff
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 16:23:12 2019 -0500
+
+    fix styling
+
+ app/templates/job_info.html | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+commit 81c038d21646da128bcbeac61b1b4aec27998155
+Merge: c2fb839 b596d5d
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 15:13:47 2019 -0500
+
+    Merge branch 'dev-api'
+
+commit b596d5d92a66eab25c22edc2b9d4af30ffcfbc8f
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 15:13:06 2019 -0500
+
+    add style kit
+
+ app/static/css/bootstrap.min.css |    7 +
+ app/static/css/main.css          |   14 -
+ app/static/css/paper-kit.css     | 8187 ++++++++++++++++++++++++++++++++++++++
+ app/static/js/paper-kit.js       |  318 ++
+ app/templates/base.html          |   20 +-
+ 5 files changed, 8526 insertions(+), 20 deletions(-)
+
+commit b3bfbe7c7975f4a622cf77e1b81d241d513f2ce6
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 14:59:05 2019 -0500
+
+    add pagination for jobs
+
+ app/main.py               | 13 +++++++++----
+ app/templates/job.html    | 38 ++++++++++++++++++++++++++++++--------
+ app/templates/salary.html | 28 +---------------------------
+ 3 files changed, 40 insertions(+), 39 deletions(-)
+
+commit 4d9ae3ac68c9667695b15d1e405b2247b9d06184
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 14:19:10 2019 -0500
+
+    formate job_info page
+
+ app/main.py                 |   2 -
+ app/static/css/main.css     |  14 ++++
+ app/templates/base.html     |   8 +-
+ app/templates/job_info.html | 175 +++++++++++++++++++++++++++-----------------
+ 4 files changed, 126 insertions(+), 73 deletions(-)
+
+commit d1f2f170f025328d790732cbe7c024ffe00fa65a
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 13:54:22 2019 -0500
+
+    ready to refactor
+
+ app/main.py | 148 ++++++++++++++++++++++++++++++------------------------------
+ 1 file changed, 74 insertions(+), 74 deletions(-)
+
+commit c2fb8397ce25fb1962221f7ee81b74c40414bca7
+Merge: 903af5e 0da7e51
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 13:53:06 2019 -0500
+
+    Merge branch 'dev-api'
+
+commit 0da7e51092c28a1a69f6258f97ec6a2775d71649
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 13:52:50 2019 -0500
+
+    connect salary to job
+
+ app/main.py                 | 35 +++++++++++++++++++----------------
+ app/templates/job_info.html | 10 +++++++++-
+ app/templates/salary.html   | 14 ++++++--------
+ 3 files changed, 34 insertions(+), 25 deletions(-)
+
+commit 691cc1376a94021a0bcd41acfc6d1ab47f255c4f
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 13:14:54 2019 -0500
+
+    use job code from onet to get wage data from bls!
+
+ app/main.py                 | 55 ++++++++++++++++++++++++++++++++++++++++++---
+ app/templates/job_info.html |  3 ++-
+ app/templates/salary.html   |  1 +
+ 3 files changed, 55 insertions(+), 4 deletions(-)
+
+commit 9ffba1294e0e3fafa2d6a3344f6d020391bd31f5
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 12:24:47 2019 -0500
+
+    load skills from both anyapi and onet
+
+ app/main.py                 |  6 +++++-
+ app/templates/job_info.html | 43 +++++++++++++++++++++++++++----------------
+ 2 files changed, 32 insertions(+), 17 deletions(-)
+
+commit c4a2c9a41d48dc8ae6bc8e2e701eb8a024fa5ec3
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 12:00:09 2019 -0500
+
+    connect anyapi with onet
+
+ app/main.py                 | 182 ++++++++++++++++++++++----------------------
+ app/templates/job.html      |   3 +-
+ app/templates/job_info.html |  52 ++++++++++---
+ 3 files changed, 136 insertions(+), 101 deletions(-)
+
+commit 4b8d11fe0e4d3d94c4603de9b5c98d3b0703bef9
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 10:30:57 2019 -0500
+
+    load job info data + render to page
+
+ app/main.py                 | 176 ++++++++++++++++++++++----------------------
+ app/templates/job.html      |   3 +-
+ app/templates/job_info.html |  19 ++---
+ 3 files changed, 101 insertions(+), 97 deletions(-)
+
+commit d0bbe18e6841b9e0febd1656f76f30cdce09f74c
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 10:03:01 2019 -0500
+
+    present job data on job page
+
+ app/main.py            | 151 +++++++++++++++++++++++++------------------------
+ app/templates/job.html |   8 ++-
+ 2 files changed, 81 insertions(+), 78 deletions(-)
+
+commit 903af5e5ea24fb294a71c3b0ba0cf3107cc05291
+Merge: fbdc39c 131387c
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 09:54:21 2019 -0500
+
+    Merge branch 'dev'
+
+commit 131387c6749f1859728385e3aa597f7869f0a06d
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Tue Apr 2 09:52:52 2019 -0500
+
+    load job data from o*net
+
+ app/main.py            | 13 +++++++++++--
+ app/templates/job.html |  3 ++-
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+commit 9001f7a7bd47f3f3019a21075f2ec8d4770168cb
+Merge: 8351c65 164ca4e
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Mon Apr 1 21:34:10 2019 -0500
+
+    Merge branch 'dev' of https://gitlab.com/periodicaidan/cs329e-idb into dev
+
+commit 8351c653897eb4e978834d048723105716770456
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Mon Apr 1 21:33:55 2019 -0500
+
+    reformat salary page
+
+ app/forms.py                    |  1 -
+ app/main.py                     | 21 +++-------------
+ app/{__init__.py => secrets.py} |  0
+ app/templates/salary.html       | 55 +++++++++++++++++++++++++++++++++--------
+ requirements.txt                |  1 +
+ 5 files changed, 50 insertions(+), 28 deletions(-)
+
+commit 164ca4ecdaebe641d722a0c75eed847b346d06c5
+Author: cloudashD <yiranzhang@utexas.edu>
+Date:   Mon Apr 1 20:40:42 2019 -0500
+
+    more unittest
+
+ app/main.py |   8 ++--
+ app/test.py | 138 ++++++++++++++++++++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 126 insertions(+), 20 deletions(-)
+
+commit 87845c2ccc6ff8f2c0401c47cd97e34a22d2a547
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Mon Apr 1 19:01:58 2019 -0500
+
+    made changes to main.py and added schema for database tables
+
+ app/main.py       |  22 +-
+ makefile          |   4 +-
+ package-lock.json | 763 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 782 insertions(+), 7 deletions(-)
+
+commit 68f4ae8d4c125a3804a11901855bfc1ab1b4c195
+Author: Dylan Mulrooney <dmulrooney@utexas.edu>
+Date:   Mon Apr 1 11:50:04 2019 -0500
+
+    Added five unit tests for home page and registration
+
+ .DS_Store   | Bin 8196 -> 0 bytes
+ app/test.py |  55 ++++++++++++++++++++++++++++++++++++++++++++++---------
+ 2 files changed, 46 insertions(+), 9 deletions(-)
+
+commit 4737901544188f59d6d83b575fdb7a7a1efa252e
+Author: Dylan Mulrooney <dmulrooney@utexas.edu>
+Date:   Mon Apr 1 11:37:59 2019 -0500
+
+    Updated requirements, fixed forms import, templating unit tests
+
+ .DS_Store        | Bin 0 -> 8196 bytes
+ app/forms.py     |   3 ---
+ app/main.py      |   2 +-
+ app/test.py      |  40 +++++++++++++++++++++++++++++++++++++---
+ requirements.txt |   3 +++
+ 5 files changed, 41 insertions(+), 7 deletions(-)
+
+commit 5859b7996111d37ae364b7fe26f17980486c3dfd
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Sun Mar 31 17:59:23 2019 -0500
+
+    Started profile page, cleaned up the authentication logic, and added WTForms
+
+ app/__init__.py                  |   0
+ app/forms.py                     |  23 +++++++++
+ app/main.py                      | 107 +++++++++++++++++++++------------------
+ app/populate_db.py               |   0
+ app/templates/auth/login.html    |  16 +++---
+ app/templates/auth/register.html |  20 ++++----
+ app/templates/profile.html       |  51 +++++++++++++++++++
+ cs329e-idb.wiki                  |   1 +
+ 8 files changed, 154 insertions(+), 64 deletions(-)
+
+commit 8d531688835232cee769d840eee95117c75a44a0
+Merge: 2e12ab7 d205103
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Fri Mar 29 20:45:04 2019 +0000
+
+    Merge branch 'dev' of https://gitlab.com/periodicaidan/cs329e-idb into dev
+
+commit 2e12ab709afb474251b5048d5e2251e127c9efb9
+Author: Dylan <dmulrooney@utexas.edu>
+Date:   Fri Mar 29 20:44:18 2019 +0000
+
+    Added user database commands and added sql functions on register and login pages
+
+ app/auth.py                      | 91 ----------------------------------------
+ app/main.py                      | 76 +++++++++++++++++++++++++++++----
+ app/templates/auth/login.html    |  4 +-
+ app/templates/auth/register.html |  6 ++-
+ app/templates/base.html          |  8 ++--
+ 5 files changed, 78 insertions(+), 107 deletions(-)
+
+commit d205103c75c778079086b9bfc0601221e1056c8e
+Author: cloudashD <yiranzhang@utexas.edu>
+Date:   Fri Mar 29 15:14:40 2019 -0500
+
+    unittest ideas
+
+ app/test.py | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+commit 25519af295dedddb900445de167b85a18bb2078f
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Fri Mar 29 14:02:23 2019 -0500
+
+    Added database model skeletons
+
+ app/main.py   | 19 +++++++++++++++++++
+ app/models.py |  5 +++++
+ 2 files changed, 24 insertions(+)
+
+commit fbdc39c8830c173d78ab6748cd61549d37f45273
+Merge: fb80f23 2f3f666
+Author: Yiran Zhang <yiranzhang@utexas.edu>
+Date:   Mon Mar 25 01:42:49 2019 +0000
+
+    Merge branch 'dev' into 'master'
+    
+    add log
+    
+    See merge request stalwar5/cs329e-idb!10
+
+commit 2f3f6664cbea526cea77bf5f2c02625ac89154e7
+Author: cloudashD <yiranzhang@utexas.edu>
+Date:   Sun Mar 24 20:41:36 2019 -0500
+
+    add log
+
+ IDB1.log | 431 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 431 insertions(+)
+
+commit fb80f230a69ead50bae21993cd4a46e0188ccc01
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Sun Mar 24 19:06:20 2019 -0500
+
+    remove duplicated api calls
+
+ app/main.py              |  25 ++++++++++---------------
+ app/static/images/bg.jpg | Bin 0 -> 5598569 bytes
+ app/templates/about.html |   4 ++--
+ app/templates/index.html |  22 ++++++++++++++++++----
+ 4 files changed, 30 insertions(+), 21 deletions(-)
+
+commit ab4f49c85f537b4aaacef678eff89a573c1347c4
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Sun Mar 24 18:11:00 2019 -0500
+
+    add salary by loc, format salary page
+
+ app/main.py               |  19 +---
+ app/templates/about.html  | 246 +++++++++++++++++++++++-----------------------
+ app/templates/base.html   |  10 +-
+ app/templates/salary.html |  53 ++++++++--
+ 4 files changed, 181 insertions(+), 147 deletions(-)
+
+commit bc718ebb09376eace130b92777a35a42fcc763a7
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Sun Mar 24 17:32:26 2019 -0500
+
+    reformat salary
+
+ app/templates/salary.html | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+commit 24558bce7d34148d856a5a69a2653351c6dd2831
+Merge: 1ac2c8f 32a7a6d
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Sun Mar 24 17:30:28 2019 -0500
+
+    Merge branch 'dev'
+
+commit 32a7a6d09ea87abf41a86876e77ad74f53264c77
+Merge: 6437cae 6699025
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Sun Mar 24 17:30:03 2019 -0500
+
+    Merge branch 'dev' of https://gitlab.com/stalwar5/cs329e-idb into dev
+
+commit 6437cae21201e4cf73cd11d2cd2b72b4d24c1c0f
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Sun Mar 24 17:29:56 2019 -0500
+
+    bls api + real salary data
+
+ app/main.py               | 30 ++++++++++++++++++++++++++++--
+ app/templates/salary.html | 11 ++++++++++-
+ requirements.txt          |  4 ++--
+ 3 files changed, 40 insertions(+), 5 deletions(-)
+
+commit 1ac2c8fd3ed2a9614d5813ce034b067470ea74b6
+Merge: 0f041de 6699025
+Author: Aidan T. Manning <periodicaidan@gmail.com>
+Date:   Sun Mar 24 22:01:52 2019 +0000
+
+    Merge branch 'dev' into 'master'
+    
+    Edited Srishtti's bio
+    
+    See merge request stalwar5/cs329e-idb!9
+
+commit 6699025255156fdfd6bbf9b6826395339faa54bd
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Sun Mar 24 17:00:52 2019 -0500
+
+    Edited Srishtti's bio
+
+ app/main.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 0f041de311d1bb8c050ba2a618669f0476ca3389
+Merge: c821223 196a1a1
+Author: Aidan T. Manning <periodicaidan@gmail.com>
+Date:   Sun Mar 24 21:56:30 2019 +0000
+
+    Merge branch 'dev' into 'master'
+    
+    Finished up the about page
+    
+    See merge request stalwar5/cs329e-idb!8
+
+commit 196a1a11e6e2157efd02b2b6999721ef3cdc087d
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Sun Mar 24 16:56:11 2019 -0500
+
+    Finished up the about page
+
+ app/main.py              |  2 +-
+ app/templates/about.html | 39 +++++++++++++++++++++++++++++++--------
+ app/templates/base.html  | 11 ++++++-----
+ 3 files changed, 38 insertions(+), 14 deletions(-)
+
+commit c821223981595d2603f24c7935c072f9835cf748
+Merge: b4fe70d 1bb828b
+Author: Aidan T. Manning <periodicaidan@gmail.com>
+Date:   Sun Mar 24 20:22:40 2019 +0000
+
+    Merge branch 'dev' into 'master'
+    
+    Dev
+    
+    See merge request stalwar5/cs329e-idb!7
+
+commit 1bb828b62938d0c54bd75e2ab75d7cb689e45423
+Merge: d439e15 b4fe70d
+Author: Aidan T. Manning <periodicaidan@gmail.com>
+Date:   Sun Mar 24 20:22:35 2019 +0000
+
+    Merge branch 'master' into 'dev'
+    
+    # Conflicts:
+    #   app/main.py
+
+commit d439e15b555471adcdced7fb03a3ec686ca85c96
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Sun Mar 24 15:21:26 2019 -0500
+
+    Edited about endpoint in main.py to work out the number of commits and issues faster
+
+ app/main.py | 66 ++++++++++++++++++++++++++++++-------------------------------
+ 1 file changed, 33 insertions(+), 33 deletions(-)
+
+commit d316b033ce3d87596a8b30304f178497900a2f04
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Sun Mar 24 15:05:54 2019 -0500
+
+    home page styling + skill page
+
+ app/main.py              |   5 --
+ app/templates/index.html | 127 ++++++++++++++++++++++++++++-------------------
+ 2 files changed, 75 insertions(+), 57 deletions(-)
+
+commit b4fe70dc8cae225b4c73b9b5fa9dd67d74a82ddb
+Merge: f2652f3 0ff41a5
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Sun Mar 24 14:58:30 2019 -0500
+
+    Merge branch 'master' of https://gitlab.com/stalwar5/cs329e-idb
+
+commit f2652f3a7190eaa55140141c231fa2d8dd00522a
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Sun Mar 24 14:58:20 2019 -0500
+
+    merge
+
+ app/main.py | 2 --
+ 1 file changed, 2 deletions(-)
+
+commit 0ff41a5850b29d21e1fc17e6e261b0c138b32d93
+Author: Aidan T. Manning <periodicaidan@gmail.com>
+Date:   Sun Mar 24 19:57:17 2019 +0000
+
+    Update main.py
+
+ app/main.py | 6 ------
+ 1 file changed, 6 deletions(-)
+
+commit f004daabaf583f0a2191f8d99c18c3eac0ce8932
+Merge: 70b8879 9706302
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Sun Mar 24 14:57:16 2019 -0500
+
+    Merge branch 'master' of https://gitlab.com/stalwar5/cs329e-idb
+
+commit 70b88795773cb8ac17b08a4aa321c4116b1be8de
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Sun Mar 24 14:56:42 2019 -0500
+
+    merge & resolve conflict
+
+ app/main.py | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+commit 9706302e6bae87626931540f8702036153f416e0
+Merge: d1158a2 1a719e0
+Author: Aidan T. Manning <periodicaidan@gmail.com>
+Date:   Sun Mar 24 19:56:19 2019 +0000
+
+    Merge branch 'dev' into 'master'
+    
+    More work on about page, flashed messages shown on register/login pages
+    
+    See merge request stalwar5/cs329e-idb!6
+
+commit bbe2d1aaf0b2460cc8547e68235c4ff6a11b858e
+Merge: d1158a2 7215157
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Sun Mar 24 14:56:19 2019 -0500
+
+    Merge branch 'dev'
+
+commit 1a719e09cc011fce905632614a7ee09d9ad28a3b
+Merge: 7215157 d1158a2
+Author: Aidan T. Manning <periodicaidan@gmail.com>
+Date:   Sun Mar 24 19:56:15 2019 +0000
+
+    Merge branch 'master' into 'dev'
+    
+    # Conflicts:
+    #   app/main.py
+
+commit d1158a2147836fbbcc017196a719ec19b5d9220f
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Sun Mar 24 14:54:16 2019 -0500
+
+    footer + formate job & salary pages
+
+ Pipfile                                  |  2 ++
+ app/main.py                              | 25 +++++++++++++------------
+ app/templates/base.html                  | 22 +++++++++++++++++-----
+ app/templates/job_info.html              |  7 +++++++
+ app/templates/salary.html                |  2 +-
+ app/templates/skill.html                 |  5 +++++
+ app/requirements.txt => requirements.txt |  0
+ 7 files changed, 45 insertions(+), 18 deletions(-)
+
+commit 721515733820ec5e26113d2c7885266a08eca419
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Sun Mar 24 14:53:34 2019 -0500
+
+    More work on about page, flashed messages shown on register/login pages
+
+ app/main.py                      |  6 +++---
+ app/templates/about.html         | 40 ++++++++++++++++++++++++++++++++++++----
+ app/templates/auth/login.html    | 10 +++++++++-
+ app/templates/auth/register.html | 12 +++++++++++-
+ 4 files changed, 59 insertions(+), 9 deletions(-)
+
+commit 20dcb76766c6cdbd303d419aa9a34076301a85f3
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Sun Mar 24 14:03:19 2019 -0500
+
+    edited salaries tab, changed one bracket of salaries
+
+ app/templates/salary.html | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
+
+commit 2f5a404c4127f1ac92f76f22e00126878fda3bad
+Merge: 2d6e16c 78d33f1
+Author: Dylan Mulrooney <dmulrooney@utexas.edu>
+Date:   Sun Mar 24 13:48:15 2019 -0500
+
+    Merge branch 'dev'
+
+commit 78d33f1b3ed8729f5015111f4e27fef224c97bd7
+Author: Dylan Mulrooney <dmulrooney@utexas.edu>
+Date:   Sun Mar 24 12:39:28 2019 -0500
+
+    Fixed templates design, fixed blank line issue.
+
+ app/main.py             | 8 ++++----
+ app/templates/base.html | 3 ++-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
+commit 350917b8f9d4924cacdaa44f31308add0a3e59f6
+Author: Dylan Mulrooney <dmulrooney@utexas.edu>
+Date:   Sun Mar 24 12:29:05 2019 -0500
+
+    Disabled login/reigster for now since not compatible with GCP
+
+ .DS_Store     | Bin 8196 -> 0 bytes
+ app/.DS_Store | Bin 8196 -> 0 bytes
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 61be6ab1fb1aceabcb48952bcc60d985d6617b6a
+Author: Dylan Mulrooney <dmulrooney@utexas.edu>
+Date:   Sun Mar 24 12:28:52 2019 -0500
+
+    Disabled login/reigster for now since not compatible with GCP
+
+ .DS_Store               | Bin 0 -> 8196 bytes
+ app/.DS_Store           | Bin 0 -> 8196 bytes
+ app/main.py             |   8 ++++----
+ app/templates/base.html |   4 +++-
+ 4 files changed, 7 insertions(+), 5 deletions(-)
+
+commit 926cd2a06ab7beb1c018d1733cab55ecbbf6b25c
+Author: Dylan Mulrooney <dmulrooney@utexas.edu>
+Date:   Sun Mar 24 12:21:10 2019 -0500
+
+    Made the home page dynamically calculate number of jobs and skills for home page
+
+ .DS_Store                | Bin 8196 -> 0 bytes
+ app/.DS_Store            | Bin 8196 -> 0 bytes
+ app/main.py              |  13 ++++++++++++-
+ app/templates/index.html |   4 ++--
+ 4 files changed, 14 insertions(+), 3 deletions(-)
+
+commit 3d8d8cc3f6ddd36c99441cbc269a5befd2434677
+Author: Dylan Mulrooney <dmulrooney@utexas.edu>
+Date:   Sun Mar 24 11:09:49 2019 -0500
+
+    Added splash page and made it pretty
+
+ .DS_Store                | Bin 8196 -> 8196 bytes
+ app/.DS_Store            | Bin 8196 -> 8196 bytes
+ app/templates/index.html |  67 +++++++++++++++++++++++++++++++++++++++++++++--
+ 3 files changed, 65 insertions(+), 2 deletions(-)
+
+commit 2d6e16cc8bd7427ca919f0ecb122f1f528ebeab9
+Merge: 1091f14 a51f0a4
+Author: Aidan T. Manning <periodicaidan@gmail.com>
+Date:   Sun Mar 24 06:19:08 2019 +0000
+
+    Merge branch 'dev' into 'master'
+    
+    Dev
+    
+    See merge request stalwar5/cs329e-idb!5
+
+commit a51f0a409682ea60915f095fe56821d475e69eb8
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Sun Mar 24 01:16:59 2019 -0500
+
+    Added about page, made job and skill pages look more aesthetically pleasing
+
+ README.md                            |   2 +-
+ app/main.py                          |  86 ++++++++++++++++++++++++++++++++++-
+ app/static/images/aidan_photo.jpg    | Bin 0 -> 122332 bytes
+ app/static/images/dylan_photo.jpg    | Bin 0 -> 1915151 bytes
+ app/static/images/srishtti_photo.jpg | Bin 0 -> 2775048 bytes
+ app/static/images/xindi_photo.jpg    | Bin 0 -> 6954127 bytes
+ app/static/images/yiran_photo.jpg    | Bin 0 -> 215240 bytes
+ app/templates/about.html             |  74 ++++++++++++++++++++++++++++++
+ app/templates/base.html              |   6 +++
+ app/templates/job.html               |  14 +++---
+ app/templates/job_info.html          |   7 +--
+ app/templates/skill.html             |   9 ++--
+ app/templates/skills_info.html       |  10 ++--
+ makefile                             |   5 +-
+ 14 files changed, 190 insertions(+), 23 deletions(-)
+
+commit a206ec57991c020a7dcd4d6ec54bc6a6f8898aab
+Author: Dylan Mulrooney <dmulrooney@utexas.edu>
+Date:   Sat Mar 23 23:37:04 2019 -0500
+
+    Removed bad files
+
+ .DS_Store                                          |  Bin 8196 -> 8196 bytes
+ ..._module_id_default__logs__2019-03-23T11-17.json | 2140 --------------------
+ 2 files changed, 2140 deletions(-)
+
+commit 12c830a61ac2b096f68dae262ce91f0694f77251
+Author: Dylan Mulrooney <dmulrooney@utexas.edu>
+Date:   Sat Mar 23 23:24:17 2019 -0500
+
+    Fixed files to work with google cloud platform, needs some revisions still
+
+ .DS_Store                                          |  Bin 8196 -> 8196 bytes
+ app/.DS_Store                                      |  Bin 0 -> 8196 bytes
+ app/app.yaml                                       |    2 +-
+ app/auth.py                                        |    2 +-
+ app/{__init__.py => main.py}                       |   11 +-
+ app/requirements.txt                               |    3 +
+ ..._module_id_default__logs__2019-03-23T11-17.json | 2140 ++++++++++++++++++++
+ requirements.txt                                   |    2 -
+ 8 files changed, 2150 insertions(+), 10 deletions(-)
+
+commit 1091f140071891d8a32490979c0f71fa7f672a74
+Merge: 03505cf beae2c6
+Author: cloudashD <yiranzhang@utexas.edu>
+Date:   Sat Mar 23 21:38:48 2019 -0500
+
+    gerge branch 'master' of https://gitlab.com/stalwar5/cs329e-idb
+    merge salary
+
+commit beae2c650039c757c66bca6f228eb25b05fd971b
+Merge: 6dc15ea f3ffa4a
+Author: Yiran Zhang <yiranzhang@utexas.edu>
+Date:   Sun Mar 24 02:29:24 2019 +0000
+
+    Merge branch 'dev' into 'master'
+    
+    Dev
+    
+    See merge request stalwar5/cs329e-idb!4
+
+commit f3ffa4a6b1db591d0c2507af220416bfaa43c090
+Author: Dylan Mulrooney <dmulrooney@utexas.edu>
+Date:   Sat Mar 23 21:11:29 2019 -0500
+
+    Added gunicorn as a requirement for GDP to run the program WSGI
+
+ requirements.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit ac863462764e0483bd10e0f1ec0a44172a76d915
+Author: Dylan Mulrooney <dmulrooney@utexas.edu>
+Date:   Sat Mar 23 21:10:28 2019 -0500
+
+    Added app.yaml for GDP deployment
+
+ .DS_Store    | Bin 0 -> 8196 bytes
+ app/app.yaml |  17 +++++++++++++++++
+ 2 files changed, 17 insertions(+)
+
+commit 03505cf32e44d8ced2d32a80392f8081315af0b0
+Merge: 6dc15ea 4b855cb
+Author: cloudashD <yiranzhang@utexas.edu>
+Date:   Sat Mar 23 00:06:28 2019 -0500
+
+    Merge branch 'dev'
+
+commit 4b855cbe74f6c1fec4bd69343d2dad085151143f
+Author: cloudashD <yiranzhang@utexas.edu>
+Date:   Sat Mar 23 00:03:43 2019 -0500
+
+    hardcode salary
+
+ app/templates/salary.html | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+commit 6dc15ea81054e8e3edf4b6683266a717d58d11dc
+Merge: 66b45b4 14e9991
+Author: Aidan T. Manning <periodicaidan@gmail.com>
+Date:   Fri Mar 22 18:22:52 2019 +0000
+
+    Merge branch 'dev' into 'master'
+    
+    Dev
+    
+    See merge request stalwar5/cs329e-idb!3
+
+commit 14e999199aa3cab6531e5a411e647a82b202d741
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Fri Mar 22 13:22:19 2019 -0500
+
+    Tweaked Skills page
+
+ app/__init__.py                | 11 ++++-------
+ app/templates/skills_info.html |  4 ++--
+ 2 files changed, 6 insertions(+), 9 deletions(-)
+
+commit 7b29f4c4251e99e1719c97241a3fb5760a6399f0
+Merge: 9cdd06c 66b45b4
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Fri Mar 22 13:13:28 2019 -0500
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       README.md
+
+commit 66b45b427a09b7b1b4a18060d86fbb07ee1aa86d
+Merge: 638b3d2 73b95b4
+Author: Aidan T. Manning <periodicaidan@gmail.com>
+Date:   Fri Mar 22 18:11:56 2019 +0000
+
+    Merge branch 'dev-aidan' into 'master'
+    
+    skills_info.html and skills.html created, updated __init__.py
+    
+    See merge request stalwar5/cs329e-idb!2
+
+commit 73b95b4b93d3351e039b56b4d8be1c171f3a99be
+Author: Srishtti Talwar <tsrishtti@gmail.com>
+Date:   Fri Mar 22 13:07:38 2019 -0500
+
+    skills_info.html and skills.html created, updated __init__.py
+
+ app/__init__.py                | 21 +++++++++++++++++++--
+ app/templates/skill.html       | 10 ++++++++--
+ app/templates/skills_info.html | 20 ++++++++++++++++++++
+ 3 files changed, 47 insertions(+), 4 deletions(-)
+
+commit 638b3d254602ef2f818c737107fc0698be4ca713
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Fri Mar 22 12:23:03 2019 -0500
+
+    load related jobs + skill desciption
+
+ app/__init__.py             |  7 ++++---
+ app/templates/base.html     |  9 +++++----
+ app/templates/job.html      |  7 +++++--
+ app/templates/job_info.html | 24 ++++++++++++++++++++----
+ 4 files changed, 34 insertions(+), 13 deletions(-)
+
+commit e90e106455d6c074c81619dac4ee20f712c1d761
+Merge: ed29a4b b4fb52f
+Author: Aidan T. Manning <periodicaidan@gmail.com>
+Date:   Fri Mar 22 17:03:34 2019 +0000
+
+    Merge branch 'dev-aidan' into 'master'
+    
+    Dev aidan
+    
+    See merge request stalwar5/cs329e-idb!1
+
+commit b4fb52f68e47026d7ff67b457488ee1b44835329
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Fri Mar 22 12:00:34 2019 -0500
+
+    Added jobs pages
+
+ README.md                   |  2 +-
+ app/__init__.py             | 26 +++++++++++++++++++++-----
+ app/templates/about.html    |  3 ++-
+ app/templates/base.html     |  7 ++++---
+ app/templates/job.html      | 24 +++++++++---------------
+ app/templates/job_info.html | 16 ++++++++++++++++
+ app/templates/skill.html    |  1 +
+ makefile                    |  7 +++++--
+ 8 files changed, 59 insertions(+), 27 deletions(-)
+
+commit 9b84440da2ecdd150ea9dad94537ac47cd7a2187
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Fri Mar 22 00:18:48 2019 -0500
+
+    Tiny update to README
+
+ README.md | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+commit 9cdd06c14b713246db9cf04ed96f49892dae0baa
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Fri Mar 22 00:17:08 2019 -0500
+
+    Tiny update to README
+
+ README.md | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+commit 565f4296dc6ed0cf2bfa0daba161d3b96e511f51
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Fri Mar 22 00:12:09 2019 -0500
+
+    Added jQuery (for Bootstrap), a makefile, and a few touchups
+
+ app/__init__.py         | 12 ++++++++----
+ app/auth.py             |  1 +
+ app/db.py               |  2 +-
+ app/templates/base.html | 43 ++++++++++++++++++++++++++-----------------
+ makefile                |  6 ++++++
+ 5 files changed, 42 insertions(+), 22 deletions(-)
+
+commit ed29a4b8121a96a9a0df6d5328ff542756061217
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Mar 21 23:41:43 2019 -0500
+
+    style form for login & register + complete the func
+
+ app/templates/auth/login.html    | 13 +++++++++----
+ app/templates/auth/register.html | 13 +++++++++----
+ 2 files changed, 18 insertions(+), 8 deletions(-)
+
+commit 219ecdc4382fcb772c7327d693003612e8002204
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Mar 21 23:32:34 2019 -0500
+
+    fix navbar for logged in users
+
+ app/templates/base.html | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+commit 81e00c726a3cb8e6a5f6e02749cfac80fe7c3892
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Mar 21 23:29:59 2019 -0500
+
+    set up navbar
+
+ app/templates/auth/login.html    |  1 +
+ app/templates/auth/register.html |  1 +
+ app/templates/base.html          | 28 +++++++++++++++++-----------
+ app/templates/index.html         |  4 ++--
+ 4 files changed, 21 insertions(+), 13 deletions(-)
+
+commit e925727a6af60fb817943b10ea6b67d6606fd637
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Mar 21 23:20:22 2019 -0500
+
+    set up db, routes, layout
+
+ Pipfile                                            |   1 +
+ README.md                                          |  10 ++-
+ app/__init__.py                                    |  60 ++++++++++++++
+ app/auth.py                                        |  90 +++++++++++++++++++++
+ app/db.py                                          |  41 ++++++++++
+ app/schema.sql                                     |  22 +++++
+ {static => app/static}/css/main.css                |   0
+ {static => app/static}/js/main.js                  |   0
+ {templates => app/templates}/about.html            |   0
+ app/templates/auth/login.html                      |  15 ++++
+ app/templates/auth/register.html                   |  15 ++++
+ app/templates/base.html                            |  63 +++++++++++++++
+ {templates => app/templates}/index.html            |   0
+ app/templates/job.html                             |  20 +++++
+ app/templates/salary.html                          |   8 ++
+ app/templates/skill.html                           |   8 ++
+ frontend/build/asset-manifest.json                 |  14 ----
+ frontend/build/favicon.ico                         | Bin 3870 -> 0 bytes
+ frontend/build/index.html                          |   1 -
+ frontend/build/manifest.json                       |  15 ----
+ ...he-manifest.3193825e0f95ba49130afa464d2188c8.js |  26 ------
+ frontend/build/service-worker.js                   |  34 --------
+ frontend/build/static/css/main.9f9f139e.chunk.css  |   2 -
+ .../build/static/css/main.9f9f139e.chunk.css.map   |   1 -
+ frontend/build/static/js/2.948d4d77.chunk.js       |   2 -
+ frontend/build/static/js/2.948d4d77.chunk.js.map   |   1 -
+ frontend/build/static/js/main.b8acf70c.chunk.js    |   2 -
+ .../build/static/js/main.b8acf70c.chunk.js.map     |   1 -
+ frontend/build/static/js/runtime~main.c5541365.js  |   2 -
+ .../build/static/js/runtime~main.c5541365.js.map   |   1 -
+ frontend/build/static/media/logo.5d5d9eef.svg      |   7 --
+ main.py                                            |  17 ----
+ models/__init__.py                                 |   0
+ templates/base.html                                |  23 ------
+ 34 files changed, 352 insertions(+), 150 deletions(-)
+
+commit 34ce54737bbb7ff83421acdd8912c6a9d62dba88
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Mar 21 22:38:49 2019 -0500
+
+    add requirements file
+
+ Pipfile                                            |  12 +++
+ Pipfile.lock                                       |  90 +++++++++++++++++++++
+ frontend/build/asset-manifest.json                 |  14 ++++
+ frontend/build/favicon.ico                         | Bin 0 -> 3870 bytes
+ frontend/build/index.html                          |   1 +
+ frontend/build/manifest.json                       |  15 ++++
+ ...he-manifest.3193825e0f95ba49130afa464d2188c8.js |  26 ++++++
+ frontend/build/service-worker.js                   |  34 ++++++++
+ frontend/build/static/css/main.9f9f139e.chunk.css  |   2 +
+ .../build/static/css/main.9f9f139e.chunk.css.map   |   1 +
+ frontend/build/static/js/2.948d4d77.chunk.js       |   2 +
+ frontend/build/static/js/2.948d4d77.chunk.js.map   |   1 +
+ frontend/build/static/js/main.b8acf70c.chunk.js    |   2 +
+ .../build/static/js/main.b8acf70c.chunk.js.map     |   1 +
+ frontend/build/static/js/runtime~main.c5541365.js  |   2 +
+ .../build/static/js/runtime~main.c5541365.js.map   |   1 +
+ frontend/build/static/media/logo.5d5d9eef.svg      |   7 ++
+ requirements.txt                                   |   1 +
+ 18 files changed, 212 insertions(+)
+
+commit 19d8a34f8da3066516f91cd139f6567cd3ae47b5
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Sat Mar 16 22:01:22 2019 -0500
+
+    Added about page and Bootstrap CDN
+
+ frontend/public/favicon.ico | Bin 3870 -> 0 bytes
+ main.py                     |   5 +++++
+ templates/about.html        |   8 ++++++++
+ templates/base.html         |  12 +++++++++++-
+ templates/index.html        |   1 +
+ 5 files changed, 25 insertions(+), 1 deletion(-)
+
+commit 52b9061feb7f3645f60949df71091f280a11dfa0
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Sat Mar 16 21:45:00 2019 -0500
+
+    Starting over without React
+
+ backend/Pipfile               |    12 -
+ backend/Pipfile.lock          |    90 -
+ backend/requirements.txt      |     2 -
+ frontend/.gitignore           |    23 -
+ frontend/README.md            |    68 -
+ frontend/package.json         |    25 -
+ frontend/public/index.html    |    41 -
+ frontend/public/manifest.json |    15 -
+ frontend/src/App.css          |    33 -
+ frontend/src/App.js           |    28 -
+ frontend/src/App.test.js      |     9 -
+ frontend/src/index.css        |    14 -
+ frontend/src/index.js         |    12 -
+ frontend/src/logo.svg         |     7 -
+ frontend/src/serviceWorker.js |   135 -
+ frontend/yarn.lock            | 10049 ----------------------------------------
+ backend/main.py => main.py    |     2 +-
+ models/__init__.py            |     0
+ static/css/main.css           |     0
+ static/js/main.js             |     0
+ templates/base.html           |    13 +
+ templates/index.html          |     7 +
+ 22 files changed, 21 insertions(+), 10564 deletions(-)
+
+commit d44f39ed2669f6f7ac81540ea21d137e14887d5c
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Mar 14 22:34:31 2019 -0500
+
+    retry setup & gitignore
+
+ backend/requirements.txt      |     2 +
+ frontend                      |     1 -
+ frontend/.gitignore           |    23 +
+ frontend/README.md            |    68 +
+ frontend/package.json         |    25 +
+ frontend/public/favicon.ico   |   Bin 0 -> 3870 bytes
+ frontend/public/index.html    |    41 +
+ frontend/public/manifest.json |    15 +
+ frontend/src/App.css          |    33 +
+ frontend/src/App.js           |    28 +
+ frontend/src/App.test.js      |     9 +
+ frontend/src/index.css        |    14 +
+ frontend/src/index.js         |    12 +
+ frontend/src/logo.svg         |     7 +
+ frontend/src/serviceWorker.js |   135 +
+ frontend/yarn.lock            | 10049 ++++++++++++++++++++++++++++++++++++++++
+ 16 files changed, 10461 insertions(+), 1 deletion(-)
+
+commit aefef51235e9fb43b0a41847a616425b4f199cea
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Mar 14 22:22:28 2019 -0500
+
+    tye ignore node_modules
+
+ .gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
+
+commit 2241c521e581c935d77d1964b2f001b834f1ea3d
+Author: periodicaidan <periodicaidan@gmail.com>
+Date:   Thu Mar 14 22:06:44 2019 -0500
+
+    Added index.html and some files for git and GitLab
+
+ .gitignore      | 148 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ LICENSE         |   7 +++
+ README.md       |   1 +
+ backend/main.py |   4 +-
+ 4 files changed, 159 insertions(+), 1 deletion(-)
+
+commit 6297849afcc4226cae311af175bb332b6325ffa5
+Author: Xindi Xu <xindixu@utexas.edu>
+Date:   Thu Mar 14 21:13:22 2019 -0500
+
+    set up react + flask
+
+ backend/Pipfile      | 12 +++++++
+ backend/Pipfile.lock | 90 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ backend/main.py      | 10 ++++++
+ frontend             |  1 +
+ 4 files changed, 113 insertions(+)
