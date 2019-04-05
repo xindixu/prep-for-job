@@ -94,7 +94,7 @@ class Jobs(db.Model):
     @classmethod
     def new_job(cls, code):
         if cls.query.filter_by(code=code).one_or_none() is None:
-            print("Need to call API for this Job!")
+            print("Need to call API for this Job !")
             # from anyapi
             job_obj = requests.get(f"http://api.dataatwork.org/v1/jobs/{code}")
             uuid = (json.loads(job_obj.text))["uuid"]
@@ -247,16 +247,3 @@ class Salary (db.Model):
             html += u"<tr><th>{}</th><td>{}</td></tr>".format(k, v)
         html += u"</table>"
         return Markup(html)
-
-
-class Skills (db.Model):
-    __tablename__ = "skills"
-    id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, nullable=False)
-    updated_at = db.Column(db.DateTime, nullable=False)
-    title = db.Column(db.Text, nullable=False)
-    # description is nullable
-    description = db.Column(db.Text, nullable = True)
-    # check if parent skill can be null
-    parent_skill = db.Column(db.Text, nullable = True)
-    #importance = db.Column(db.Float, nullable = False)
