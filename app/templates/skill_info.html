@@ -31,5 +31,12 @@
         {% endfor %}
       </tbody>
     </table>
-
+    <script type="text/javascript">
+      new Tablesort(document.getElementsByTagName('table')[0]);
+    </script>
 {% endblock %}
+<script>
+  window.onload = function () {
+      new Tablesort(document.getElementsByTagName('table')[0]);
+  }
+</script>
