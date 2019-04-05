@@ -28,7 +28,9 @@
       </th>
       <td>$ {{ "{:,}".format(obj[2]) }}</td>
       <td>
-        <button type="button" class="btn btn-info" onClick="window.location='{{ url_for("skill_salary", code=obj[1] + '.00')}}'">See Skills Info</button>
+        <form action="{{ url_for("skill_salary", code=obj[1] + '.00')}}">
+            <input type="submit" class="btn btn-info" value="See Skills Info"></input>
+        </form>
         <!-- link first skill on skills page by replacing Skills^ -->
       </td>
     </tr>

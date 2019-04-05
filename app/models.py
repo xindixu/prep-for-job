@@ -89,7 +89,7 @@ class Jobs(db.Model):
     abilities = db.Column(db.Text, nullable=False)
     technology = db.Column(db.Text, nullable=False)
     related_jobs = db.Column(db.Text, nullable=False)
-    wage = db.Column(db.String(255))
+    wage = db.Column(db.Text)
 
     @classmethod
     def new_job(cls, code):
@@ -254,9 +254,9 @@ class Skills (db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, nullable=False)
     updated_at = db.Column(db.DateTime, nullable=False)
-    title = db.Column(db.String(255), nullable=False)
+    title = db.Column(db.Text, nullable=False)
     # description is nullable
     description = db.Column(db.Text, nullable = True)
     # check if parent skill can be null
-    parent_skill = db.Column(db.String(255), nullable = True)
+    parent_skill = db.Column(db.Text, nullable = True)
     #importance = db.Column(db.Float, nullable = False)

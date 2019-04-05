@@ -109,13 +109,18 @@
 <section id="related_jobs">
   <h2>Related Jobs</h2>
   <ul class="list-group">
-    {% for job in related_jobs.careers.career %}
-    <li class="list-group-item">
-      <a href="{{ url_for("job", code=job.code) }}">
-        {{ job.title }}
-      </a>
-    </li>
-    {% endfor %}
+    {% if 'careers' not in related_jobs %}
+      <h3>No related jobs found!</h3>
+    {% endif %}
+    {% if 'careers' in related_jobs %}
+      {% for job in related_jobs.careers.career %}
+      <li class="list-group-item">
+        <a href="{{ url_for("job", code=job.code) }}">
+          {{ job.title }}
+        </a>
+      </li>
+      {% endfor %}
+    {% endif %}
   </ul>
 </section>
 

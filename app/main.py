@@ -12,7 +12,7 @@ def create_app():
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-        SQLALCHEMY_DATABASE_URI='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb4',
+        SQLALCHEMY_DATABASE_URI='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb5',
         SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
 

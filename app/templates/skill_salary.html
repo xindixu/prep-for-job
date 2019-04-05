@@ -25,7 +25,7 @@
 <hr>
 <section id="basic_info" style="margin-top: -35px;">
 <!-- TODO: conditional rendering; api request exceed -->
-{% if wage.status != 'REQUEST_NOT_PROCESSED'%}
+{% if wage.status != 'REQUEST_NOT_PROCESSED' %}
 <h4><b> Look at the skills needed to earn a wage of $ {{wage.Results.series[0].data[0].value}}/hr! Related jobs mentioned below!</b></h4>
 {% else %}
 <div class="alert alert-warning" role="alert">
@@ -70,13 +70,18 @@
 <section id="related_jobs">
   <h2>Related Jobs</h2>
   <ul class="list-group">
-    {% for job in related_jobs.careers.career %}
-    <li class="list-group-item">
-      <a href="{{ url_for("job", code=job.code) }}">
-        {{ job.title }}
-      </a>
-    </li>
-    {% endfor %}
+    {% if 'careers' not in related_jobs %}
+      <h3>No related jobs found!</h3>
+    {% endif %}
+    {% if 'careers' in related_jobs %}
+      {% for job in related_jobs.careers.career %}
+      <li class="list-group-item">
+        <a href="{{ url_for("job", code=job.code) }}">
+          {{ job.title }}
+        </a>
+      </li>
+      {% endfor %}
+    {% endif %}
   </ul>
 </section>
 
