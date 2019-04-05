@@ -1,0 +1,420 @@
+Help on module models:
+
+NAME
+    models
+
+CLASSES
+    sqlalchemy.ext.declarative.api.Model(flask_sqlalchemy.model.Model)
+        JobPages
+        Jobs
+        Salary
+        Users
+    
+    class JobPages(sqlalchemy.ext.declarative.api.Model)
+     |  JobPages(**kwargs)
+     |  
+     |  Base class for SQLAlchemy declarative base model.
+     |  
+     |  To define models, subclass :attr:`db.Model <SQLAlchemy.Model>`, not this
+     |  class. To customize ``db.Model``, subclass this and pass it as
+     |  ``model_class`` to :class:`SQLAlchemy`.
+     |  
+     |  Method resolution order:
+     |      JobPages
+     |      sqlalchemy.ext.declarative.api.Model
+     |      flask_sqlalchemy.model.Model
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, **kwargs)
+     |      A simple constructor that allows initialization from kwargs.
+     |      
+     |      Sets attributes on the constructed instance using the names and
+     |      values in ``kwargs``.
+     |      
+     |      Only keys that are present as
+     |      attributes of the instance's class are allowed. These could be,
+     |      for example, any mapped columns or relationships.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |  
+     |  get_page(page) from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  need_cache_page(page) from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  new_page(page) from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  created_at
+     |  
+     |  jobs
+     |  
+     |  page
+     |  
+     |  updated_at
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  __mapper__ = <Mapper at 0x10c9d4b70; JobPages>
+     |  
+     |  __table__ = Table('jobpages', MetaData(bind=None), Column('p..., table...
+     |  
+     |  __tablename__ = 'jobpages'
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from sqlalchemy.ext.declarative.api.Model:
+     |  
+     |  query
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from sqlalchemy.ext.declarative.api.Model:
+     |  
+     |  metadata = MetaData(bind=None)
+     |  
+     |  query_class = <class 'flask_sqlalchemy.BaseQuery'>
+     |      SQLAlchemy :class:`~sqlalchemy.orm.query.Query` subclass with convenience methods for querying in a web application.
+     |      
+     |      This is the default :attr:`~Model.query` object used for models, and exposed as :attr:`~SQLAlchemy.Query`.
+     |      Override the query class for an individual model by subclassing this and setting :attr:`~Model.query_class`.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from flask_sqlalchemy.model.Model:
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from flask_sqlalchemy.model.Model:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from flask_sqlalchemy.model.Model:
+     |  
+     |  __weakref__ = <weakref at 0x10c9cc318; to 'DefaultMeta' at 0x7ff80f14c...
+    
+    class Jobs(sqlalchemy.ext.declarative.api.Model)
+     |  Jobs(**kwargs)
+     |  
+     |  Base class for SQLAlchemy declarative base model.
+     |  
+     |  To define models, subclass :attr:`db.Model <SQLAlchemy.Model>`, not this
+     |  class. To customize ``db.Model``, subclass this and pass it as
+     |  ``model_class`` to :class:`SQLAlchemy`.
+     |  
+     |  Method resolution order:
+     |      Jobs
+     |      sqlalchemy.ext.declarative.api.Model
+     |      flask_sqlalchemy.model.Model
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __html__(self)
+     |  
+     |  __init__(self, **kwargs)
+     |      A simple constructor that allows initialization from kwargs.
+     |      
+     |      Sets attributes on the constructed instance using the names and
+     |      values in ``kwargs``.
+     |      
+     |      Only keys that are present as
+     |      attributes of the instance's class are allowed. These could be,
+     |      for example, any mapped columns or relationships.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |  
+     |  get_code(code) from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  get_related_jobs_in_sallary_range(deviation) from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  need_cache_code(code) from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  new_job(code) from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  abilities
+     |  
+     |  code
+     |  
+     |  created_at
+     |  
+     |  id
+     |  
+     |  job_info
+     |  
+     |  job_obj
+     |  
+     |  knowledge
+     |  
+     |  related_jobs
+     |  
+     |  related_skills
+     |  
+     |  skills
+     |  
+     |  technology
+     |  
+     |  updated_at
+     |  
+     |  uuid
+     |  
+     |  wage
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  __mapper__ = <Mapper at 0x10c9d4748; Jobs>
+     |  
+     |  __table__ = Table('jobs', MetaData(bind=None), Column('id', ...olumn('...
+     |  
+     |  __tablename__ = 'jobs'
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from sqlalchemy.ext.declarative.api.Model:
+     |  
+     |  query
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from sqlalchemy.ext.declarative.api.Model:
+     |  
+     |  metadata = MetaData(bind=None)
+     |  
+     |  query_class = <class 'flask_sqlalchemy.BaseQuery'>
+     |      SQLAlchemy :class:`~sqlalchemy.orm.query.Query` subclass with convenience methods for querying in a web application.
+     |      
+     |      This is the default :attr:`~Model.query` object used for models, and exposed as :attr:`~SQLAlchemy.Query`.
+     |      Override the query class for an individual model by subclassing this and setting :attr:`~Model.query_class`.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from flask_sqlalchemy.model.Model:
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from flask_sqlalchemy.model.Model:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from flask_sqlalchemy.model.Model:
+     |  
+     |  __weakref__ = <weakref at 0x10c99cc78; to 'DefaultMeta' at 0x7ff80f13f...
+    
+    class Salary(sqlalchemy.ext.declarative.api.Model)
+     |  Salary(**kwargs)
+     |  
+     |  Base class for SQLAlchemy declarative base model.
+     |  
+     |  To define models, subclass :attr:`db.Model <SQLAlchemy.Model>`, not this
+     |  class. To customize ``db.Model``, subclass this and pass it as
+     |  ``model_class`` to :class:`SQLAlchemy`.
+     |  
+     |  Method resolution order:
+     |      Salary
+     |      sqlalchemy.ext.declarative.api.Model
+     |      flask_sqlalchemy.model.Model
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __html__(self)
+     |  
+     |  __init__(self, **kwargs)
+     |      A simple constructor that allows initialization from kwargs.
+     |      
+     |      Sets attributes on the constructed instance using the names and
+     |      values in ``kwargs``.
+     |      
+     |      Only keys that are present as
+     |      attributes of the instance's class are allowed. These could be,
+     |      for example, any mapped columns or relationships.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |  
+     |  get_page(page) from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  need_cache_page(page) from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  new_salary_page() from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  created_at
+     |  
+     |  id
+     |  
+     |  salary_info
+     |  
+     |  updated_at
+     |  
+     |  weekly_avg
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  __mapper__ = <Mapper at 0x10c9e8128; Salary>
+     |  
+     |  __table__ = Table('salary', MetaData(bind=None), Column('id'...me(2019...
+     |  
+     |  __tablename__ = 'salary'
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from sqlalchemy.ext.declarative.api.Model:
+     |  
+     |  query
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from sqlalchemy.ext.declarative.api.Model:
+     |  
+     |  metadata = MetaData(bind=None)
+     |  
+     |  query_class = <class 'flask_sqlalchemy.BaseQuery'>
+     |      SQLAlchemy :class:`~sqlalchemy.orm.query.Query` subclass with convenience methods for querying in a web application.
+     |      
+     |      This is the default :attr:`~Model.query` object used for models, and exposed as :attr:`~SQLAlchemy.Query`.
+     |      Override the query class for an individual model by subclassing this and setting :attr:`~Model.query_class`.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from flask_sqlalchemy.model.Model:
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from flask_sqlalchemy.model.Model:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from flask_sqlalchemy.model.Model:
+     |  
+     |  __weakref__ = <weakref at 0x10c9ccb88; to 'DefaultMeta' at 0x7ff80f14d...
+    
+    class Users(sqlalchemy.ext.declarative.api.Model)
+     |  Users(**kwargs)
+     |  
+     |  Base class for SQLAlchemy declarative base model.
+     |  
+     |  To define models, subclass :attr:`db.Model <SQLAlchemy.Model>`, not this
+     |  class. To customize ``db.Model``, subclass this and pass it as
+     |  ``model_class`` to :class:`SQLAlchemy`.
+     |  
+     |  Method resolution order:
+     |      Users
+     |      sqlalchemy.ext.declarative.api.Model
+     |      flask_sqlalchemy.model.Model
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __html__(self)
+     |  
+     |  __init__(self, **kwargs)
+     |      A simple constructor that allows initialization from kwargs.
+     |      
+     |      Sets attributes on the constructed instance using the names and
+     |      values in ``kwargs``.
+     |      
+     |      Only keys that are present as
+     |      attributes of the instance's class are allowed. These could be,
+     |      for example, any mapped columns or relationships.
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  check_password(self, password)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Class methods defined here:
+     |  
+     |  exists(email) from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  get_password(email) from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  new_member(email, password, first_name, last_name) from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  view_members() from flask_sqlalchemy.model.DefaultMeta
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  bio
+     |  
+     |  education
+     |  
+     |  email
+     |  
+     |  first_name
+     |  
+     |  hash
+     |  
+     |  id
+     |  
+     |  image
+     |  
+     |  is_admin
+     |  
+     |  last_name
+     |  
+     |  location
+     |  
+     |  salt
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  __mapper__ = <Mapper at 0x10c99da58; Users>
+     |  
+     |  __table__ = Table('users', MetaData(bind=None), Column('hash... String...
+     |  
+     |  __tablename__ = 'users'
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from sqlalchemy.ext.declarative.api.Model:
+     |  
+     |  query
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from sqlalchemy.ext.declarative.api.Model:
+     |  
+     |  metadata = MetaData(bind=None)
+     |  
+     |  query_class = <class 'flask_sqlalchemy.BaseQuery'>
+     |      SQLAlchemy :class:`~sqlalchemy.orm.query.Query` subclass with convenience methods for querying in a web application.
+     |      
+     |      This is the default :attr:`~Model.query` object used for models, and exposed as :attr:`~SQLAlchemy.Query`.
+     |      Override the query class for an individual model by subclassing this and setting :attr:`~Model.query_class`.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from flask_sqlalchemy.model.Model:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from flask_sqlalchemy.model.Model:
+     |  
+     |  __weakref__ = <weakref at 0x10c99cc28; to 'DefaultMeta' at 0x7ff80f13f...
+
+DATA
+    db = <SQLAlchemy engine=None>
+
+FILE
+    /Users/srishttitalwar/Desktop/Project4/cs329e-idb/app/models.py
+
+
