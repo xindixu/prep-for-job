@@ -37,8 +37,29 @@ def create_app():
     @app.route('/about')
     def about():
         # TODO: fix this when network is slow
-        commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits", params={"all": "true", "per_page": 200}).json()
-        issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all", params={"scope": "all", "per_page": 100}).json()
+        commits = []
+        issues = []
+
+        # Get all the commits. They are paginated, and pages are limited to a max of 100 per request, so we must
+        # loop to get all the pages.
+        page = 1
+        commits_req = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits",
+                                   params={"all": "true", "per_page": 100, "page": page})
+        while page <= int(commits_req.headers["X-Total-Pages"]):
+            commits.extend(commits_req.json())
+            page += 1
+            commits_req = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits",
+                                       params={"all": "true", "per_page": 100, "page": page})
+
+        # Get all the issues. Same caveat applies here as it does for commits.
+        page = 1
+        issues_req = requests.get("https://gitlab.com/api/v4/projects/11264402/issues",
+                                  params={"scope": "all", "per_page": 100, page: 1})
+        while page <= int(issues_req.headers["X-Total-Pages"]):
+            issues.extend(issues_req.json())
+            page += 1
+            issues_req = requests.get("https://gitlab.com/api/v4/projects/11264402/issues",
+                                      params={"scope": "all", "per_page": 100, page: 1})
 
         member_contribs = {
             "aidan": {"commits": 0, "issues": 0},
@@ -72,7 +93,7 @@ def create_app():
             elif issue["author"]["username"] == "yiranzhang":
                 member_contribs["yiran"]["issues"] += 1
 
-        members = [  # TODO: sort by number of commits
+        members = [
             {
                 "name": "Aidan T. Manning",
                 "bio": "Computational chemistry major (May 2020). Interested in writing software to assist chemical research and education. Also makes bot accounts in his spare time.",
