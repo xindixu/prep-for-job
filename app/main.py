@@ -267,6 +267,7 @@ def create_app():
             technology = jarray[7]
             related_jobs = jarray[8]
             wage = jarray[9]
+
             if using_api == True:
                 return render_template("job_info.html", job=json.loads(job_info.text),
                                    job_obj=json.loads(job_obj.text),
@@ -292,13 +293,18 @@ def create_app():
 
     @app.route('/skill/')
     @app.route('/skill/<string:id>')
-    def skill(id=None):
+    def skill(page=None, id=None):
+        page = int(request.args.get('page', 1))
         headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
         if id is None:
             # Hot technology listing
-            url = 'https://services.onetcenter.org/ws/online/hot_technology/'
+            url = 'https://services.onetcenter.org/ws/online/hot_technology'
+            if page is not None:
+                start = (page-1)*20+1
+                end = start + 20
+                url += f"?start={start}&end={end}"
             technology = requests.get(url, headers=headers)
-            return render_template("skill.html", technology=json.loads(technology.text))
+            return render_template("skill.html", technology=json.loads(technology.text), page=page)
         else:
             technology = requests.get(f"https://services.onetcenter.org/ws/online/hot_technology/{id}",headers=headers)
             technology = json.loads(technology.text)
