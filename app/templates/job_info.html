@@ -27,9 +27,8 @@
 <q>{{job.what_they_do}}</q>
 
 <h2>Hourly Wage</h2>
-<!-- TODO: conditional rendering; api request exceed -->
 {% if wage.status != 'REQUEST_NOT_PROCESSED'%}
-<p><strong>$ {{wage.Results.series[0].data[0].value}}/hr</strong></p>
+<p><strong><a href="{{ url_for("skill_salary", code=job.code) }}">${{ wage.Results.series[0].data[0].value }}/hr</a></strong></p>
 {% else %}
 <div class="alert alert-warning" role="alert">
   Daily api limit exceeded!

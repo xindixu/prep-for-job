@@ -1,15 +1,19 @@
-from sqlalchemy.orm import load_only
-from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-import requests, json
+import requests
+import json
 from datetime import datetime
+from markupsafe import Markup
 from passlib.hash import sha256_crypt
+import secrets
+
+
 db = SQLAlchemy()
 
 
 class Users(db.Model):
     __tablename__ = "users"
     hash = db.Column(db.String(256), nullable=False)
+    salt = db.Column(db.String(16), nullable=False, unique=True)
     email = db.Column(db.String(256), nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(75), nullable=False)
@@ -32,20 +36,18 @@ class Users(db.Model):
 
     @classmethod
     def get_password(cls, email):
-        # nothing works
-        fields = ['email', 'hash']
-        cc = cls.query.filter_by(email=email).options(load_only(*fields)).one_or_none()
-
+        cc = cls.query.filter_by(email=email).one_or_none()
         try:
-            return cc.hash # make this work :(
+            return cc.hash
         except:
             print("cant access password hash :(")
 
     @classmethod
     def new_member(cls, email, password, first_name, last_name):
-        hash = str(sha256_crypt.hash(password))
+        salt = secrets.token_hex(8)
+        hash = str(sha256_crypt.using(salt=salt, relaxed=True).hash(password))
         print(password, hash)
-        u = cls(email=email, hash=hash, first_name=first_name, last_name=last_name)
+        u = cls(email=email, hash=hash, salt=salt, first_name=first_name, last_name=last_name)
         db.session.add(u)
         db.session.commit()
         return u
@@ -54,14 +56,21 @@ class Users(db.Model):
     def view_members(cls):
         return cls.query.all()
 
-    @classmethod
-    def check_password(cls, email, hpassword):
-        real_hash = Users.get_password(email)
-        check_hash = sha256_crypt.hash(hpassword)
-        if (check_hash == real_hash):
+    def check_password(self, password):
+        check_hash = sha256_crypt.using(salt_size=16, salt=self.salt).hash(password)
+        print("Password Provided:", check_hash)
+        print("Actual Password:", self.hash)
+        if check_hash == self.hash:
             return True
         else:
             return False
+
+    def __html__(self):
+        html = u"<table>"
+        for k, v in self.__dict__.items():
+            html += u"<tr><th>{}</th><td>{}</td></tr>".format(k, v)
+        html += u"</table>"
+        return Markup(html)
 
 class Jobs(db.Model):
     __tablename__ = "jobs"
@@ -138,6 +147,18 @@ class Jobs(db.Model):
         u = cls.query.filter_by(code=code).one_or_none()
         jarray = [u.job_obj, u.uuid, u.related_skills, u.job_info, u.knowledge, u.skills, u.abilities, u.technology, u.related_jobs, u.wage]
         return jarray
+
+    @classmethod
+    def get_related_jobs_in_sallary_range(cls, deviation):
+        pass
+
+    def __html__(self):
+        html = u"<table>"
+        for k, v in self.__dict__.items():
+            html += u"<tr><th>{}</th><td>{}</td></tr>".format(k, v)
+        html += u"</table>"
+        return Markup(html)
+
 
 class JobPages (db.Model):
     __tablename__ = "jobpages"
@@ -219,3 +240,23 @@ class Salary (db.Model):
     @classmethod
     def get_page(cls, page):
         return cls.query.filter_by(page=page).one_or_none()
+
+    def __html__(self):
+        html = u"<table>"
+        for k, v in self.__dict__.items():
+            html += u"<tr><th>{}</th><td>{}</td></tr>".format(k, v)
+        html += u"</table>"
+        return Markup(html)
+
+
+class Skills (db.Model):
+    __tablename__ = "skills"
+    id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.DateTime, nullable=False)
+    updated_at = db.Column(db.DateTime, nullable=False)
+    title = db.Column(db.String(255), nullable=False)
+    # description is nullable
+    description = db.Column(db.Text, nullable = True)
+    # check if parent skill can be null
+    parent_skill = db.Column(db.String(255), nullable = True)
+    #importance = db.Column(db.Float, nullable = False)

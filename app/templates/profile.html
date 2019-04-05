@@ -4,7 +4,11 @@
 Profile for {{ user.name }}
 {% endblock %}
 {% block content %}
-{# name, email, profile_picture, bio, education, location #}
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+        <div class="alert alert-{{ category }}">
+            {{ message|e }}
+        </div>
+    {% endfor %}
     <div class="col-md-5 mb-5">
         <div class="card">
             {% if user.image == None %}
@@ -40,17 +44,6 @@ Profile for {{ user.name }}
             </ul>
         </div>
     </div>
-
-    {# A var dump of the user object, for debugging/testing purposes #}
-    <table class="table table-striped table-bordered">
-    {% for k, v in user.__dict__.items() %}
-        <tr>
-            <th>{{ k }}</th>
-            <td>{{ v }}</td>
-        </tr>
-    {% endfor %}
-    </table>
-
 
 <script src="https://cdn.jsdelivr.net/npm/jdenticon@2.1.1" async></script>
 {% endblock %}

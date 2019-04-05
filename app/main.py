@@ -1,16 +1,12 @@
-
-from passlib.hash import sha256_crypt
 import os
-import datetime
 from flask import Flask, render_template, g, request, flash, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
 import requests
 import json
 from bls_datasets import oes, qcew
 from forms import RegistrationForm, LoginForm
 from models import Users, JobPages, Jobs, db
 
-def create_app(test_config=None):
+def create_app():
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
@@ -24,22 +20,7 @@ def create_app(test_config=None):
 
     @app.before_first_request
     def setup():
-        db.drop_all()
         db.create_all()
-
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
-
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
-
 
     # routes
     @app.route('/')
@@ -56,8 +37,8 @@ def create_app(test_config=None):
     @app.route('/about')
     def about():
         # TODO: fix this when network is slow
-        commits = requests.get("https://gitlab.com/api/v4/projects/11533899/repository/commits", params={"all": "true", "per_page": 100}).json()
-        issues = requests.get("https://gitlab.com/api/v4/projects/11533899/issues?scope=all", params={"scope": "all", "per_page": 100}).json()
+        commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits", params={"all": "true", "per_page": 200}).json()
+        issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all", params={"scope": "all", "per_page": 100}).json()
 
         member_contribs = {
             "aidan": {"commits": 0, "issues": 0},
@@ -190,37 +171,19 @@ def create_app(test_config=None):
     @app.route('/auth/register/', methods=('GET', 'POST'))
     def register():
         form = RegistrationForm()
-        if request.method != 'POST':
-            return render_template("auth/register.html", form=form)
         if request.method == 'POST' and form.validate_on_submit():
             email = form.email.data.lower()
             password = form.password.data
             first_name = form.first_name.data
             last_name = form.last_name.data
             if Users.exists(email):
-                return "Exists"
+                flash("User {} already exists".format(email))
             else:
-                Users.new_member(email, password, first_name, last_name)
-                return "Registered!"
-            """
-            try:
                 u = Users.new_member(email, password, first_name, last_name)
-                if u is None:
-                    print(u)
-                    flash(f"User {email} already exists", "danger")
-                    return render_template("auth/register.html", form=form)
-            except Exception as e:  # todo: make this more specific
-                print(e)
-                flash(f"User {email} already exists", "danger")
-                return render_template("auth/register.html", form=form)
-            k = u.view_members()
-            print(k)
-            flash("You have been registered successfully", category="success")
-            return redirect(url_for("login"))
-        else:
-            return render_template("auth/register.html", form=form)
-            """
+                flash("You have been registered successfully!", "success")
+                return redirect(url_for("profile", user_id=u.id))
 
+        return render_template("auth/register.html", form=form)
 
     @app.route('/auth/login/', methods=('GET', 'POST'))
     def login():
@@ -228,12 +191,17 @@ def create_app(test_config=None):
         if request.method == 'POST' and form.validate_on_submit():
             email = form.email.data
             password = form.password.data
-            u = Users.check_password(email, password)
-            if u:
-                return render_template("auth/login.html", form=form)
+            if not Users.exists(email):
+                flash("User {} does not exist".format(email), "danger")
             else:
-                flash("Incorrect password for "+email)
-            return render_template("auth/login.html", form=form)
+                u = Users.query.filter_by(email=email).first()
+                if u.check_password(password):
+                    flash("Logged in successfully!", "success")
+                    return redirect(url_for("profile", user_id=u.id))
+                else:
+                    flash("Incorrect password for "+email, "danger")
+
+        return render_template("auth/login.html", form=form)
 
 
 
@@ -245,14 +213,6 @@ def create_app(test_config=None):
     def profile(user_id):
         u = Users.query.filter_by(id=user_id).first()
         print(u)
-        # user = {
-        #     "name": "John Smith",
-        #     "email": "johnsmith1@example.com",
-        #     "profile_picture": None,
-        #     "bio": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam eaque ipsa labore pariatur porro sequi tenetur? Commodi nemo nisi nulla quam quos suscipit temporibus voluptatibus?",
-        #     "education": "Fuck school, teach yourself",
-        #     "location": "Hell, MI"
-        # }
         return render_template("profile.html", user=u)
 
     @app.route('/job/')
@@ -331,69 +291,42 @@ def create_app(test_config=None):
 
             return render_template("skill_info.html", technology=technology,occupations=occupations)
 
-
     @app.route('/salary')
-    @app.route('/salary/<string:code>')
-    def salary(job_title=None, code=None):
-        job_title = request.args.get('job_title')
-        print(job_title)
+    def salary():
+        # TODO: load multiple wage data
+        # connect job titles back to job page
+        df_oes = oes.get_data(year=2017)
+        detailed = df_oes[df_oes.OCC_GROUP == 'detailed']
+        job = detailed.OCC_TITLE.values
+        code = detailed.OCC_CODE.values
+        salary = detailed.A_MEDIAN.values
+        salary_info = zip(job,code,salary)
 
-        if code is None:
-            # TODO: load multiple wage data
-            # connect job titles back to job page
-            df_oes = oes.get_data(year=2017)
-            detailed = df_oes[df_oes.OCC_GROUP == 'detailed']
-            job = detailed.OCC_TITLE.values
-            code = detailed.OCC_CODE.values
-            salary = detailed.A_MEDIAN.values
-            salary_info = zip(job,code,salary)
+        # avg weekly wage
+        df_qcew = qcew.get_data('industry', rtype='dataframe', year='2017', qtr='1', industry='10')
+        austin = df_qcew[(df_qcew.own_code == 0) & (df_qcew.area_fips == '48015')]
+        weekly_avg = austin.avg_wkly_wage.values[0]
 
-            # for i in job.index:
-            #     salary_info += {'title': job.get(i), 'code': code.get(i), 'salary': salary.get(i)}
-                # salary = detailed[detailed.OCC_TITLE == j].A_MEDIAN.values[0]
+        return render_template("salary.html", salary_info=salary_info, loc_to_salary=weekly_avg)
 
-            # avg weekly wage
-            df_qcew = qcew.get_data('industry', rtype='dataframe', year='2017', qtr='1', industry='10')
-            austin = df_qcew[(df_qcew.own_code == 0) & (df_qcew.area_fips == '48015')]
-            weekly_avg = austin.avg_wkly_wage.values[0]
+        # base = 'OEUN'
+        # # national wide
+        # area_code = '0000000'
+        # # total
+        # industry_code = '000000'
+        # # hourly wage
+        # statistic_code = '03'
+        # seriesid = base+area_code+industry_code+job_code+statistic_code
+        #
+        # headers = {'Content-type': 'application/json'}
+        # data = json.dumps({"seriesid": [seriesid]})
+        # wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
+        #
+        # return render_template("salary_info.html", status=wage.json()["status"], wage=wage.json()["Results"]["series"][0]["data"][0])
 
-
-            # TODO: load multiple wage data
-            # api
-            base = 'OEUN'
-            # national wide
-            area_code = '0000000'
-            # total
-            industry_code = '000000'
-            # Registered Nurses
-            job_code = '291141'
-            # hourly wage
-            statistic_code = '03'
-            seriesid = base+area_code+industry_code+job_code+statistic_code
-
-            # url = "http://api.bls.gov/publicAPI/v2/timeseries/data/"
-            # wage = requests.get(url, data=data, headers=headers)
-
-            headers = {'Content-type': 'application/json'}
-            data = json.dumps({"seriesid": [seriesid]})
-            wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
-            return render_template("salary.html", salary_info=salary_info, loc_to_salary=weekly_avg)
-        else:
-            base = 'OEUN'
-            area_code = '0000000' # national wide
-            industry_code = '000000' # total
-
-            arr = code[:7].split('-')
-            job_code = arr[0]+arr[1]
-
-            # hourly wage
-            statistic_code = '03'
-            seriesid = base+area_code+industry_code+job_code+statistic_code
-
-            headers = {'Content-type': 'application/json'}
-            data = json.dumps({"seriesid": [seriesid], "startyear": "2018", "endyear": "2018"})
-            wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
-            return render_template("salary_info.html", wage=json.loads(wage.text), job_title=job_title)
+    @app.errorhandler(404)
+    def error404(err):
+        return render_template("error404.html", err=err), 404
 
     # auth
     @app.url_value_preprocessor

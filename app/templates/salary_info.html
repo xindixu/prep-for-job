@@ -5,15 +5,23 @@
 {% endblock %}
 
 {% block content %}
-<h1>Salary info for {{ job_title }}</h1>
+{#<h1>Salary info for {{ job_title }}</h1>#}
 <h2>Hourly Wage</h2>
 <!-- TODO: conditional rendering; api request exceed -->
-{% if wage.status != 'REQUEST_NOT_PROCESSED'%}
-<p><strong>$ {{wage.Results.series[0].data[0].value}}/hr</strong></p>
+{% if status != 'REQUEST_NOT_PROCESSED'%}
+<p><strong>$ {{wage.value}}/hr</strong></p>
 {% else %}
 <div class="alert alert-warning" role="alert">
   Daily api limit exceeded!
 </div>
 {% endif %}
+
+    <dl>
+    {% for k, v in wage.items() %}
+        <dt>{{ k }}</dt>
+        <dd>{{ v }}</dd>
+    {% endfor %}
+
+    </dl>
 
 {% endblock %}
