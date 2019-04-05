@@ -1,5 +1,5 @@
-from app.main import create_app
-from app.models import Users, JobPages, Jobs, db
+from main import create_app
+from models import Users, JobPages, Jobs, db
 import unittest
 from random import randint
 
