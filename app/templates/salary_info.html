@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Salary information for {{ job_title }}
+{% endblock %}
+
+{% block content %}
+{#<h1>Salary info for {{ job_title }}</h1>#}
+<h2>Hourly Wage</h2>
+<!-- TODO: conditional rendering; api request exceed -->
+{% if status != 'REQUEST_NOT_PROCESSED'%}
+<p><strong>$ {{wage.value}}/hr</strong></p>
+{% else %}
+<div class="alert alert-warning" role="alert">
+  Daily api limit exceeded!
+</div>
+{% endif %}
+
+    <dl>
+    {% for k, v in wage.items() %}
+        <dt>{{ k }}</dt>
+        <dd>{{ v }}</dd>
+    {% endfor %}
+
+    </dl>
+
+{% endblock %}

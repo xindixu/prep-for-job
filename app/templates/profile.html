@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profile for {{ user.name }}
+{% endblock %}
+{% block content %}
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+        <div class="alert alert-{{ category }}">
+            {{ message|e }}
+        </div>
+    {% endfor %}
+    <div class="col-md-5 mb-5">
+        <div class="card">
+            {% if user.image == None %}
+                <svg data-jdenticon-value="{{ user.email }}"></svg>
+            {% else %}
+                <img src="{{ user.image }}" alt="{{ user.email }}">
+            {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">
+                {{ user.first_name }} {{ user.last_name }}
+            </h5>
+            <p>
+                <a href="mailto:{{ user.email }}">
+                    {{ user.email }}
+                </a>
+            </p>
+        </div>
+            <ul class="list-group list-group-flush">
+{#                <li class="list-group-item">#}
+{#                    <i class="fas fa-at"></i>&nbsp;&nbsp;#}
+{#                </li>#}
+                {% if user.bio != None %}
+                <li class="list-group-item">
+                    {{ user.bio }}
+                </li>
+                {% endif %}
+                <li class="list-group-item">
+                    <i class="fas fa-user-graduate"></i>&nbsp;&nbsp;{{ user.education }}
+                </li>
+                <li class="list-group-item">
+                    <i class="fas fa-map-marker-alt"></i>&nbsp;&nbsp;{{ user.location }}
+                </li>
+            </ul>
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/jdenticon@2.1.1" async></script>
+{% endblock %}
