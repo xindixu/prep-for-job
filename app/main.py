@@ -333,7 +333,7 @@ def create_app():
         code = detailed.OCC_CODE.values
         salary = detailed.A_MEDIAN.values
 
-        start = (page-1)*20+1
+        start = (page-1)*20
         end = start + 20
         salary_info = zip(job[start:end],code[start:end],salary[start:end])
 

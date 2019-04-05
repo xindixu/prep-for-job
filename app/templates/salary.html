@@ -11,7 +11,7 @@
 
 <h2>Salary By Occupation</h2>
 
-<table class="table table-striped table-hover">
+<table id="new" class="table table-striped table-hover">
   <thead>
     <tr>
       <th style="width: 43.33%" scope="col">Occupation</th>
@@ -61,6 +61,8 @@
   </ul>
 </nav>
 
+
+
 {#
 <h2>Salary By Location</h2>
 <table class="table table-striped table-hover">
@@ -81,3 +83,8 @@
 #}
 
 {% endblock %}
+<script>
+  window.onload = function () {
+      new Tablesort(document.getElementsByTagName('table')[0]);
+  }
+</script>
