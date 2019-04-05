@@ -6,13 +6,14 @@ from bls_datasets import oes, qcew
 from forms import RegistrationForm, LoginForm
 from models import Users, JobPages, Jobs, db
 
-def create_app():
+
+def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb5'):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-        SQLALCHEMY_DATABASE_URI='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb5',
+        SQLALCHEMY_DATABASE_URI=db_string,
         SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
 
@@ -135,7 +136,7 @@ def create_app():
         stats = {
             "total_commits": 0,
             "total_issues": 0,
-            "total_unittests": 0
+            "total_unittests": 6
         }
 
         for _, contribs in member_contribs.items():
