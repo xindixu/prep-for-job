@@ -6,3 +6,4 @@ requests
 flask_wtf
 passlib==1.7.1
 psycopg2
+coverage==4.2
