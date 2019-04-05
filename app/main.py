@@ -319,22 +319,30 @@ def create_app():
             return render_template("skill_info.html", technology=technology,occupations=occupations)
 
     @app.route('/salary')
-    def salary():
-        # TODO: load multiple wage data
-        # connect job titles back to job page
+    def salary(page=None):
+        # 809 entries
+        page = int(request.args.get('page', 1))
+        salary_info = []
+        job = []
+        code = []
+        salary = []
+
         df_oes = oes.get_data(year=2017)
         detailed = df_oes[df_oes.OCC_GROUP == 'detailed']
         job = detailed.OCC_TITLE.values
         code = detailed.OCC_CODE.values
         salary = detailed.A_MEDIAN.values
-        salary_info = zip(job,code,salary)
 
-        # avg weekly wage
-        df_qcew = qcew.get_data('industry', rtype='dataframe', year='2017', qtr='1', industry='10')
-        austin = df_qcew[(df_qcew.own_code == 0) & (df_qcew.area_fips == '48015')]
-        weekly_avg = austin.avg_wkly_wage.values[0]
+        start = (page-1)*20+1
+        end = start + 20
+        salary_info = zip(job[start:end],code[start:end],salary[start:end])
 
-        return render_template("salary.html", salary_info=salary_info, loc_to_salary=weekly_avg)
+        # # avg weekly wage
+        # df_qcew = qcew.get_data('industry', rtype='dataframe', year='2017', qtr='1', industry='10')
+        # austin = df_qcew[(df_qcew.own_code == 0) & (df_qcew.area_fips == '48015')]
+        # weekly_avg = austin.avg_wkly_wage.values[0]
+
+        return render_template("salary.html", salary_info=salary_info,page=page)
 
         # base = 'OEUN'
         # # national wide

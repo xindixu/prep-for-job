@@ -16,7 +16,7 @@
     <tr>
       <th style="width: 43.33%" scope="col">Occupation</th>
       <th style="width: 33.33%" scope="col">Annual Salary</th>
-      <th style="width: 33.33%" scope="col">Related Skills</th>
+      <th style="width: 33.33%" scope="col">Related salarys</th>
     </tr>
   </thead>
 
@@ -31,13 +31,37 @@
         <form action="{{ url_for("skill_salary", code=obj[1] + '.00')}}">
             <input type="submit" class="btn btn-info" value="See Skills Info"></input>
         </form>
-        <!-- link first skill on skills page by replacing Skills^ -->
       </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 
+<nav aria-label="Page navigation" class="my-4">
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link" href="{{ url_for("salary", page=1)}}" aria-label="First">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% for i in range([1,page-3]|max,page)%}
+    <li class="page-item"><a class="page-link" href="{{ url_for("salary", page=i)}}">{{i}}</a></li>
+    {% endfor %}
+
+    <li class="page-item"><a class="page-link active" disabled>{{page}}</a></li>
+
+    {% for i in range(page+1,[page+4,10]|min)%}
+    <li class="page-item"><a class="page-link" href="{{ url_for("salary", page=i)}}">{{i}}</a></li>
+    {% endfor %}
+    <li class="page-item">
+      <a class="page-link" href="{{ url_for("salary", page=10)}}" aria-label="Last">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+{#
 <h2>Salary By Location</h2>
 <table class="table table-striped table-hover">
   <thead>
@@ -54,6 +78,6 @@
     </tr>
   </tbody>
 </table>
-
+#}
 
 {% endblock %}
