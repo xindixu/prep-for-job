@@ -1,8 +1,9 @@
-from main import create_app, Jobs, Skills, Salary, db
+from main import create_app
+from models import Users, JobPages, Jobs, db
 import unittest
 from random import randint
 
-class FlaskBookshelfTests(unittest.TestCase):
+class FlaskTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -14,7 +15,7 @@ class FlaskBookshelfTests(unittest.TestCase):
 
     def setUp(self):
         # creates a test client
-        self.app = create_app.test_client()
+        self.app = create_app().test_client()
         # propagate the exceptions to the test client
         self.app.testing = True
 
@@ -24,17 +25,8 @@ class FlaskBookshelfTests(unittest.TestCase):
     def test_splash_status_code(self):
         # sends HTTP GET request on path /
         result = self.app.get('/')
-
         # assert the status code of the response is OK
         self.assertEqual(result.status_code, 200)
-
-    def test_splash_data(self):
-        # sends HTTP GET request on path /
-        result = self.app.get('/')
-
-        # assert the data
-        self.assertEqual(result.data, "This will fail!")
-
     def test_register_email_unique(self):
         # sends HTTP GET request on path /
         params = {
@@ -75,7 +67,7 @@ class FlaskBookshelfTests(unittest.TestCase):
 
 
 
-# test for job table
+    # test for job table
     # insertion is working
     def test_job_insert(self):
         s = Jobs(id='9999', created_at ='1999-01-08', updated_at = '1999-10-08',title = 'job', salary = 0, description = 'this is a job',parent_skill = "none")
@@ -103,6 +95,9 @@ class FlaskBookshelfTests(unittest.TestCase):
 
         try:
             db.session.query(Jobs).filter_by(id = '9999').delete()
+            db.session.commit()
+        except:
+            pass
 
     # Salary is nullable
     def test_job_salary(self):
@@ -117,8 +112,9 @@ class FlaskBookshelfTests(unittest.TestCase):
         self.assertEqual(error, False)
 
         db.session.query(Jobs).filter_by(id = '9999').delete()
+        db.session.commit()
 
-# test for skill table
+    # test for skill table
     # insertion is working
     def test_skill_insert(self):
         s = Skills(id='9999', created_at ='1999-01-08', updated_at = '1999-10-08',title = 'skill', importance = 0, description = 'this is a skill',parent_skill = "none")
@@ -141,10 +137,13 @@ class FlaskBookshelfTests(unittest.TestCase):
             db.session.commit()
         except:
             error = True
-        self.assertEqual(error, False)        
+        self.assertEqual(error, False)
 
         try:
             db.session.query(Skills).filter_by(id = '9999').delete()
+            db.session.commit()
+        except:
+            pass
     # parent_skill is nullable
     def test_skill_description(self):
         error = False
@@ -155,15 +154,17 @@ class FlaskBookshelfTests(unittest.TestCase):
             db.session.commit()
         except:
             error = True
-        self.assertEqual(error, False)        
+        self.assertEqual(error, False)
 
         try:
             db.session.query(Skills).filter_by(id = '9999').delete()
+            db.session.commit()
+        except:
+            pass
 
 
 
-
-# test for login table
+    # test for login table
     # password is correct
     def test_password_incorrect(self):
         # sends HTTP GET request on path /
@@ -188,7 +189,7 @@ class FlaskBookshelfTests(unittest.TestCase):
         # assert the data
         self.assertEqual(result.data, "LOGGED IN")
 
-    # logout 
+    # logout
     def test_log_out(self):
         # sends HTTP GET request on path /
 
@@ -196,6 +197,9 @@ class FlaskBookshelfTests(unittest.TestCase):
 
         # assert the data
         self.assertEqual(result.data, "LOGGED OUT")
+
+unittest.main()
+
 
 # test for about page
 
