@@ -76,7 +76,7 @@ def create_app():
             {
                 "name": "Aidan T. Manning",
                 "bio": "Computational chemistry major (May 2020). Interested in writing software to assist chemical research and education. Also makes bot accounts in his spare time.",
-                "responsibilities": "Backend, about page, job and skill info pages",
+                "responsibilities": "Backend, about page, job and skill info pages, SQLAlchemy, worked with authentication, debugging and code refactoring",
                 "contribs": member_contribs["aidan"],
                 "photo": "aidan"
             },
@@ -90,21 +90,21 @@ def create_app():
             {
                 "name": "Srishtti Talwar",
                 "bio": "Mathematics and Economics major. Pursuing Elements of Computing Certificate. Graduating May 2020.",
-                "responsibilities": "Skills Page, Technical Report",
+                "responsibilities": "Skills Page, Technical Report, Splash page, skill_salary_info page, About page",
                 "contribs": member_contribs["srishtti"],
                 "photo": "srishtti"
             },
             {
                 "name": "Dylan Mulrooney",
                 "bio": "Undeclared, Computer Science internal transfer. Blockchain developer.",
-                "responsibilities": "Google Cloud Platform and home page",
+                "responsibilities": "Google Cloud Platform and home page, Database, Caching, Deployment, Register and Login Page, unit tests",
                 "contribs": member_contribs["dylan"],
                 "photo": "dylan"
             },
             {
                 "name": "Yiran Zhang",
                 "bio": "senior, actuarial science major, pursuing elements of computing certificate, music lover and drum player.",
-                "responsibilities": "Tech report, Salary page",
+                "responsibilities": "Technical report, Salary page, unit tests, and data-model",
                 "contribs": member_contribs["yiran"],
                 "photo": "yiran"
             }
