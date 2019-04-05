@@ -1,7 +1,9 @@
+from sqlalchemy.orm import load_only
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import requests, json
 from datetime import datetime
+from passlib.hash import sha256_crypt
 db = SQLAlchemy()
 
 
@@ -22,10 +24,28 @@ class Users(db.Model):
         return f"User({self.id}, {self.email})"
 
     @classmethod
-    def new_member(cls, email, password, first_name, last_name):
+    def exists(cls, email):
         if cls.query.filter_by(email=email).one_or_none() is not None:
-            return None
-        u = cls(email=email, hash=password, first_name=first_name, last_name=last_name)
+            return True
+        else:
+            return False
+
+    @classmethod
+    def get_password(cls, email):
+        # nothing works
+        fields = ['email', 'hash']
+        cc = cls.query.filter_by(email=email).options(load_only(*fields)).one_or_none()
+
+        try:
+            return cc.hash # make this work :(
+        except:
+            print("cant access password hash :(")
+
+    @classmethod
+    def new_member(cls, email, password, first_name, last_name):
+        hash = str(sha256_crypt.hash(password))
+        print(password, hash)
+        u = cls(email=email, hash=hash, first_name=first_name, last_name=last_name)
         db.session.add(u)
         db.session.commit()
         return u
@@ -36,9 +56,9 @@ class Users(db.Model):
 
     @classmethod
     def check_password(cls, email, hpassword):
-        # todo hash password before passing
-        u = cls.query.filter_by(email=email).first()
-        if hpassword == u.hash:
+        real_hash = Users.get_password(email)
+        check_hash = sha256_crypt.hash(hpassword)
+        if (check_hash == real_hash):
             return True
         else:
             return False
@@ -92,7 +112,7 @@ class Jobs(db.Model):
 
             # hourly wage
             statistic_code = '03'
-            seriesid = base+area_code+industry_code+job_code+statistic_code
+            seriesid = base + area_code + industry_code + job_code + statistic_code
 
             headers = {'Content-type': 'application/json'}
             data = json.dumps({"seriesid": [seriesid], "startyear": "2018", "endyear": "2018"})
@@ -142,7 +162,7 @@ class JobPages (db.Model):
             db.session.add(u)
             db.session.commit()
             return jobs
-            
+
     @classmethod
     def need_cache_page(cls, page):
         # todo hash password before passing
@@ -199,16 +219,3 @@ class Salary (db.Model):
     @classmethod
     def get_page(cls, page):
         return cls.query.filter_by(page=page).one_or_none()
-
-
-class Skills (db.Model):
-    __tablename__ = "skills"
-    id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime,nullable = False)
-    updated_at = db.Column(db.DateTime,nullable = False)
-    title = db.Column(db.String(255), nullable=False)
-    # description is nullable
-    description = db.Column(db.Text, nullable = True)
-    # check if parent skill can be null
-    parent_skill = db.Column(db.String(255), nullable = True)
-    importance = db.Column(db.Float, nullable = False)

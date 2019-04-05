@@ -1,16 +1,14 @@
-import os
 
+from passlib.hash import sha256_crypt
+import os
+import datetime
 from flask import Flask, render_template, g, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import requests
 import json
 from bls_datasets import oes, qcew
-from passlib.hash import sha256_crypt
 from forms import RegistrationForm, LoginForm
-from models import Users, Skills, JobPages, Jobs, db
-# from secrets import DB_STRING
-import datetime
-
+from models import Users, JobPages, Jobs, db
 
 def create_app(test_config=None):
     # create and configure the app
@@ -58,8 +56,8 @@ def create_app(test_config=None):
     @app.route('/about')
     def about():
         # TODO: fix this when network is slow
-        commits = requests.get("https://gitlab.com/api/v4/projects/11264402/repository/commits", params={"all": "true", "per_page": 100}).json()
-        issues = requests.get("https://gitlab.com/api/v4/projects/11264402/issues?scope=all", params={"scope": "all", "per_page": 100}).json()
+        commits = requests.get("https://gitlab.com/api/v4/projects/11533899/repository/commits", params={"all": "true", "per_page": 100}).json()
+        issues = requests.get("https://gitlab.com/api/v4/projects/11533899/issues?scope=all", params={"scope": "all", "per_page": 100}).json()
 
         member_contribs = {
             "aidan": {"commits": 0, "issues": 0},
@@ -103,8 +101,8 @@ def create_app(test_config=None):
             },
             {
                 "name": "Xindi Xu",
-                "bio": "Advertising, Elements of Computing Certificate (May 2020). Front End Developer",
-                "responsibilities": "Job Info Page, Salary page, BLS API connection, Login/Register & database, Front End",
+                "bio": "Advertising major, Elements of Computing Certificate (May 2020). Front End Developer",
+                "responsibilities": "Job, Job_info, Skill, Skill_info, Salary, Salary_info, Home pages, O*Net/BLS API connection, Frontend & styling",
                 "contribs": member_contribs["xindi"],
                 "photo": "xindi"
             },
@@ -144,14 +142,67 @@ def create_app(test_config=None):
 
         return render_template("about.html", members=members, stats=stats)
 
+    @app.route('/skill_salary/<string:code>', methods=('GET', 'POST'))
+    def skill_salary(code):
+        if Jobs.need_cache_code(code):
+            print("Grabbing from API for first time and storing it!")
+            using_api = True
+            jarray = Jobs.new_job(code)
+        else:
+            print("Pulling cached value from DB!")
+            using_api = False
+            jarray = Jobs.get_code(code)
+
+        job_obj = jarray[0]
+        uuid = jarray[1]
+        related_skills = jarray[2]
+        job_info = jarray[3]
+        knowledge = jarray[4]
+        skills = jarray[5]
+        abilities = jarray[6]
+        technology = jarray[7]
+        related_jobs = jarray[8]
+        wage = jarray[9]
+
+        if using_api == True:
+            return render_template("skill_salary.html", job=json.loads(job_info.text),
+                               job_obj=json.loads(job_obj.text),
+                               related_skills=json.loads(related_skills.text),
+                               knowledge=json.loads(knowledge.text),
+                               skills=json.loads(skills.text),
+                               abilities=json.loads(abilities.text),
+                               technology=json.loads(technology.text),
+                               related_jobs=json.loads(related_jobs.text),
+                               wage=json.loads(wage.text)
+                               )
+        else:
+            return render_template("skill_salary.html", job=json.loads(job_info),
+                               job_obj=json.loads(job_obj),
+                               related_skills=json.loads(related_skills),
+                               knowledge=json.loads(knowledge),
+                               skills=json.loads(skills),
+                               abilities=json.loads(abilities),
+                               technology=json.loads(technology),
+                               related_jobs=json.loads(related_jobs),
+                               wage=json.loads(wage)
+                               )
+
     @app.route('/auth/register/', methods=('GET', 'POST'))
     def register():
         form = RegistrationForm()
+        if request.method != 'POST':
+            return render_template("auth/register.html", form=form)
         if request.method == 'POST' and form.validate_on_submit():
-            email = form.email.data
+            email = form.email.data.lower()
             password = form.password.data
             first_name = form.first_name.data
             last_name = form.last_name.data
+            if Users.exists(email):
+                return "Exists"
+            else:
+                Users.new_member(email, password, first_name, last_name)
+                return "Registered!"
+            """
             try:
                 u = Users.new_member(email, password, first_name, last_name)
                 if u is None:
@@ -168,6 +219,8 @@ def create_app(test_config=None):
             return redirect(url_for("login"))
         else:
             return render_template("auth/register.html", form=form)
+            """
+
 
     @app.route('/auth/login/', methods=('GET', 'POST'))
     def login():
@@ -175,15 +228,14 @@ def create_app(test_config=None):
         if request.method == 'POST' and form.validate_on_submit():
             email = form.email.data
             password = form.password.data
-            u = Users.query.filter_by(email=email).one_or_none()
-            if u is None:
-                flash(f"{email} was not found.", "danger")
-            elif u.hash != password:
-                flash(f"Incorrect password for {email}", "danger")
+            u = Users.check_password(email, password)
+            if u:
+                return render_template("auth/login.html", form=form)
             else:
-                return redirect(url_for("profile", user_id=u.id))
+                flash("Incorrect password for "+email)
+            return render_template("auth/login.html", form=form)
 
-        return render_template("auth/login.html", form=form)
+
 
     @app.route('/auth/logout/', methods=('GET', 'POST'))
     def logout():
@@ -216,10 +268,12 @@ def create_app(test_config=None):
             return render_template("job.html", jobs=jobs, page=page)
         else:
             if Jobs.need_cache_code(code):
+                using_api = True
                 print("Grabbing from API for first time and storing it!")
                 jarray = Jobs.new_job(code)
             else:
                 print("Pulling cached value from DB!")
+                using_api = False
                 jarray = Jobs.get_code(code)
 
             job_obj = jarray[0]
@@ -232,8 +286,8 @@ def create_app(test_config=None):
             technology = jarray[7]
             related_jobs = jarray[8]
             wage = jarray[9]
-
-            return render_template("job_info.html", job=json.loads(job_info.text),
+            if using_api == True:
+                return render_template("job_info.html", job=json.loads(job_info.text),
                                    job_obj=json.loads(job_obj.text),
                                    related_skills=json.loads(related_skills.text),
                                    knowledge=json.loads(knowledge.text),
@@ -242,6 +296,17 @@ def create_app(test_config=None):
                                    technology=json.loads(technology.text),
                                    related_jobs=json.loads(related_jobs.text),
                                    wage=json.loads(wage.text)
+                                   )
+            else:
+                return render_template("job_info.html", job=json.loads(job_info),
+                                   job_obj=json.loads(job_obj),
+                                   related_skills=json.loads(related_skills),
+                                   knowledge=json.loads(knowledge),
+                                   skills=json.loads(skills),
+                                   abilities=json.loads(abilities),
+                                   technology=json.loads(technology),
+                                   related_jobs=json.loads(related_jobs),
+                                   wage=json.loads(wage)
                                    )
 
     @app.route('/skill/')
