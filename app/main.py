@@ -3,7 +3,7 @@ from flask import Flask, render_template, g, request, flash, redirect, url_for
 import requests
 import json
 from bls_datasets import oes, qcew
-from forms import RegistrationForm, LoginForm
+from forms import RegistrationForm, LoginForm, SearchForm
 from models import Users, JobPages, Jobs, db
 
 
@@ -225,8 +225,6 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
 
         return render_template("auth/login.html", form=form)
 
-
-
     @app.route('/auth/logout/', methods=('GET', 'POST'))
     def logout():
         return "TODO: add session, hash passwords, add postgress uri, and test db functions"
@@ -359,6 +357,22 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
         # wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
         #
         # return render_template("salary_info.html", status=wage.json()["status"], wage=wage.json()["Results"]["series"][0]["data"][0])
+
+    @app.route('/search', methods=('GET', 'POST'))
+    def search(search=None):
+        form = SearchForm(request.form)
+        keyword = request.args.get('keyword')
+        if keyword is None:
+            return render_template('search.html', form=form)
+        else:
+            results = []
+            # search with api
+            url =f"https://services.onetcenter.org/ws/mnm/search?keyword={keyword}"
+            print()
+
+
+
+
 
     @app.errorhandler(404)
     def error404(err):
