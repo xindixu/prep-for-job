@@ -16,9 +16,11 @@
 <table id="new" class="table table-striped table-hover">
   <thead>
     <tr>
-      <th style="width: 43.33%" scope="col">Occupation</th>
-      <th style="width: 33.33%" scope="col">Annual Salary</th>
-      <th style="width: 33.33%" scope="col">Related salarys</th>
+      <th style="width: 30.00%" scope="col">Occupation</th>
+      <th style="width: 20.00%" scope="col">Annual Salary</th>
+      <th style="width: 20.00%" scope="col">Related salarys</th>
+      <th style="width: 15.00%" scope="col">col4</th>
+      <th style="width: 15.00%" scope="col">col5s</th>
     </tr>
   </thead>
 
@@ -32,6 +34,16 @@
       <td>
         <form action="{{ url_for("skill_salary", code=obj[1] + '.00')}}">
             <input type="submit" class="btn btn-info" value="See Skills Info"></input>
+        </form>
+      </td>
+      <td>
+        <form action="set url here">
+            <input type="submit" class="btn btn-info" value="col4"></input>
+        </form>
+      </td>
+      <td>
+        <form action="set url here">
+            <input type="submit" class="btn btn-info" value="col5"></input>
         </form>
       </td>
     </tr>
