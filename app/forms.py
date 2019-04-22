@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, validators, RadioField
+from wtforms import StringField, PasswordField, SubmitField, validators
 from wtforms.csrf.core import CSRFTokenField
 
 
@@ -23,6 +23,5 @@ class LoginForm (FlaskForm):
 
 
 class SearchForm(FlaskForm):
-    searchBy = RadioField(u"Search by", choices=[('Job Title', 'job_title'), ('Skill', 'skill')])
-    keyword = StringField('')
+    keyword = StringField(u"Enter keyword", validators=[validators.DataRequired()])
     submit = SubmitField(u"Search")

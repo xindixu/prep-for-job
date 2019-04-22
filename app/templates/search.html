@@ -6,14 +6,10 @@
 
 <h1>Search</h1>
 
+<p class="lead">Search for your next dream job with keywords</p>
 <form method="post">
   <div class="form-group">
-    {{ form.searchBy.label }}
-    {% for choice in form.searchBy %}
-    <div class="form-check">
-          {{ choice(class_="form-radio") }} {{ choice.label(class_="form-label") }}
-    </div>
-    {% endfor %}
+
 
     <div class="form-group">
       {{ form.keyword.label }}
