@@ -315,7 +315,7 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
                 }
                 occupations.append(obj)
 
-            return render_template("skill_info.html", technology=technology,occupations=occupations)
+            return render_template("skill_info.html", technology=technology, occupations=occupations)
 
     @app.route('/salary')
     def salary(page=None):
@@ -373,9 +373,9 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
         # search with api
         url =f"https://services.onetcenter.org/ws/mnm/search?keyword={keyword}"
         results = requests.get(url, headers=headers)
-        print(results.text)
 
-        return render_template('result.html', keyword=keyword, results=results.text)
+
+        return render_template('result.html', keyword=keyword, results=json.loads(results.text))
 
     @app.errorhandler(404)
     def error404(err):
