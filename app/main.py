@@ -361,18 +361,21 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
     @app.route('/search', methods=('GET', 'POST'))
     def search(search=None):
         form = SearchForm(request.form)
-        keyword = request.args.get('keyword')
-        if keyword is None:
-            return render_template('search.html', form=form)
+        if request.method == 'POST':
+            keyword = form.keyword.data
+            return redirect(url_for("result", keyword=keyword))
         else:
-            results = []
-            # search with api
-            url =f"https://services.onetcenter.org/ws/mnm/search?keyword={keyword}"
-            print()
+            return render_template('search.html', form=form)
 
+    @app.route("/result/<keyword>")
+    def result(keyword):
+        headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
+        # search with api
+        url =f"https://services.onetcenter.org/ws/mnm/search?keyword={keyword}"
+        results = requests.get(url, headers=headers)
+        print(results.text)
 
-
-
+        return render_template('result.html', keyword=keyword, results=results.text)
 
     @app.errorhandler(404)
     def error404(err):
