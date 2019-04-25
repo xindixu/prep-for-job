@@ -359,32 +359,15 @@ def create_app(db_string='postgresql://xindixu:xindixu@localhost:5434/prep-for-j
         job = detailed.OCC_TITLE.values
         code = detailed.OCC_CODE.values
         salary = detailed.A_MEDIAN.values
+        pct25 = detailed.A_PCT25.values
+        pct75 = detailed.A_PCT75.values
+
 
         start = (page-1)*20
         end = start + 20
-        salary_info = zip(job[start:end],code[start:end],salary[start:end])
+        salary_info = zip(job[start:end],code[start:end],salary[start:end],pct25[start:end],pct75[start:end])
 
-        # # avg weekly wage
-        # df_qcew = qcew.get_data('industry', rtype='dataframe', year='2017', qtr='1', industry='10')
-        # austin = df_qcew[(df_qcew.own_code == 0) & (df_qcew.area_fips == '48015')]
-        # weekly_avg = austin.avg_wkly_wage.values[0]
-
-        return render_template("salary.html", salary_info=salary_info,page=page)
-
-        # base = 'OEUN'
-        # # national wide
-        # area_code = '0000000'
-        # # total
-        # industry_code = '000000'
-        # # hourly wage
-        # statistic_code = '03'
-        # seriesid = base+area_code+industry_code+job_code+statistic_code
-        #
-        # headers = {'Content-type': 'application/json'}
-        # data = json.dumps({"seriesid": [seriesid]})
-        # wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
-        #
-        # return render_template("salary_info.html", status=wage.json()["status"], wage=wage.json()["Results"]["series"][0]["data"][0])
+        return render_template("salary.html", salary_info=salary_info, page=page)
 
     @app.route('/search', methods=('GET', 'POST'))
     def search(search=None):
