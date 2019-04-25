@@ -145,6 +145,8 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
 
         return render_template("about.html", members=members, stats=stats)
 
+
+
     @app.route('/skill_salary/<string:code>', methods=('GET', 'POST'))
     def skill_salary(code):
         if Jobs.need_cache_code(code):
