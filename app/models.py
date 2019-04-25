@@ -129,14 +129,14 @@ class Jobs(db.Model):
     @classmethod
     def need_cache_code(cls, code):
         # todo hash password before passing
-        u = cls.query.filter_by(code=code).one_or_none()
+        u = cls.query.filter_by(code=code).first()
         if u == None:
             return True
         else:
             return False
     @classmethod
     def get_code(cls, code):
-        u = cls.query.filter_by(code=code).one_or_none()
+        u = cls.query.filter_by(code=code).first()
         jarray = [u.job_info, u.knowledge, u.skills, u.abilities, u.technology, u.related_jobs, u.wage]
         return jarray
 

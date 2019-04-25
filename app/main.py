@@ -7,7 +7,7 @@ from forms import RegistrationForm, LoginForm, SearchForm
 from models import Users, JobPages, Jobs, db
 
 
-def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb5'):
+def create_app(db_string='postgresql://xindixu:xindixu@localhost:5434/prep-for-job'):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
@@ -238,6 +238,48 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
                 jobs = json.loads(jobs)
             else:
                 jobs = json.loads(str(JobPages.get_page(page).jobs))
+
+                ## Dylan - ADDING FOR COLUMN DATA ##
+                # GET CODE FOR EACH JOB #
+                for job in jobs["career"]:
+                    code = job["code"]
+                    if Jobs.need_cache_code(code):
+                        using_api = True
+                        print("Grabbing from API for columns first time and storing it!")
+                        jarray = Jobs.new_job(code)
+                    else:
+                        print("Pulling cached value of columns from DB!")
+                        using_api = False
+                        jarray = Jobs.get_code(code)
+
+                    skills = jarray[2]
+                    abilities = jarray[3]
+                    technology = jarray[4]
+                    related_jobs = jarray[5]
+                    wage = jarray[6]
+
+                    if using_api == True:
+                        wage=json.loads(wage.text)
+                        skills=json.loads(skills.text)
+                        abilities = json.loads(abilities.text)
+                    else:
+                        wage=json.loads(wage)
+                        skills=json.loads(skills)
+                        abilities = json.loads(abilities)
+                    
+                    print(wage)
+                    if wage["status"] != 'REQUEST_NOT_PROCESSED':
+                        # WARNING: wage api might exceed daily
+                        wage = wage["Results"]["series"][0]["data"][0]["value"]
+                   
+                    primary = skills['group'][0]['element'][0]['name']
+                    try:
+                        secondary = skills['group'][0]['element'][1]['name']
+                    except:
+                        secondary = ""
+                    ability = abilities['group'][0]['element'][0]['name']
+                    print([wage, primary, secondary, ability])
+
             return render_template("job.html", jobs=jobs, page=page)
         else:
             if Jobs.need_cache_code(code):
