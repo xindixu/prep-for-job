@@ -80,10 +80,7 @@ class Jobs(db.Model):
     code = db.Column(db.String(255), nullable=False)
     #title = db.Column(db.String(255), nullable=False)
     #job = db.Column(db.String(255), nullable=False)
-    job_obj = db.Column(db.Text, nullable=False)
     job_info = db.Column(db.Text, nullable=False)
-    uuid = db.Column(db.Text, nullable=False)
-    related_skills = db.Column(db.Text, nullable=False)
     knowledge = db.Column(db.Text, nullable=False)
     skills = db.Column(db.Text, nullable=False)
     abilities = db.Column(db.Text, nullable=False)
@@ -95,11 +92,6 @@ class Jobs(db.Model):
     def new_job(cls, code):
         if cls.query.filter_by(code=code).one_or_none() is None:
             print("Need to call API for this Job !")
-            # from anyapi
-            job_obj = requests.get(f"http://api.dataatwork.org/v1/jobs/{code}")
-            uuid = (json.loads(job_obj.text))["uuid"]
-            # TODO: need to remove this from db
-            related_skills = requests.get(f"http://api.dataatwork.org/v1/jobs/{uuid}/related_skills")
 
             #from onet
             headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
@@ -126,10 +118,10 @@ class Jobs(db.Model):
             headers = {'Content-type': 'application/json'}
             data = json.dumps({"seriesid": [seriesid], "startyear": "2018", "endyear": "2018"})
             wage = requests.post('https://api.bls.gov/publicAPI/v2/timeseries/data/', data=data, headers=headers)
-            u = cls(code=code, job_obj=job_obj.text, job_info=job_info.text, uuid=uuid, related_skills=related_skills.text, knowledge=knowledge.text, skills=skills.text, abilities=abilities.text, technology=technology.text, related_jobs=related_jobs.text, wage=wage.text)
+            u = cls(code=code, job_info=job_info.text, knowledge=knowledge.text, skills=skills.text, abilities=abilities.text, technology=technology.text, related_jobs=related_jobs.text, wage=wage.text)
             db.session.add(u)
             db.session.commit()
-            return [job_obj, uuid, related_skills, job_info, knowledge, skills, abilities, technology, related_jobs, wage]
+            return [job_info, knowledge, skills, abilities, technology, related_jobs, wage]
         else:
             print("No need to call!")
             return None
@@ -145,7 +137,7 @@ class Jobs(db.Model):
     @classmethod
     def get_code(cls, code):
         u = cls.query.filter_by(code=code).one_or_none()
-        jarray = [u.job_obj, u.uuid, u.related_skills, u.job_info, u.knowledge, u.skills, u.abilities, u.technology, u.related_jobs, u.wage]
+        jarray = [u.job_info, u.knowledge, u.skills, u.abilities, u.technology, u.related_jobs, u.wage]
         return jarray
 
     @classmethod

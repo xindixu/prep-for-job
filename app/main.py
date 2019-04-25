@@ -156,21 +156,16 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
             using_api = False
             jarray = Jobs.get_code(code)
 
-        job_obj = jarray[0]
-        uuid = jarray[1]
-        related_skills = jarray[2]
-        job_info = jarray[3]
-        knowledge = jarray[4]
-        skills = jarray[5]
-        abilities = jarray[6]
-        technology = jarray[7]
-        related_jobs = jarray[8]
-        wage = jarray[9]
+        job_info = jarray[0]
+        knowledge = jarray[1]
+        skills = jarray[2]
+        abilities = jarray[3]
+        technology = jarray[4]
+        related_jobs = jarray[5]
+        wage = jarray[6]
 
         if using_api == True:
             return render_template("skill_salary.html", job=json.loads(job_info.text),
-                               job_obj=json.loads(job_obj.text),
-                               related_skills=json.loads(related_skills.text),
                                knowledge=json.loads(knowledge.text),
                                skills=json.loads(skills.text),
                                abilities=json.loads(abilities.text),
@@ -180,8 +175,6 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
                                )
         else:
             return render_template("skill_salary.html", job=json.loads(job_info),
-                               job_obj=json.loads(job_obj),
-                               related_skills=json.loads(related_skills),
                                knowledge=json.loads(knowledge),
                                skills=json.loads(skills),
                                abilities=json.loads(abilities),
@@ -256,21 +249,16 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
                 using_api = False
                 jarray = Jobs.get_code(code)
 
-            job_obj = jarray[0]
-            uuid = jarray[1]
-            related_skills = jarray[2]
-            job_info = jarray[3]
-            knowledge = jarray[4]
-            skills = jarray[5]
-            abilities = jarray[6]
-            technology = jarray[7]
-            related_jobs = jarray[8]
-            wage = jarray[9]
+                job_info = jarray[0]
+                knowledge = jarray[1]
+                skills = jarray[2]
+                abilities = jarray[3]
+                technology = jarray[4]
+                related_jobs = jarray[5]
+                wage = jarray[6]
 
             if using_api == True:
                 return render_template("job_info.html", job=json.loads(job_info.text),
-                                   job_obj=json.loads(job_obj.text),
-                                   related_skills=json.loads(related_skills.text),
                                    knowledge=json.loads(knowledge.text),
                                    skills=json.loads(skills.text),
                                    abilities=json.loads(abilities.text),
@@ -280,8 +268,6 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
                                    )
             else:
                 return render_template("job_info.html", job=json.loads(job_info),
-                                   job_obj=json.loads(job_obj),
-                                   related_skills=json.loads(related_skills),
                                    knowledge=json.loads(knowledge),
                                    skills=json.loads(skills),
                                    abilities=json.loads(abilities),

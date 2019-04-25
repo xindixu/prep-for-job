@@ -84,27 +84,4 @@
     {% endif %}
   </ul>
 </section>
-
-{#
-<section id="all_skills">
-  <!-- From anyapi -->
-  <h2>All Skills</h2>
-  <ul class="list-group">
-    {% for skill in related_skills.skills %}
-    <li class="list-group-item">
-      {{skill.skill_uuid}}
-      <a href="{{ url_for("skill", uuid=skill.skill_uuid) }}">
-        {{skill.skill_name}}
-      </a>
-      {{skill.description}}
-    </li>
-
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-</div>
-
-</section>
-#}
 {% endblock %}
