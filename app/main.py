@@ -331,7 +331,27 @@ def create_app(db_string='postgresql://xindixu:xindixu@localhost:5434/prep-for-j
                 end = start + 20
                 url += f"?start={start}&end={end}"
             technology = requests.get(url, headers=headers)
-            return render_template("skill.html", technology=json.loads(technology.text), page=page)
+            technology = json.loads(technology.text)
+            i = 0
+            for i in range(0,len(technology['technology'])):
+                code = technology['technology'][i]['id']
+                tech = requests.get(f"https://services.onetcenter.org/ws/online/hot_technology/{code}",headers=headers)
+                tech = json.loads(tech.text) # this may be wrong!
+                obj = []
+                for job in tech["occupation"]:
+                    if job["tags"]["bright_outlook"] and job["tags"]["green"]:
+                        k = 1
+                    if job["tags"]["bright_outlook"] and not job["tags"]["green"]:
+                        k = 0.5
+                    if not job["tags"]["bright_outlook"] and not job["tags"]["green"]:
+                        k = 0
+                    if not job["tags"]["bright_outlook"] and job["tags"]["green"]:
+                        k = 0.5
+                    obj.append([job["title"], job["tags"]["bright_outlook"], job["tags"]["green"], k])
+                while(len(obj) <= 20):
+                    obj.append(["No related found", True, False, 0.5])
+                print(obj)
+            return render_template("skill.html", technology=technology, page=page, occupations=obj)
         else:
             technology = requests.get(f"https://services.onetcenter.org/ws/online/hot_technology/{id}",headers=headers)
             technology = json.loads(technology.text)

@@ -10,7 +10,7 @@
 </style>
 
 <div style= "display: inline-block; text-align: center">
-  <h1>Skills &nbsp;&nbsp;<img src="../static/images/skills.jpg" width="300" height="200" alt ="img" /></h1>
+  <h1>Skills &nbsp;&nbsp;<img src="../static/images/skills.jpg" width="300" height="auto" alt ="img" /></h1>
 </div>
 <hr>
 
@@ -18,11 +18,10 @@
   <thead>
     <tr>
       <th style="width: 30.00%" scope="col">Technological Skill</th>
-      <th style="width: 20.00%" scope="col">Lucrative Carreers</th>
-      <th style="width: 20.00%" scope="col"></th>
-      <th style="width: 15.00%" scope="col"></th>
-      <th style="width: 15.00%" scope="col"></th>
-
+      <th style="width: 20.00%" scope="col">Related Careers</th>
+      <th style="width: 20.00%" scope="col">Bright Outlook</th>
+      <th style="width: 15.00%" scope="col">Green</th>
+      <th style="width: 15.00%" scope="col">Popularity</th>
     </tr>
   </thead>
 
@@ -33,24 +32,29 @@
         <a href="{{ url_for("skill", id=tech.id) }}">{{ tech.name }}</a>
       </th>
       <td>
-        <form action="set url here">
-            <input type="submit" class="btn btn-info" value="col2"></input>
-        </form>
+        <span>{{occupations[loop.index0][0]}}</span>
       </td>
       <td>
-        <form action="set url here">
-            <input type="submit" class="btn btn-info" value="col3"></input>
-        </form>
+        {% if occupations[loop.index0][1] %}
+          <span><img src="{{ url_for("static", filename="images/green.png") }}" style="
+    height:  41px;" alt="status"></span>
+        {% else %}
+            <span><img src="{{ url_for("static", filename="images/red.png") }}" style="
+    height:  60px;" alt="status"></span>
+        {% endif %}
       </td>
       <td>
-        <form action="set url here">
-            <input type="submit" class="btn btn-info" value="col4"></input>
-        </form>
+        {% if occupations[loop.index0][2] %}
+          <span><img src="{{ url_for("static", filename="images/green.png") }}" style="
+    height:  41px;" alt="status"></span>
+        {% else %}
+            <span><img src="{{ url_for("static", filename="images/red.png") }}" style="
+    height:  60px;" alt="status"></span>
+        {% endif %}
       </td>
       <td>
-        <form action="set url here">
-            <input type="submit" class="btn btn-info" value="col5"></input>
-        </form>
+          <span><img src="{{ url_for("static", filename="images/"+occupations[loop.index0][3]|string+".png") }}" style="
+    height:  41px;" alt="popularity"></span>
       </td>
     </tr>
     {% endfor %}
