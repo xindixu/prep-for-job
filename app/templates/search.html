@@ -3,23 +3,45 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
+<style>
+.hero-image {
+  background-image:url('../static/images/search.jpg');
+  height: 500px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  alpha: 0.4;
+}
 
+.hero-text {
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>
 <h1>Search</h1>
-
 <p class="lead">Search for your next dream job with keywords</p>
-<form method="post">
-  <div class="form-group">
 
-
-    <div class="form-group">
-      {{ form.keyword.label }}
-      {{ form.keyword(class_="form-control", placeholder="architect", id="keyword") }}
-    </div>
-
-  <div class="form-group">
-    {{ form.submit(class_="btn btn-primary") }}
-  </div>
+<div class="hero-image"></div>
+    <div class="hero-text">
+    <form method="post">
+      <div class="form-group">
+        <div class="form-group">
+          <h2>{{ form.keyword.label }}</h2>
+          {{ form.keyword(class_="form-control", placeholder="architect", id="keyword") }}
+        </div>
+      <div class="form-group">
+        {{ form.submit(class_="btn btn-primary") }}
+      </div>
 
   {{ form.hidden_tag() }}
 </form>
+</div>
+
+
+
+
 {% endblock %}
