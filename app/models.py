@@ -73,6 +73,17 @@ class Users(db.Model):
         return Markup(html)
 
 class Jobs(db.Model):
+    """
+    code: primary key, page number from the API requests
+    jobs: name of the job
+    skills: API request fetching related skills to viewed job (code) 
+    abilities: API request requesting required abilities to do a particular career (code) 
+    technology:  API request fetching the technology associated with a given career (code) 
+    knowledge:  API request getting the knowledge needed for a given career (code) 
+    related job: API request looking for closely matched jobs given a career (code), allows exploring 
+    job_info: Stored object created with API responses, stored for speedy calculations
+    wage: general hourly wage for the job 
+    """
     __tablename__ = "jobs"
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime,nullable = False, default=datetime.utcnow())
@@ -90,9 +101,11 @@ class Jobs(db.Model):
 
     @classmethod
     def new_job(cls, code):
+        """
+        create a new job with api if it's not cached in db
+        detail API description go on WiKi page
+        """
         if cls.query.filter_by(code=code).one_or_none() is None:
-            print("Need to call API for this Job !")
-
             #from onet
             headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
             job_info = requests.get(f"https://services.onetcenter.org/ws/mnm/careers/{code}", headers=headers)
@@ -128,7 +141,7 @@ class Jobs(db.Model):
 
     @classmethod
     def need_cache_code(cls, code):
-        # todo hash password before passing
+        # TODO hash password before passing
         u = cls.query.filter_by(code=code).first()
         if u == None:
             return True
@@ -136,6 +149,9 @@ class Jobs(db.Model):
             return False
     @classmethod
     def get_code(cls, code):
+        """
+        get the job object from the db
+        """
         u = cls.query.filter_by(code=code).first()
         jarray = [u.job_info, u.knowledge, u.skills, u.abilities, u.technology, u.related_jobs, u.wage]
         return jarray
@@ -153,6 +169,10 @@ class Jobs(db.Model):
 
 
 class JobPages (db.Model):
+    """
+    page: primary key, page number from the API requests
+    jobs: name of the job
+    """
     __tablename__ = "jobpages"
     page = db.Column(db.Integer, nullable = False, primary_key=True, autoincrement=False)
     created_at = db.Column(db.DateTime,nullable = False, default=datetime.utcnow())
@@ -178,6 +198,9 @@ class JobPages (db.Model):
 
     @classmethod
     def need_cache_page(cls, page):
+        """
+        determine the page need to be cached
+        """
         # todo hash password before passing
         u = cls.query.filter_by(page=page).one_or_none()
         if u == None:
@@ -187,6 +210,9 @@ class JobPages (db.Model):
 
     @classmethod
     def get_page(cls, page):
+        """
+        get the page from the db
+        """
         return cls.query.filter_by(page=page).one_or_none()
 
 
@@ -200,7 +226,9 @@ class Salary (db.Model):
 
     @classmethod
     def new_salary_page(cls):
-        # not done!
+        """
+        populates the database if needed
+        """
         if cls.query.filter_by(id=1).one_or_none() is None:
             print("NEED TO POPULATE DB PAGE #"+str(page)+"!")
             headers = {"Authorization":"Basic dXRleGFzOjk3NDRxZmc=", "Accept": "application/json"}
@@ -222,7 +250,9 @@ class Salary (db.Model):
 
     @classmethod
     def need_cache_page(cls, page):
-        # todo hash password before passing
+        """
+        checks if the page needs caching and returns True or False accordingly
+        """
         u = cls.query.filter_by(page=page).one_or_none()
         if u == None:
             return True
@@ -231,6 +261,9 @@ class Salary (db.Model):
 
     @classmethod
     def get_page(cls, page):
+        """
+        this will get the page that is needed
+        """
         return cls.query.filter_by(page=page).one_or_none()
 
     def __html__(self):
