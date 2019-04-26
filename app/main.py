@@ -186,13 +186,42 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
     @app.route('/auth/register/', methods=('GET', 'POST'))
     def register():
         form = RegistrationForm()
-        if request.method == 'POST' and form.validate_on_submit():
+        if request.method == 'POST':
+            err = False
             email = form.email.data.lower()
             password = form.password.data
+            confirm_password = form.confirm_password.data
             first_name = form.first_name.data
             last_name = form.last_name.data
+            if not email or len(email) <= 1:
+                flash("Email required", "danger")
+                err = True
+            if not(first_name) or len(first_name) <= 1:
+                flash("First name required", "danger")
+                err = True
+            if not(last_name) or len(last_name) <= 1:
+                flash("Last name required", "danger")
+                err = True
+            if not confirm_password or len(confirm_password) < 2:
+                flash("Password confirmation required", "danger")
+                err = True
+            if not password or len(password) < 2:
+                flash("Password required", "danger")
+                err = True
+            if not ("@" in email and "." in email and len(email) > 6):
+                print("EMAIL INVALID")
+                flash("Email invalid", "danger")
+                err = True
+            if password != confirm_password:
+                print("MISMATCH")
+                flash("Passwords must match", "danger")
+                err = True
             if Users.exists(email):
+                print("EXISTSSS")
                 flash("User {} already exists".format(email))
+                err = True
+            if err == True:
+                return render_template("auth/register.html", form=form)
             else:
                 u = Users.new_member(email, password, first_name, last_name)
                 flash("You have been registered successfully!", "success")
@@ -203,9 +232,12 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
     @app.route('/auth/login/', methods=('GET', 'POST'))
     def login():
         form = LoginForm()
-        if request.method == 'POST' and form.validate_on_submit():
+        if request.method == 'POST':
             email = form.email.data
             password = form.password.data
+            if not email or len(email) <= 1:
+                flash("Email required", "danger")
+                return render_template("auth/register.html", form=form)
             if not Users.exists(email):
                 flash("User {} does not exist".format(email), "danger")
             else:
