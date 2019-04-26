@@ -11,6 +11,20 @@ db = SQLAlchemy()
 
 
 class Users(db.Model):
+    """
+    id: primary key
+    email: email address
+    hash: password
+    salt: used to protect password
+    first_name: first name
+    last_name: last name
+    location: user's location
+    education: user's education level
+    bio: users's bio
+    is_admin: whether the user is administrator
+    image: name of image stored
+    """
+
     __tablename__ = "users"
     hash = db.Column(db.String(256), nullable=False)
     salt = db.Column(db.String(16), nullable=False, unique=True)
@@ -29,6 +43,10 @@ class Users(db.Model):
 
     @classmethod
     def exists(cls, email):
+        """
+        Check if a user exists
+        """
+
         if cls.query.filter_by(email=email).one_or_none() is not None:
             return True
         else:
@@ -36,6 +54,9 @@ class Users(db.Model):
 
     @classmethod
     def get_password(cls, email):
+        """
+        Return password from a user using email address
+        """
         cc = cls.query.filter_by(email=email).one_or_none()
         try:
             return cc.hash
@@ -44,6 +65,9 @@ class Users(db.Model):
 
     @classmethod
     def new_member(cls, email, password, first_name, last_name):
+        """
+        Add a new member
+        """
         salt = secrets.token_hex(8)
         hash = str(sha256_crypt.using(salt=salt, relaxed=True).hash(password))
         print(password, hash)
@@ -54,9 +78,15 @@ class Users(db.Model):
 
     @classmethod
     def view_members(cls):
+        """
+        View all stored members
+        """
         return cls.query.all()
 
     def check_password(self, password):
+        """
+        Check if the password for a user is correct
+        """
         check_hash = sha256_crypt.using(salt_size=16, salt=self.salt).hash(password)
         print("Password Provided:", check_hash)
         print("Actual Password:", self.hash)
