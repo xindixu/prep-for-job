@@ -98,35 +98,35 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
             {
                 "name": "Aidan T. Manning",
                 "bio": "Computational chemistry major (May 2020). Interested in writing software to assist chemical research and education. Also makes bot accounts in his spare time.",
-                "responsibilities": "Backend, about page, job and skill info pages, SQLAlchemy, worked with authentication, debugging and code refactoring",
+                "responsibilities": "Backend, about page, job and skill info pages, SQLAlchemy, worked with authentication, debugging and code refactoring, unit tests",
                 "contribs": member_contribs["aidan"],
                 "photo": "aidan"
             },
             {
                 "name": "Xindi Xu",
                 "bio": "Advertising major, Elements of Computing Certificate (May 2020). Front End Developer",
-                "responsibilities": "Job, Job_info, Skill, Skill_info, Salary, Salary_info, Home pages, O*Net/BLS API connection, Frontend & styling",
+                "responsibilities": "Job, Job_info, Skill, Skill_info, Salary, Salary_info, Home pages, O*Net/BLS API connection, Frontend & styling, Search functionality",
                 "contribs": member_contribs["xindi"],
                 "photo": "xindi"
             },
             {
                 "name": "Srishtti Talwar",
                 "bio": "Mathematics and Economics major. Pursuing Elements of Computing Certificate. Graduating May 2020.",
-                "responsibilities": "Skills Page, Technical Report, Splash page, skill_salary_info page, About page",
+                "responsibilities": "Skills Page, Technical Report, Splash page, skill_salary_info page, About page, Presentation",
                 "contribs": member_contribs["srishtti"],
                 "photo": "srishtti"
             },
             {
                 "name": "Dylan Mulrooney",
                 "bio": "Undeclared, Computer Science internal transfer. Blockchain developer.",
-                "responsibilities": "Google Cloud Platform and home page, Database, Caching, Deployment, Register and Login Page, unit tests",
+                "responsibilities": "Digital Ocean and home page, Database, Caching, Deployment, Register and Login Page, unit tests, Namecheap",
                 "contribs": member_contribs["dylan"],
                 "photo": "dylan"
             },
             {
                 "name": "Yiran Zhang",
                 "bio": "senior, actuarial science major, pursuing elements of computing certificate, music lover and drum player.",
-                "responsibilities": "Technical report, Salary page, unit tests, and data-model",
+                "responsibilities": "Technical report, Salary page, unit tests, and data-model, Presentation",
                 "contribs": member_contribs["yiran"],
                 "photo": "yiran"
             }
