@@ -118,8 +118,8 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
             },
             {
                 "name": "Dylan Mulrooney",
-                "bio": "Undeclared, Computer Science internal transfer. Blockchain developer.",
-                "responsibilities": "Digital Ocean and home page, Database, Caching, Deployment, Register and Login Page, unit tests, Namecheap",
+                "bio": "Undeclared, Computer Science internal transfer. Blockchain technology research and development. ",
+                "responsibilities": "Digital Ocean and home page, Database, Caching, Deployment, Register and Login Page, Unit Tests, Namecheap",
                 "contribs": member_contribs["dylan"],
                 "photo": "dylan"
             },

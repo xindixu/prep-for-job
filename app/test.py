@@ -165,17 +165,6 @@ class FlaskTests (TestCase):
         self.assert200(result)
         self.assertTemplateUsed("profile.html")
 
-    def test_login_error_fields_required(self):
-        form = LoginForm(
-            email="",
-            password=""
-        )
-        self.client.post("/auth/login/", data=form.data)
-
-        self.assertTemplateUsed("auth/login.html")
-        self.assertMessageFlashed("Email required", "danger")
-        self.assertMessageFlashed("Password required", "danger")
-
     def test_login_error_user_does_not_exist(self):
         form = LoginForm(
             email="tomsmith@protonmail.com",
