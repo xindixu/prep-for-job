@@ -226,6 +226,7 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
                 return render_template("auth/register.html", form=form)
             else:
                 u = Users.new_member(email, password, first_name, last_name)
+                g.user = u
                 flash("You have been registered successfully!", "success")
                 return redirect(url_for("profile", user_id=u.id))
 
@@ -246,6 +247,7 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
                 u = Users.query.filter_by(email=email).first()
                 if u.check_password(password):
                     flash("Logged in successfully!", "success")
+                    g.user = u
                     return redirect(url_for("profile", user_id=u.id))
                 else:
                     flash("Incorrect password for "+email, "danger")
@@ -254,6 +256,7 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
 
     @app.route('/auth/logout/', methods=('GET', 'POST'))
     def logout():
+        g.user = None
         return "TODO: add session, hash passwords, add postgress uri, and test db functions"
 
     @app.route("/profile/<user_id>")
@@ -397,7 +400,6 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
         # search with api
         url =f"https://services.onetcenter.org/ws/mnm/search?keyword={keyword}"
         results = requests.get(url, headers=headers)
-
 
         return render_template('result.html', keyword=keyword, results=json.loads(results.text))
 
