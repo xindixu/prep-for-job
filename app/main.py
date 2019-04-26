@@ -145,6 +145,8 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
 
         return render_template("about.html", members=members, stats=stats)
 
+
+
     @app.route('/skill_salary/<string:code>', methods=('GET', 'POST'))
     def skill_salary(code):
         if Jobs.need_cache_code(code):
@@ -282,13 +284,13 @@ def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/
                 using_api = False
                 jarray = Jobs.get_code(code)
 
-                job_info = jarray[0]
-                knowledge = jarray[1]
-                skills = jarray[2]
-                abilities = jarray[3]
-                technology = jarray[4]
-                related_jobs = jarray[5]
-                wage = jarray[6]
+            job_info = jarray[0]
+            knowledge = jarray[1]
+            skills = jarray[2]
+            abilities = jarray[3]
+            technology = jarray[4]
+            related_jobs = jarray[5]
+            wage = jarray[6]
 
             if using_api == True:
                 return render_template("job_info.html", job=json.loads(job_info.text),
