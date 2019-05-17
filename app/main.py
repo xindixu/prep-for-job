@@ -7,7 +7,7 @@ from forms import RegistrationForm, LoginForm, SearchForm
 from models import Users, JobPages, Jobs, db
 
 
-def create_app(db_string='postgresql://postgres:dbPassword1@157.230.173.38:5432/maindb6'):
+def create_app(db_string='postgres://yvfdrppflgskzs:72f1d199b0aba877f86c806d70687204a758fa07485a99faca28ec05167bec56@ec2-54-163-226-238.compute-1.amazonaws.com:5432/desked1nc70ett'):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
