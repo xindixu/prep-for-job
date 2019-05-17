@@ -6,24 +6,20 @@ from bls_datasets import oes, qcew
 from forms import RegistrationForm, LoginForm, SearchForm
 from models import Users, JobPages, Jobs, db
 
-from flask.ext.heroku import Heroku
 
 
 def create_app(db_string='postgres://yvfdrppflgskzs:72f1d199b0aba877f86c806d70687204a758fa07485a99faca28ec05167bec56@ec2-54-163-226-238.compute-1.amazonaws.com:5432/desked1nc70ett'):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    # app.config.from_mapping(
-    #     SECRET_KEY='dev',
-    #     DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-    #     SQLALCHEMY_DATABASE_URI=db_string,
-    #     SQLALCHEMY_TRACK_MODIFICATIONS=False
-    # )
+    app.config.from_mapping(
+        SECRET_KEY='dev',
+        DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
+        SQLALCHEMY_DATABASE_URI=db_string,
+        SQLALCHEMY_TRACK_MODIFICATIONS=False
+    )
+
+    db.init_app(app)
     
-    app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://yvfdrppflgskzs:72f1d199b0aba877f86c806d70687204a758fa07485a99faca28ec05167bec56@ec2-54-163-226-238.compute-1.amazonaws.com:5432/desked1nc70ett"
-
-    heroku = Heroku(app)
-    db = SQLAlchemy(app)
-
     @app.before_first_request
     def setup():
         db.create_all()
